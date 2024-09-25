@@ -4,5 +4,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
+
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/cloudfy/Arcturus</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/cloudfy/Arcturus</PackageProjectUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 </Project>

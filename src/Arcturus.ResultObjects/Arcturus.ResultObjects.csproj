@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageId>Arcturus.ResultObjects</PackageId>
+	  <PackageTags>result,resultobject</PackageTags>
   </PropertyGroup>
 
 </Project>
