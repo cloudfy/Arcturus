@@ -3,11 +3,15 @@
 namespace Arcturus.ResultObjects;
 
 /// <summary>
-/// 
+/// Represents a result of an operation - success or failure.
 /// </summary>
 public class Result
 {
-    internal Result(bool isSuccess) => IsSuccess = isSuccess;
+    internal Result(bool isSuccess, Fault? fault = null)
+    {
+        IsSuccess = isSuccess;
+        Fault = fault;
+    }
     
     /// <summary>
     /// Returns a success result.
@@ -22,11 +26,11 @@ public class Result
     /// <returns><see cref="Result{T}"/></returns>
     public static Result<TValue> Success<TValue>(TValue? value) => new(true, value);
     /// <summary>
-    /// 
+    /// Returns a failure result with an optional <paramref name="fault"/>.
     /// </summary>
-    /// <returns></returns>
-    public static Result Failure() => new(false);
-
+    /// <param name="fault">Optional.</param>
+    /// <returns><see cref="Result"/></returns>
+    public static Result Failure(Fault? fault = null) => new(false, fault);
     /// <summary>
     /// Returns true if the result is a success.
     /// </summary>
@@ -35,6 +39,16 @@ public class Result
     /// Returns true if the result is not a success.
     /// </summary>
     public bool IsFailure => !IsSuccess;
+    /// <summary>
+    /// Gets an exception if assigned. Use <see cref="ResultExtensions.WithException{T}(Result{T}, Exception)"/>.
+    /// </summary>
     public Exception? Exception { get; internal set; }
+    /// <summary>
+    /// Gets the reason for the failure when <see cref="IsFailure"/> is true.
+    /// </summary>
+    public Fault? Fault { get; }
+    /// <summary>
+    /// Gets an HttpStatusCode if assigned. Use <see cref="ResultExtensions.WithHttpStatusCode{T}(Result{T}, HttpStatusCode)"/>.
+    /// </summary>
     public HttpStatusCode? HttpStatusCode { get; internal set; }
 }
