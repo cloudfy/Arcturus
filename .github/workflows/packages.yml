@@ -27,6 +27,7 @@ jobs:
         date=$(date +'%Y.%m.%d')
         rev=$(git rev-list --count HEAD)
         echo "version=$date.$rev" >> $GITHUB_ENV
+        echo "version = $date.$rev" >> $GITHUB_OUTPUT
     - name: Pack the project
       run: dotnet pack --no-build --configuration Release -p:PackageVersion=${{ env.version }}
     - name: Push to NuGet
