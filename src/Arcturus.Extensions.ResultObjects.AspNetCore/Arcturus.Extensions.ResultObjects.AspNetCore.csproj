@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<PackageId>Arcturus.Extensions.ResultObjects.AspNetCore</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>result,resultobject,aspnetcore</PackageTags>
 	</PropertyGroup>

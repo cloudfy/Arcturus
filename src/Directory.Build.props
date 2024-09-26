@@ -10,5 +10,11 @@
 		<PackageProjectUrl>https://github.com/cloudfy/Arcturus</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<RepositoryType>git</RepositoryType>
+
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\docs\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 </Project>
