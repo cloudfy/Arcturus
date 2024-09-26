@@ -1,0 +1,13 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>Feature.cs</DefaultName>
+    <Name>Arcturus - Vertical Application Feature</Name>
+    <Description>Application feature including a command, handler and result. Name the feature as {Verb}{Nuon} ex. CreateCustomer. Used in vertical application architecture.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>10</SortOrder>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">Feature.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
