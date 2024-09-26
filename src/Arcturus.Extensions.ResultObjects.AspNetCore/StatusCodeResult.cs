@@ -21,6 +21,7 @@ public sealed class StatusCodeResult : IResult
 
         problemDetails.Title ??= _result.Fault?.Code;
         problemDetails.Detail = _result.Fault?.Message;
+        problemDetails.Type ??= "https://schemas/2022/fault/#" + defaultStatusCode.ToString().ToLower();
 
         //var cts = new ProblemDetailsContext()
         //{

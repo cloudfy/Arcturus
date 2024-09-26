@@ -32,6 +32,13 @@ public class Result
     /// <returns><see cref="Result"/></returns>
     public static Result Failure(Fault? fault = null) => new(false, fault);
     /// <summary>
+    /// Returns a failure result with an optional <paramref name="fault"/>.
+    /// </summary>
+    /// <typeparam name="TValue">Type of value.</typeparam>
+    /// <param name="fault">Optional.</param>
+    /// <returns><see cref="Result{T}"/></returns>
+    public static Result<TValue> Failure<TValue>(Fault? fault = null) => new(false, default, fault);
+    /// <summary>
     /// Returns true if the result is a success.
     /// </summary>
     public bool IsSuccess { get; internal set; }

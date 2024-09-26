@@ -16,15 +16,15 @@ public sealed class StatusCodeActionResult : IActionResult
     {
         HttpStatusCode defaultStatusCode = _result.HttpStatusCode ?? HttpStatusCode.BadRequest;
 
-        var cts = new ProblemDetailsContext()
-        {
-            HttpContext = context.HttpContext
-        };
+        //var cts = new ProblemDetailsContext()
+        //{
+        //    HttpContext = context.HttpContext
+        //};
         var factory = context.HttpContext.RequestServices.GetService<ProblemDetailsFactory>();
-        var prbml = factory!.CreateProblemDetails(context.HttpContext, (int)defaultStatusCode);
-        prbml.Type ??= "https://schemas/2022/fault/#" + defaultStatusCode.ToString().ToLower();
-        prbml.Title ??= _result.Fault?.Code;
-        prbml.Detail = _result.Fault?.Message;
+        var problemDetails = factory!.CreateProblemDetails(context.HttpContext, (int)defaultStatusCode);
+        problemDetails.Type ??= "https://schemas/2022/fault/#" + defaultStatusCode.ToString().ToLower();
+        problemDetails.Title ??= _result.Fault?.Code;
+        problemDetails.Detail = _result.Fault?.Message;
         //if (_properties?.Length > 0)
         //{
         //    prbml.Extensions.Add("fields", _properties.ToKeyValueList(_ => _.Code, _ => _.Message));
@@ -33,6 +33,6 @@ public sealed class StatusCodeActionResult : IActionResult
         //prbml.Extensions.Add("code", _value?.Code);
         //    context.HttpContext.Response.Clear();
         context.HttpContext.Response.StatusCode = (int)defaultStatusCode;
-        await context.HttpContext.Response.WriteAsJsonAsync(prbml);
+        await context.HttpContext.Response.WriteAsJsonAsync(problemDetails);
     }
 }
