@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
@@ -26,6 +28,7 @@ jobs:
       run: |
         date=$(date +'%Y.%m.%d')
         rev=$(git rev-list --all --count HEAD)
+        echo "Revision: $rev"
         version="$date.$rev"
         echo "version=$version" >> $GITHUB_ENV
         echo "Generated version: $version"
