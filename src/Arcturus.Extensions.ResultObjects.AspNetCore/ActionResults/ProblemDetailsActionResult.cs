@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
+using Arcturus.ResultObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
-namespace Arcturus.ResultObjects;
+namespace Arcturus.Extensions.ResultObjects.AspNetCore.ActionResults;
 
-public sealed class StatusCodeActionResult : IActionResult
+public sealed class ProblemDetailsActionResult : IActionResult
 {
     private readonly Result _result;
 
-    internal StatusCodeActionResult(Result result) => _result = result;
+    internal ProblemDetailsActionResult(Result result) => _result = result;
 
-    public async Task ExecuteResultAsync(ActionContext context)
+    public Task ExecuteResultAsync(ActionContext context)
     {
         HttpStatusCode defaultStatusCode = _result.HttpStatusCode ?? HttpStatusCode.BadRequest;
 
@@ -33,6 +34,8 @@ public sealed class StatusCodeActionResult : IActionResult
         //prbml.Extensions.Add("code", _value?.Code);
         //    context.HttpContext.Response.Clear();
         context.HttpContext.Response.StatusCode = (int)defaultStatusCode;
-        await context.HttpContext.Response.WriteAsJsonAsync(problemDetails);
+        return HttpResultsHelper.WriteResultAsJsonAsync(
+            context.HttpContext
+            , problemDetails);
     }
 }

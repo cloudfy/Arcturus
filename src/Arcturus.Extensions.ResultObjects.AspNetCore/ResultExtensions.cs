@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Arcturus.Extensions.ResultObjects.AspNetCore.ActionResults;
+using Arcturus.Extensions.ResultObjects.AspNetCore.Results;
 
 namespace Arcturus.ResultObjects;
 
 public static class ResultExtensions
 {
+    private static HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
+    
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="IActionResult"/> object.
     /// </summary>
@@ -12,13 +17,18 @@ public static class ResultExtensions
     /// <returns>An <see cref="IActionResult"/> object representing the result.</returns>
     public static IActionResult ToActionResult<T>(this Result<T> result)
     {
-        if (result.IsSuccess)
+        if (result.IsSuccess && result.HttpStatusCode is null)
             return new OkObjectResult(result.Value);
 
-        if (result.HttpStatusCode is not null)
-            return new StatusCodeActionResult(result);
+        if (result.IsSuccess && result.HttpStatusCode is not null)
+            return new OkObjectResult(result.Value) { StatusCode = (int)result.HttpStatusCode.Value };
 
-        return new ObjectResult(null) { StatusCode = 500 };
+        if (result.HttpStatusCode is not null)
+            return new ProblemDetailsActionResult(result);
+
+        //return new Microsoft.AspNetCore.Mvc.ObjectResult(null) { StatusCode = 500 };
+        return new ProblemDetailsActionResult(
+            result.WithHttpStatusCode(_defaultStatusCode));
     }
     /// <summary>
     /// 
@@ -27,13 +37,19 @@ public static class ResultExtensions
     /// <returns></returns>
     public static IActionResult ToActionResult(this Result result)
     {
-        if (result.IsSuccess)
+        if (result.IsSuccess && result.HttpStatusCode is null)
             return new OkObjectResult(null);
 
-        if (result.HttpStatusCode is not null)
-            return new StatusCodeActionResult(result);
+        if (result.IsSuccess && result.HttpStatusCode is not null)
+            return new OkObjectResult(null) { StatusCode = (int)result.HttpStatusCode.Value };
 
-        return new ObjectResult(null) { StatusCode = 500 };
+        if (result.HttpStatusCode is not null)
+            return new ProblemDetailsActionResult(result);
+
+        // return new Microsoft.AspNetCore.Mvc.ObjectResult(null) { StatusCode = 500 };
+        return new ProblemDetailsActionResult(
+            result.WithHttpStatusCode(_defaultStatusCode));
+
     }
     /// <summary>
     /// 
@@ -58,13 +74,18 @@ public static class ResultExtensions
     /// <returns>An <see cref="Microsoft.AspNetCore.Http.IResult"/> object representing the result.</returns>
     public static Microsoft.AspNetCore.Http.IResult ToResult<T>(this Result<T> result)
     {
-        if (result.IsSuccess)
+        if (result.IsSuccess && result.HttpStatusCode is null)
             return Microsoft.AspNetCore.Http.Results.Ok(result.Value);
 
+        if (result.IsSuccess && result.HttpStatusCode is not null)
+            return new ObjectResult<T>(result.Value, result.HttpStatusCode.Value);
+ 
         if (result.HttpStatusCode is not null)
-            return new StatusCodeResult(result);
+            return new ProblemDetailsResult(result);
 
-        return Microsoft.AspNetCore.Http.Results.Problem();
+        //return Microsoft.AspNetCore.Http.Results.Problem();
+        return new ProblemDetailsResult(
+            result.WithHttpStatusCode(_defaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="Microsoft.AspNetCore.Http.IResult"/> object.
@@ -81,13 +102,18 @@ public static class ResultExtensions
     /// <returns></returns>
     public static Microsoft.AspNetCore.Http.IResult ToResult(this Result result)
     {
-        if (result.IsSuccess)
+        if (result.IsSuccess && result.HttpStatusCode is null)
             return Microsoft.AspNetCore.Http.Results.Ok();
 
-        if (result.HttpStatusCode is not null)
-            return new StatusCodeResult(result);
+        if (result.IsSuccess && result.HttpStatusCode is not null)
+            return new Extensions.ResultObjects.AspNetCore.Results.ObjectResult(null, result.HttpStatusCode.Value);
 
-        return Microsoft.AspNetCore.Http.Results.Problem();
+        if (result.HttpStatusCode is not null)
+            return new ProblemDetailsResult(result);
+
+//        return Microsoft.AspNetCore.Http.Results.Problem();
+        return new ProblemDetailsResult(
+            result.WithHttpStatusCode(_defaultStatusCode));
     }
     /// <summary>
     /// 
