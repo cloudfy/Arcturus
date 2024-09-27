@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<PackageId>Arcturus.AspNetCore.Endpoints</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageTags>api,endpoints,mvc,aspnetcore</PackageTags>
+		<PackageTags>api,endpoints,mvc,aspnetcore,arcturus</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>

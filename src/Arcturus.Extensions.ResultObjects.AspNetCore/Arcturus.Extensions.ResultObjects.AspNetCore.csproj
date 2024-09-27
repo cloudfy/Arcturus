@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<PackageId>Arcturus.Extensions.ResultObjects.AspNetCore</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageTags>result,resultobject,aspnetcore</PackageTags>
+		<PackageTags>result,resultobject,aspnetcore,arcturus</PackageTags>
 	</PropertyGroup>
 	
 	<ItemGroup>
