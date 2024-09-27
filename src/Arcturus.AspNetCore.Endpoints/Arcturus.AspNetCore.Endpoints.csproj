@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Arcturus.AspNetCore.Endpoints</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>api,endpoints,mvc,aspnetcore</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+</Project>

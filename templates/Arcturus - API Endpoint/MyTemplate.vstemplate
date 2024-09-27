@@ -1,0 +1,14 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+    <DefaultName>Feature.cs</DefaultName>
+    <Name>Arcturus - API Endpoint</Name>
+    <Description>API Endpoint using Arcturus.AspNetCore.Endpoints.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <TemplateGroupID>AspNetCore</TemplateGroupID>
+    <SortOrder>10</SortOrder>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">Feature.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
