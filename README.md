@@ -18,7 +18,7 @@ As Arcturus consist of multiple packages, we are keeping documentation in the [W
 ## How can I contribute?
 We welcome contributions! Many people all over the world have helped make .NET better.
 
-Follow instructions in [contributing.md](contributing.md) for working in the code in the repository.
+Follow instructions in [contributing.md](CONTRIBUTING.md) for working in the code in the repository.
 
 ## License
-The code in this repo is licensed under the [MIT](LICENSE.TXT) license.
+The code in this repo is licensed under the [MIT](LICENSE) license.
