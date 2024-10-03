@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <PackageId>Arcturus.ResultObjects</PackageId>
-	  <PackageTags>result,resultobject</PackageTags>
+	  <PackageTags>result,resultobject,arcturus</PackageTags>
   </PropertyGroup>
 
 </Project>
