@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Arcturus.ResultObjects.Specialized;
+using System.Net;
 
 namespace Arcturus.ResultObjects;
 
@@ -11,6 +12,10 @@ public class Result
     {
         IsSuccess = isSuccess;
         Fault = fault;
+        if (fault is ISpecializedFault specializedFault)
+        {
+            HttpStatusCode = specializedFault.HttpStatusCode;
+        }
     }
     
     /// <summary>
@@ -58,4 +63,8 @@ public class Result
     /// Gets an HttpStatusCode if assigned. Use <see cref="ResultExtensions.WithHttpStatusCode{T}(Result{T}, HttpStatusCode)"/>.
     /// </summary>
     public HttpStatusCode? HttpStatusCode { get; internal set; }
+    /// <summary>
+    /// Gets a url of a help documentation.
+    /// </summary>
+    public string? HelpLink { get; internal set; }
 }

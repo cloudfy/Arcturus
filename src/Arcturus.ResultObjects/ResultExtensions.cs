@@ -52,4 +52,9 @@ public static class ResultExtensions
         value.HttpStatusCode = httpStatusCode;
         return value;
     }
+    public static Result<T> WithHelpLink<T>(this Result<T> result, string uri)
+    {
+        result.HelpLink = uri;
+        return result;
+    }
 }
