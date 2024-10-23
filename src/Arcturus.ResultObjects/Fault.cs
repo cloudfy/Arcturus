@@ -12,12 +12,12 @@ public record Fault(string? Code, string Message)
     /// </summary>
     /// <param name="code">Required. String of code.</param>
     /// <param name="message">Required. String of message.</param>
-    /// <returns></returns>
+    /// <returns><see cref="Fault"/></returns>
     public static Fault From(string code, string message) => new(code, message);
     /// <summary>
     /// Returns an instance of <see cref="Fault"/> by <paramref name="message"/> only.
     /// </summary>
     /// <param name="message">Required. String of message.</param>
-    /// <returns></returns>
+    /// <returns><see cref="Fault"/></returns>
     public static Fault From(string message) => new(null, message);
 }

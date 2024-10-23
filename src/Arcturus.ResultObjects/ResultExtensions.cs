@@ -47,12 +47,37 @@ public static class ResultExtensions
         value.HttpStatusCode = httpStatusCode;
         return value;
     }
+    /// <summary>
+    /// Assigns the <paramref name="httpStatusCode"/> to the result.
+    /// </summary>
+    /// <param name="value">Required.</param>
+    /// <param name="httpStatusCode"><see cref="HttpStatusCode"/> to assign.</param>
+    /// <returns><see cref="Result"/></returns>
     public static Result WithHttpStatusCode(this Result value, HttpStatusCode httpStatusCode)
     {
         value.HttpStatusCode = httpStatusCode;
         return value;
     }
+    /// <summary>
+    /// Assigns a helplink to the result.
+    /// </summary>
+    /// <typeparam name="T">Type of result object.</typeparam>
+    /// <param name="result">Required.</param>
+    /// <param name="uri">Url of the help link.</param>
+    /// <returns><see cref="Result{T}"/></returns>
     public static Result<T> WithHelpLink<T>(this Result<T> result, string uri)
+    {
+        result.HelpLink = uri;
+        return result;
+    }
+    /// <summary>
+    /// Assigns a helplink to the result.
+    /// </summary>
+    /// <typeparam name="T">Type of result object.</typeparam>
+    /// <param name="result">Required.</param>
+    /// <param name="uri">Url of the help link.</param>
+    /// <returns><see cref="Result"/></returns>
+    public static Result WithHelpLink(this Result result, string uri)
     {
         result.HelpLink = uri;
         return result;
