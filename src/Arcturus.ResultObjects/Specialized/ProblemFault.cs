@@ -3,12 +3,12 @@
 namespace Arcturus.ResultObjects.Specialized;
 
 /// <summary>
-/// Provides a fault for a constraint violation (result in HTTP 422).
+/// Provide a problem fault object (result in HTTP 500).
 /// </summary>
 /// <param name="Code">Optional code.</param>
 /// <param name="Message">A string message indicating the fault.</param>
-public record ConstraintFault(string Code, string Message)
+public record ProblemFault(string Code, string Message)
     : Fault(Code, Message), ISpecializedFault
 {
-    public HttpStatusCode HttpStatusCode => HttpStatusCode.UnprocessableContent;
+    public HttpStatusCode HttpStatusCode => HttpStatusCode.InternalServerError;
 }
