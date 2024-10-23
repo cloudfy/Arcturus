@@ -3,6 +3,11 @@
   <PropertyGroup>
 	  <PackageId>Arcturus.ResultObjects</PackageId>
 	  <PackageTags>result,resultobject,arcturus</PackageTags>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
+	<PropertyGroup>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	</PropertyGroup>
 </Project>
