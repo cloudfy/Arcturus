@@ -44,6 +44,14 @@ public class Result
     /// <returns><see cref="Result{T}"/></returns>
     public static Result<TValue> Failure<TValue>(Fault? fault = null) => new(false, default, fault);
     /// <summary>
+    /// Returns a failure result with a fault of <paramref name="code"/> and <paramref name="message"/>
+    /// </summary>
+    /// <typeparam name="TValue">Type of value.</typeparam>
+    /// <param name="code">Optional code.</param>
+    /// <param name="message">Message of the fault.</param>
+    /// <returns><see cref="Result{T}"/></returns>
+    public static Result<TValue> Failure<TValue>(string? code, string message) => new(false, default, new Fault(code, message));
+    /// <summary>
     /// Returns true if the result is a success.
     /// </summary>
     public bool IsSuccess { get; internal set; }
