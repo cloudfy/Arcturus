@@ -17,14 +17,13 @@ public sealed class ProblemDetailsResult : IResult
     {
         HttpStatusCode defaultStatusCode = _result.HttpStatusCode ?? HttpStatusCode.BadRequest;
 
-        //var factory1 = httpContext.RequestServices.GetService<IProblemDetailsService>();
         var factory = httpContext.RequestServices.GetService<ProblemDetailsFactory>();
         var problemDetails = factory!.CreateProblemDetails(httpContext, (int)defaultStatusCode);
 
         problemDetails.Title ??= _result.Fault?.Code;
         problemDetails.Detail = _result.Fault?.Message;
         problemDetails.Type ??= "https://schemas/2022/fault/#" + defaultStatusCode.ToString().ToLower();
-
+        problemDetails.Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}";
         //var cts = new ProblemDetailsContext()
         //{
         //    HttpContext = httpContext
