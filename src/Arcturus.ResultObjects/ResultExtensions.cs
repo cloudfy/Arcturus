@@ -73,7 +73,6 @@ public static class ResultExtensions
     /// <summary>
     /// Assigns a helplink to the result.
     /// </summary>
-    /// <typeparam name="T">Type of result object.</typeparam>
     /// <param name="result">Required.</param>
     /// <param name="uri">Url of the help link.</param>
     /// <returns><see cref="Result"/></returns>

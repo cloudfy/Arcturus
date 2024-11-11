@@ -17,15 +17,12 @@ public sealed class ProblemDetailsActionResult : IActionResult
     {
         HttpStatusCode defaultStatusCode = _result.HttpStatusCode ?? HttpStatusCode.BadRequest;
 
-        //var cts = new ProblemDetailsContext()
-        //{
-        //    HttpContext = context.HttpContext
-        //};
         var factory = context.HttpContext.RequestServices.GetService<ProblemDetailsFactory>();
         var problemDetails = factory!.CreateProblemDetails(context.HttpContext, (int)defaultStatusCode);
         problemDetails.Type ??= "https://schemas/2022/fault/#" + defaultStatusCode.ToString().ToLower();
         problemDetails.Title ??= _result.Fault?.Code;
         problemDetails.Detail = _result.Fault?.Message;
+        problemDetails.Instance = $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
         //if (_properties?.Length > 0)
         //{
         //    prbml.Extensions.Add("fields", _properties.ToKeyValueList(_ => _.Code, _ => _.Message));

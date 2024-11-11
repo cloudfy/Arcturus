@@ -31,10 +31,10 @@ public static class ResultExtensions
             result.WithHttpStatusCode(_defaultStatusCode));
     }
     /// <summary>
-    /// 
+    /// Converts a <see cref="Result"/> object to an <see cref="IActionResult"/> object.
     /// </summary>
-    /// <param name="result"></param>
-    /// <returns></returns>
+    /// <param name="result">The <see cref="Result"/> object to convert.</param>
+    /// <returns>An <see cref="IActionResult"/> object representing the result.</returns>
     public static IActionResult ToActionResult(this Result result)
     {
         if (result.IsSuccess && result.HttpStatusCode is null)
@@ -52,10 +52,10 @@ public static class ResultExtensions
 
     }
     /// <summary>
-    /// 
+    /// Converts a Task of <see cref="Result"/> object to an <see cref="IActionResult"/> object.
     /// </summary>
-    /// <param name="result"></param>
-    /// <returns></returns>
+    /// <param name="result">The <see cref="Result"/> object to convert.</param>
+    /// <returns>An <see cref="IActionResult"/> object representing the result.</returns>
     public async static Task<IActionResult> ToActionResult(this Task<Result> result)
         => (await result).ToActionResult();
     /// <summary>
