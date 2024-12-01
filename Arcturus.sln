@@ -15,6 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcturus.Extensions.ResultO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.AspNetCore.Endpoints", "src\Arcturus.AspNetCore.Endpoints\Arcturus.AspNetCore.Endpoints.csproj", "{2CF44FC8-346B-44A9-9B80-2D7A16E2B474}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.EventBus.Abstracts", "src\Arcturus.EventBus.Abstracts\Arcturus.EventBus.Abstracts.csproj", "{491AEBF9-2D1C-4E79-928E-B15EEAD1533A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.EventBus", "src\Arcturus.EventBus\Arcturus.EventBus.csproj", "{ED23F692-87DC-4753-A67B-D6F94F3BBA00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.EventBus.RabbitMQ", "src\Arcturus.EventBus.RabbitMQ\Arcturus.EventBus.RabbitMQ.csproj", "{86F28A25-A376-411F-B67B-FB6FC3742566}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,18 @@ Global
 		{2CF44FC8-346B-44A9-9B80-2D7A16E2B474}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CF44FC8-346B-44A9-9B80-2D7A16E2B474}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CF44FC8-346B-44A9-9B80-2D7A16E2B474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{491AEBF9-2D1C-4E79-928E-B15EEAD1533A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{491AEBF9-2D1C-4E79-928E-B15EEAD1533A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{491AEBF9-2D1C-4E79-928E-B15EEAD1533A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{491AEBF9-2D1C-4E79-928E-B15EEAD1533A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED23F692-87DC-4753-A67B-D6F94F3BBA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED23F692-87DC-4753-A67B-D6F94F3BBA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED23F692-87DC-4753-A67B-D6F94F3BBA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED23F692-87DC-4753-A67B-D6F94F3BBA00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86F28A25-A376-411F-B67B-FB6FC3742566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86F28A25-A376-411F-B67B-FB6FC3742566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86F28A25-A376-411F-B67B-FB6FC3742566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86F28A25-A376-411F-B67B-FB6FC3742566}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
