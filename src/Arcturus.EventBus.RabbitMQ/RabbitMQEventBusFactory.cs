@@ -5,13 +5,13 @@ namespace Arcturus.EventBus.RabbitMQ;
 public sealed class RabbitMQEventBusFactory(
     IConnection connection) : IEventBusFactory
 {
-    public IPublisher CreatePublisher()
+    public IPublisher CreatePublisher(string? queue = null)
     {
-        return new RabbitMQPublisher(connection);
+        return new RabbitMQPublisher(connection, queue);
     }
-    public IProcessor CreateProcessor()
+    public IProcessor CreateProcessor(string? queue = null)
     {
-        return new RabbitMQProcessor(connection);
+        return new RabbitMQProcessor(connection, queue);
     }
     public ISubscriber CreateSubscriber()
     {

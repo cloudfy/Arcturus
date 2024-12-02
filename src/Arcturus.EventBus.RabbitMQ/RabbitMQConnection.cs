@@ -9,7 +9,6 @@ public sealed class RabbitMQConnection : IConnection
     private string? _applicationId { get; }
     private string _clientName { get; }
     private string _connectionHostName { get; }
-
     private RMQ.IChannel? _channel;
     private RMQ.IConnection? _connection;
     private bool _isConnected = false;
@@ -34,6 +33,11 @@ public sealed class RabbitMQConnection : IConnection
         using (await _asyncLock.LockAsync(cancellationToken))
         {
             _connection = await factory.CreateConnectionAsync(_clientName, cancellationToken);
+            _connection.ConnectionShutdownAsync += (sender, args) =>
+            {
+                _isConnected = false;
+                return Task.CompletedTask;
+            };
             _channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
             _isConnected = true;

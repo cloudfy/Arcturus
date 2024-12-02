@@ -7,6 +7,13 @@ namespace Arcturus.EventBus.RabbitMQ.Internals;
 internal sealed class EventMessageConverter : JsonConverter<IEventMessage>
 {
     private const string DiscriminatorPropertyName = "$eventType";
+    private readonly DefaultEventMessageTypeResolver _typeResolver;
+
+    internal EventMessageConverter()
+    {
+        _typeResolver = new DefaultEventMessageTypeResolver();
+    }
+
     public override IEventMessage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var document = JsonDocument.ParseValue(ref reader);
@@ -18,26 +25,8 @@ internal sealed class EventMessageConverter : JsonConverter<IEventMessage>
             throw new JsonException($"Missing discriminator property '{DiscriminatorPropertyName}'.");
         }
 
-        var typeName = typeProperty.GetString();
-        if (typeName == null)
-        {
-            throw new JsonException("Discriminator property value is null.");
-        }
-
-        // Resolve the type and deserialize
-        //      var type = Type.GetType(typeName);
-
-        var type = AppDomain.CurrentDomain
-            .GetAssemblies()
-            .Select(a => a.GetType(typeName))
-            .Where(_ => _ is not null)
-            .FirstOrDefault();
-
-        if (type == null)
-        {
-                throw new JsonException($"Cannot resolve type '{typeName}'.");
-        }
-
+        var typeName = typeProperty.GetString() ?? throw new JsonException("Discriminator property value is null.");
+        var type = _typeResolver.ResolveType(typeName) ?? throw new JsonException($"Cannot resolve type '{typeName}'.");
         var json = root.GetRawText();
         return (IEventMessage)JsonSerializer.Deserialize(json, type, options)!;
     }

@@ -2,7 +2,7 @@
 
 public interface IEventBusFactory
 {
-    IProcessor CreateProcessor();
-    IPublisher CreatePublisher();
+    IProcessor CreateProcessor(string? queue = null);
+    IPublisher CreatePublisher(string? queue = null);
     ISubscriber CreateSubscriber();
 }

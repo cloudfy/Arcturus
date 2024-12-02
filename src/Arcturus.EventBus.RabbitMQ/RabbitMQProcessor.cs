@@ -10,14 +10,15 @@ public sealed class RabbitMQProcessor : IProcessor
 {
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
     private readonly RabbitMQConnection _connection;
-    private readonly string queueName = "task_queue";
+    private readonly string _queueName;
 
-    internal RabbitMQProcessor(Abstracts.IConnection connection)
+    internal RabbitMQProcessor(Abstracts.IConnection connection, string? queueName = null)
     {
         if (connection is not RabbitMQConnection)
             throw new NotImplementedException();
 
         _connection = (RabbitMQConnection)connection;
+        _queueName = queueName ?? "default_queue";
     }
 
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
@@ -26,7 +27,7 @@ public sealed class RabbitMQProcessor : IProcessor
 
         // consumer
         await _connection.Channel.QueueDeclareAsync(
-            queue: queueName
+            queue: _queueName
             , durable: true
             , exclusive: false
             , autoDelete: false
@@ -55,7 +56,7 @@ public sealed class RabbitMQProcessor : IProcessor
             await _connection.Channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false, cancellationToken);
         };
 
-        await _connection.Channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer, cancellationToken);
+        await _connection.Channel.BasicConsumeAsync(_queueName, autoAck: false, consumer: consumer, cancellationToken);
         //  await _connection.Channel.BasicConsumeAsync(queueName, false, null, false, false, null, consumer, cancellationToken);
         while (!cancellationToken.IsCancellationRequested)
         {

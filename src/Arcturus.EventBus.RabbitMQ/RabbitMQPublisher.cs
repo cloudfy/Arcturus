@@ -11,13 +11,15 @@ namespace Arcturus.EventBus.RabbitMQ;
 public sealed class RabbitMQPublisher : IPublisher
 {
     private readonly RabbitMQConnection _connection;
-    private readonly string queueName = "task_queue";
-    internal RabbitMQPublisher(Abstracts.IConnection connection)
+    private readonly string _queueName;
+
+    internal RabbitMQPublisher(Abstracts.IConnection connection, string? queueName = null)
     {
         if (connection is not RabbitMQConnection)
-            throw new NotImplementedException();
+            throw new NotImplementedException($"Requires RabbitMQConnection");
 
         _connection = (RabbitMQConnection)connection;
+        _queueName = queueName ?? "default_queue";
     }
 
     public async Task Publish<TEvent>(
@@ -37,7 +39,7 @@ public sealed class RabbitMQPublisher : IPublisher
             await _connection.EnsureConnected(cancellationToken);
 
             await _connection.Channel.QueueDeclareAsync(
-                queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
+                queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
             var message = EventMessageSerializer.Serialize(@event);
             var body = Encoding.UTF8.GetBytes(message);
@@ -52,7 +54,7 @@ public sealed class RabbitMQPublisher : IPublisher
             };
 
             await _connection.Channel.BasicPublishAsync(
-                exchange: string.Empty, routingKey: queueName, mandatory: true, basicProperties: properties, body: body);
+                exchange: string.Empty, routingKey: _queueName, mandatory: true, basicProperties: properties, body: body);
         });
 
     }
