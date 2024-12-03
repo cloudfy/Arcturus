@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Arcturus.EventBus.Abstracts</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>eventbus,events,arcturus</PackageTags>
+	</PropertyGroup>
+
+</Project>
