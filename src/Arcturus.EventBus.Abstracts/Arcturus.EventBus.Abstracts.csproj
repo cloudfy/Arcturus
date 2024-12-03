@@ -4,6 +4,8 @@
 		<PackageId>Arcturus.EventBus.Abstracts</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus</PackageTags>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+
 	</PropertyGroup>
 
 </Project>

@@ -14,4 +14,8 @@ public sealed class RabbitMQEventBusOptions
     /// Gets or sets a host name. Defaults to localhost.
     /// </summary>
     public string? HostName { get; set; }
+    /// <summary>
+    /// If true, events will be processed by the event handlers processor and fallback to the <see cref="Arcturus.EventBus.Abstracts.IProcessor.OnProcessAsync"/> event.
+    /// </summary>
+    public bool? UseEventHandlersProcessor { get; set; }
 }

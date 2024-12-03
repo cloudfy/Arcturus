@@ -7,11 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Arcturus.EventBus.Abstracts\Arcturus.EventBus.Abstracts.csproj" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Middleware\" />
+	  <ProjectReference Include="..\Arcturus.EventBus.Abstracts\Arcturus.EventBus.Abstracts.csproj" />
 	</ItemGroup>
 
 

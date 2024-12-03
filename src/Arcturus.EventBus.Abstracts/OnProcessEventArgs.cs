@@ -1,7 +1,16 @@
 ﻿namespace Arcturus.EventBus.Abstracts;
 
+/// <summary>
+/// Represents the event arguments for the <see cref="IProcessor.OnProcessAsync" /> event.
+/// </summary>
 public sealed class OnProcessEventArgs : EventArgs
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OnProcessEventArgs" /> class.
+    /// </summary>
+    /// <param name="messageId">Optional. Id of message.</param>
+    /// <param name="headers">Optional. Dictionary of headers.</param>
+    /// <param name="cancellationToken">Propogates notification that events should be cancelled.</param>
     public OnProcessEventArgs(
         string? messageId
         , IDictionary<string, object?>? headers
