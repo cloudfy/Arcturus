@@ -1,5 +1,8 @@
 ﻿namespace Arcturus.EventBus.Abstracts;
 
+/// <summary>
+/// Represents a connection to a message broker.
+/// </summary>
 public interface IConnection
 {
     /// <summary>

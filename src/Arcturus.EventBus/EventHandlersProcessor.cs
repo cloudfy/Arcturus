@@ -1,0 +1,74 @@
+﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Internals;
+using Arcturus.EventBus.Middleware;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Arcturus.EventBus;
+
+public sealed class EventHandlersProcessor : IProcessor
+{
+    private readonly IProcessor _processor;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<EventHandlersProcessor> _logger;
+
+    public EventHandlersProcessor(
+        IProcessor processor, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+    {
+        _processor = processor;
+        _processor.OnProcessAsync += InternalOnProcessAsync;
+
+        _serviceProvider = serviceProvider;
+
+        _logger = loggerFactory.CreateLogger<EventHandlersProcessor>();
+    }
+
+    public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
+
+    public async Task WaitForEvents(CancellationToken cancellationToken = default)
+    {
+        await _processor.WaitForEvents(cancellationToken);
+    }
+
+    private async Task InternalOnProcessAsync(IEventMessage @event, OnProcessEventArgs? e)
+    {
+        var eventType = @event.GetType();
+        var eventHandlerType = typeof(IEventMessageHandler<>).MakeGenericType(eventType);
+        var handlerType = ReflectionCache.GetOrCreate(
+            eventHandlerType
+            , (t) =>
+            {
+                // TODO: Cache
+                return AppDomain.CurrentDomain
+                    .GetAssemblies()
+                    .SelectMany(a => a.GetTypes())
+                    .FirstOrDefault(t => eventHandlerType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
+            });
+
+        if (handlerType is null)
+        {
+            _logger.LogTrace("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", eventType.Name);
+
+            if (OnProcessAsync is not null)
+                await OnProcessAsync!.Invoke(@event, e);
+            return;
+        }
+
+        using (var scope = _serviceProvider.CreateScope())
+        {
+            var pipeline = HostExtensions.BuildByRequestDelegate(
+                async () => {
+                    var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, handlerType);
+                    //var handler = scope.ServiceProvider.GetService(eventHandlerType); // Requires that they are registered using DI
+                    if (handler == null)
+                    {
+                        _logger.LogTrace("There are no handlers for the following event: {EventName}", eventType.Name);
+                        return;
+                    }
+                    await (Task)eventHandlerType.GetMethod(nameof(IEventMessageHandler<IEventMessage>.Handle))!.Invoke(handler, [@event!, e?.CancellationToken])!;
+                });
+
+            await pipeline(new EventContext(@event, nameof(@event), scope.ServiceProvider));
+        }
+    }
+}

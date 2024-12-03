@@ -1,5 +1,8 @@
 ﻿namespace Arcturus.EventBus.Abstracts;
 
+/// <summary>
+/// Abstract interface to processing events.
+/// </summary>
 public interface IProcessor
 {
     /// <summary>

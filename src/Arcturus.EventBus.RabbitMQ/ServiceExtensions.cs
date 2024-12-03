@@ -18,6 +18,7 @@ public static class ServicesExtensions
         services.AddSingleton<IConnection, RabbitMQConnection>(
             (sp) => { return new RabbitMQConnection(currentOptions); });
         services.AddSingleton<IEventBusFactory, RabbitMQEventBusFactory>();
+        services.AddSingleton<RabbitMQEventBusOptions>(currentOptions);
 
         return services;
     }
