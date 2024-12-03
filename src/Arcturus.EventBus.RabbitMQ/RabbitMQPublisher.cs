@@ -1,4 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Diagnostics;
 using Arcturus.EventBus.RabbitMQ.Internals;
 using Polly;
 using RabbitMQ.Client;
@@ -21,7 +22,7 @@ public sealed class RabbitMQPublisher : IPublisher
         _connection = (RabbitMQConnection)connection;
         _queueName = queueName ?? "default_queue";
     }
-
+        
     public async Task Publish<TEvent>(
         TEvent @event
         , CancellationToken cancellationToken = default) where TEvent : IEventMessage
@@ -44,6 +45,11 @@ public sealed class RabbitMQPublisher : IPublisher
             var message = EventMessageSerializer.Serialize(@event);
             var body = Encoding.UTF8.GetBytes(message);
 
+            using Activity? sendActivity = EventBusActivitySource.PublisherHasListeners
+                ? EventBusActivitySource.Publish(@event.GetType().Name)
+                : default;
+            //sendActivity?.SetTag("eventbus.message.name", @event.GetType().Name);
+
             var properties = new BasicProperties
             {
                 Persistent = true
@@ -56,6 +62,5 @@ public sealed class RabbitMQPublisher : IPublisher
             await _connection.Channel.BasicPublishAsync(
                 exchange: string.Empty, routingKey: _queueName, mandatory: true, basicProperties: properties, body: body);
         });
-
     }
 }
