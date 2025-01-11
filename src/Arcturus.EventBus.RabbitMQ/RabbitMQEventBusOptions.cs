@@ -15,7 +15,10 @@ public sealed class RabbitMQEventBusOptions
     /// </summary>
     public string? HostName { get; set; }
     /// <summary>
-    /// If true, events will be processed by the event handlers processor and fallback to the <see cref="Arcturus.EventBus.Abstracts.IProcessor.OnProcessAsync"/> event.
+    /// If true, events will be processed by the <see cref="Arcturus.EventBus.EventHandlersProcessor"/> or fallback to the <see cref="Arcturus.EventBus.Abstracts.IProcessor.OnProcessAsync"/> event.
     /// </summary>
+    /// <remarks>
+    /// The <see cref="Arcturus.EventBus.EventHandlersProcessor"/> provide support for event pipelines, which may implement <see cref="Arcturus.EventBus.Middleware.IEventMiddleware" />. Use <see cref="Arcturus.EventBus.Middleware.HostExtensions.UseEventMiddleware{TMiddleware}(Microsoft.Extensions.Hosting.IHost, object?[])"/>.
+    /// </remarks>
     public bool? UseEventHandlersProcessor { get; set; }
 }
