@@ -41,8 +41,8 @@ internal sealed class EventMessageConverter : JsonConverter<IEventMessage>
         var type = value.GetType();
         writer.WriteStartObject();
 
-        // Write the discriminator
-        writer.WriteString(DiscriminatorPropertyName, type.FullName);
+        // Write the discriminator (type)
+        writer.WriteString(DiscriminatorPropertyName, GetEventName(type));
 
         // Serialize the object properties
         var properties = type.GetProperties();
@@ -63,5 +63,13 @@ internal sealed class EventMessageConverter : JsonConverter<IEventMessage>
         }
 
         writer.WriteEndObject();
+    }
+    private static string GetEventName(Type type)
+    {
+        var messageAttribute = type.GetCustomAttribute<EventMessageAttribute>();
+        if (messageAttribute is not null)
+            return messageAttribute.Name;
+
+        return type.FullName!;
     }
 }

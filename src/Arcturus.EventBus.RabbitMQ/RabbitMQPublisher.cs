@@ -53,9 +53,9 @@ public sealed class RabbitMQPublisher : IPublisher
             var body = Encoding.UTF8.GetBytes(message);
 
             using Activity? sendActivity = EventBusActivitySource.PublisherHasListeners
-                ? EventBusActivitySource.Publish(@event.GetType().Name)
+                ? EventBusActivitySource.Publish(GetEventName(@event))
                 : default;
-            //sendActivity?.SetTag("eventbus.message.name", @event.GetType().Name);
+            //sendActivity?.SetTag("eventbus.message.name", GetEventName(@event));
 
             var properties = new BasicProperties
             {
@@ -69,5 +69,14 @@ public sealed class RabbitMQPublisher : IPublisher
             await _connection.Channel.BasicPublishAsync(
                 exchange: string.Empty, routingKey: _queueName, mandatory: true, basicProperties: properties, body: body);
         });
+    }
+
+    private static string GetEventName(IEventMessage @event)
+    {
+        var messageAttribute = @event.GetType().GetCustomAttribute<EventMessageAttribute>();
+        if (messageAttribute is not null)
+            return messageAttribute.Name;
+
+        return @event.GetType().Name;
     }
 }

@@ -6,7 +6,7 @@
 public interface IPublisher
 {
     /// <summary>
-    /// Publishes an event via the event bus.
+    /// Publishes an <see cref="IEventMessage" /> via the event bus.
     /// </summary>
     /// <typeparam name="TEvent">Event type implemented by <see cref="IEventMessage"/></typeparam>
     /// <param name="event">Required. Event to publish.</param>

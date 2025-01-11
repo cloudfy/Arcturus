@@ -1,7 +1,7 @@
 ﻿namespace Arcturus.EventBus.Abstracts;
 
 /// <summary>
-/// Provides methods to creates instances of <see cref="IProcessor"/>, <see cref="IPublisher"/>, and <see cref="ISubscriber"/>.
+/// Provides methods to creates instances of <see cref="IProcessor"/> and <see cref="IPublisher"/>.
 /// </summary>
 public interface IEventBusFactory
 {

@@ -19,11 +19,13 @@ public sealed class RabbitMQEventBusFactory(
     }
     public IProcessor CreateProcessor(string? queue = null)
     {
-        // returns a wrapper
+        // returns a wrapper processor that will handle the event handlers
+        // and fallback to the processor if no handlers are found
         if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
             return new EventHandlersProcessor(
                 new RabbitMQProcessor(_connection, queue), _serviceProvider, loggerFactory);
-        return new RabbitMQProcessor(connection, queue);
+
+        return new RabbitMQProcessor(_connection, queue);
     }
     //public ISubscriber CreateSubscriber()
     //{

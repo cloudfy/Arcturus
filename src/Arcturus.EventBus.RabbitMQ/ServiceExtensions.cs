@@ -5,6 +5,12 @@ namespace Arcturus.EventBus.RabbitMQ;
 
 public static class ServicesExtensions
 {
+    /// <summary>
+    /// Adds RabbitMQ EventBus to the service collection.
+    /// </summary>
+    /// <param name="services">Service collection.</param>
+    /// <param name="options">Optional.</param>
+    /// <returns><see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddRabbitMQEventBus(
         this IServiceCollection services
         , Action<RabbitMQEventBusOptions>? options = null)

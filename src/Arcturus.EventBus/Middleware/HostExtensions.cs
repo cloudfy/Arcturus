@@ -13,13 +13,20 @@ public static class HostExtensions
     private readonly static MethodInfo _getServiceInfo
         = typeof(HostExtensions).GetMethod(nameof(GetService), BindingFlags.NonPublic | BindingFlags.Static)!;
 
-    public static IHost UseMiddleware<TMiddleware>(
+    /// <summary>
+    /// Injects an event middleware into the event pipeline.
+    /// </summary>
+    /// <typeparam name="TMiddleware"></typeparam>
+    /// <param name="app"></param>
+    /// <param name="args"></param>
+    /// <returns></returns>
+    public static IHost UseEventMiddleware<TMiddleware>(
         this IHost app, params object?[] args) where TMiddleware : IEventMiddleware
     {
-        return app.UseMiddleware(typeof(TMiddleware), args);
+        return app.UseEventMiddleware(typeof(TMiddleware), args);
     }
 
-    private static IHost UseMiddleware(
+    private static IHost UseEventMiddleware(
         this IHost app
         , Type middleware
         , params object?[] args)
@@ -87,7 +94,7 @@ public static class HostExtensions
         private readonly MethodInfo _invokeMethod;
         private readonly ParameterInfo[] _parameters;
 
-        public ReflectionMiddlewareBinder(
+        internal ReflectionMiddlewareBinder(
             IHost app,
             Type middleware,
             object?[] args,
@@ -102,7 +109,7 @@ public static class HostExtensions
         }
 
         // The CreateMiddleware method name is used by ApplicationBuilder to resolve the middleware type.
-        public RequestDelegate CreateMiddleware(RequestDelegate next)
+        internal RequestDelegate CreateMiddleware(RequestDelegate next)
         {
             var ctorArgs = new object[_args.Length + 1];
             ctorArgs[0] = next;

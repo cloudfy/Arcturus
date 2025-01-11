@@ -54,6 +54,9 @@ public sealed class EventHandlersProcessor : IProcessor
             return;
         }
 
+        // initiate a scope for the pipeline
+        // - the scopes service provider is passed onto the eventhandler
+#pragma warning disable IDE0063 // Use simple 'using' statement
         using (var scope = _serviceProvider.CreateScope())
         {
             var pipeline = HostExtensions.BuildByRequestDelegate(
@@ -70,5 +73,6 @@ public sealed class EventHandlersProcessor : IProcessor
 
             await pipeline(new EventContext(@event, nameof(@event), scope.ServiceProvider));
         }
+#pragma warning restore IDE0063 // Use simple 'using' statement
     }
 }
