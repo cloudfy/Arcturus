@@ -5,11 +5,11 @@ namespace Arcturus.EventBus.RabbitMQ.Internals;
 
 internal static class EventMessageSerializer
 {
-    private static JsonSerializerOptions _options = new()
+    private static readonly JsonSerializerOptions _options = new()
     {
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
         , WriteIndented = false
-        , Converters = { new EventBus.Serialization.EventMessageConverter() }
+        , Converters = { new EventBus.Serialization.DefaultEventMessageConverter() }
     };
 
     internal static string Serialize(IEventMessage @event)
