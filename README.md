@@ -19,6 +19,7 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 * [Arcturus.EventBus](https://github.com/cloudfy/Arcturus/wiki/EventBus): Provides eventbus implementation.
 * [Arcturus.EventBus.Abstracts](https://github.com/cloudfy/Arcturus/wiki/EventBus): Provides abstracts eventbus implementation.
 * [Arcturus.EventBus.RabbitMQ](https://github.com/cloudfy/Arcturus/wiki/EventBus): RabbitMQ implementation of the event bus.
+* [Arcturus.EventBus.AzureStorageQueue](https://github.com/cloudfy/Arcturus/wiki/EventBus): Azure Storage Queue implementation of the event bus.
 
 ## Read the Wiki
 As Arcturus consist of multiple packages, we are keeping documentation in the [Wiki](https://github.com/cloudfy/Arcturus/wiki).
