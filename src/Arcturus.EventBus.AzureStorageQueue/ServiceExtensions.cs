@@ -5,6 +5,12 @@ namespace Arcturus.EventBus.AzureStorageQueue;
 
 public static class ServiceExtensions
 {
+    /// <summary>
+    /// Adds Arcturus.EventBus implementation using Azure Storage Queues to the service collection.
+    /// </summary>
+    /// <param name="services">Required. Service collection.</param>
+    /// <param name="options">Optional. Options to configure.</param>
+    /// <returns></returns>
     public static IServiceCollection AddAzureStorageQueueEventBus(
         this IServiceCollection services
         , Action<StorageQueueOptions>? options = null)

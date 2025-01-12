@@ -19,9 +19,12 @@ public class StorageQueueFactory(
         // and fallback to the processor if no handlers are found
         if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
             return new EventHandlersProcessor(
-                new StorageQueueProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName), _serviceProvider, loggerFactory);
+                new StorageQueueProcessor(
+                    _connection
+                    , _eventBusOptions
+                    , queue ?? _eventBusOptions.DefaultQueueName), _serviceProvider, loggerFactory);
 
-        return new StorageQueueProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName);
+        return new StorageQueueProcessor(_connection, _eventBusOptions, queue ?? _eventBusOptions.DefaultQueueName);
     }
 
     public IPublisher CreatePublisher(string? queue = null)
