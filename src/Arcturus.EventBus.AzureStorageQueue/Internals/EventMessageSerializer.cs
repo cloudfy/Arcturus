@@ -1,7 +1,7 @@
 ﻿using Arcturus.EventBus.Abstracts;
 using System.Text.Json;
 
-namespace Arcturus.EventBus.RabbitMQ.Internals;
+namespace Arcturus.EventBus.AzureStorageQueue.Internals;
 
 internal static class EventMessageSerializer
 {
@@ -9,7 +9,7 @@ internal static class EventMessageSerializer
     {
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
         , WriteIndented = false
-        , Converters = { new EventBus.Serialization.DefaultEventMessageConverter() }
+         , Converters = { new Serialization.DefaultEventMessageConverter() }
     };
 
     internal static string Serialize(IEventMessage @event)

@@ -2,17 +2,14 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Arcturus.EventBus.RabbitMQ.Internals;
+namespace Arcturus.EventBus.Serialization;
 
-internal sealed class EventMessageConverter : JsonConverter<IEventMessage>
+public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
 {
     private const string DiscriminatorPropertyName = "$eventType";
     private readonly DefaultEventMessageTypeResolver _typeResolver;
 
-    internal EventMessageConverter()
-    {
-        _typeResolver = new DefaultEventMessageTypeResolver();
-    }
+    public DefaultEventMessageConverter() => _typeResolver = new DefaultEventMessageTypeResolver();
 
     public override IEventMessage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

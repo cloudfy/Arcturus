@@ -1,6 +1,6 @@
 ﻿using Arcturus.EventBus.Abstracts;
 
-namespace Arcturus.EventBus.RabbitMQ.Internals;
+namespace Arcturus.EventBus.Serialization;
 
 /// <summary>
 /// Default type resolver using the AppDomain.

@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus;
 
+/// <summary>
+/// Initializes a new instance of the auto-event wired message processor. This handles the events.
+/// </summary>
 public sealed class EventHandlersProcessor : IProcessor
 {
     private readonly IProcessor _processor;
