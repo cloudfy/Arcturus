@@ -1,40 +1,53 @@
 ﻿using Arcturus.EventBus.Abstracts;
 using Arcturus.EventBus.AzureServiceBus.Internals;
+using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus.AzureServiceBus;
 
-public sealed class ServiceBusPublisher : IPublisher
+public sealed class ServiceBusPublisher : IPublisher, IAsyncDisposable
 {
     private readonly ServiceBusConnection _connection;
     private readonly string _queueName;
     private readonly ILogger<ServiceBusPublisher> _logger;
     private readonly ServiceBusOptions _options;
+    private ServiceBusSender? _sender;
 
     internal ServiceBusPublisher(
         IConnection connection
-        , string? queue
+        , string queueName
         , ServiceBusOptions options
         , ILoggerFactory loggerFactory)
     {
         _connection = (ServiceBusConnection)connection;
-        _queueName = queue ?? "default-queue";
+        _queueName = queueName;
         _logger = loggerFactory.CreateLogger<ServiceBusPublisher>();
         _options = options;
     }
 
+    private async ValueTask<ServiceBusSender> GetOrCacheSender()
+    {
+        if (_sender is null)
+        {
+            var serviceBusClient = await _connection.GetServiceBusClient();
+            _sender = serviceBusClient.CreateSender(
+                _queueName
+                , new ServiceBusSenderOptions
+                {
+                    Identifier = _options.ClientId
+                });
+        }
+        return _sender;
+    }
     public async Task Publish<TEvent>(
         TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEventMessage
     {
-        var servieBusClient = await _connection.GetServiceBusClient();
-        var sender = servieBusClient.CreateSender(
-            _queueName
-            , new Azure.Messaging.ServiceBus.ServiceBusSenderOptions
-            {
-                Identifier = _options.ClientId
-            });
+        var sender = await GetOrCacheSender();
 
-        var serviceBusMessage = new Azure.Messaging.ServiceBus.ServiceBusMessage(EventMessageSerializer.Serialize(@event));
+        var serviceBusMessage = new ServiceBusMessage(EventMessageSerializer.Serialize(@event))
+        {
+            MessageId = Guid.NewGuid().ToString("N")
+        };
         //serviceBusMessage.CorrelationId = ""
         //serviceBusMessage.TimeToLive
 
@@ -45,6 +58,10 @@ public sealed class ServiceBusPublisher : IPublisher
             , serviceBusMessage.MessageId);
 
         await sender.SendMessageAsync(serviceBusMessage, cancellationToken);
-        await sender.DisposeAsync();
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        return _sender?.DisposeAsync() ?? ValueTask.CompletedTask;
     }
 }

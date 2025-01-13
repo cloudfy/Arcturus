@@ -31,10 +31,10 @@ public sealed class ServiceBusProcessor : IProcessor
         var processorClient = queueClient.CreateProcessor(
             _queueName
             , new Azure.Messaging.ServiceBus.ServiceBusProcessorOptions {
-                ReceiveMode = Azure.Messaging.ServiceBus.ServiceBusReceiveMode.ReceiveAndDelete //.PeekLock
+                ReceiveMode = Azure.Messaging.ServiceBus.ServiceBusReceiveMode.PeekLock //.PeekLock
                 , Identifier = _options.ClientId
                 , MaxConcurrentCalls = 1
-                , AutoCompleteMessages = true
+                , AutoCompleteMessages = false // true
             });
 
         processorClient.ProcessMessageAsync += async args =>
@@ -47,12 +47,29 @@ public sealed class ServiceBusProcessor : IProcessor
                 var @event = EventMessageSerializer.Deserialize(messageBody);
                 
                 if (OnProcessAsync is not null)
-                    await OnProcessAsync.Invoke(
-                        @event
-                        , new OnProcessEventArgs(
-                            args.Message.MessageId
-                            , args.Message.ApplicationProperties.ToDictionary()
-                            , args.CancellationToken));
+                {
+                    try
+                    {
+                        await OnProcessAsync.Invoke(
+                           @event
+                           , new OnProcessEventArgs(
+                               args.Message.MessageId
+                               , args.Message.ApplicationProperties.ToDictionary()
+                               , args.CancellationToken));
+
+                        await args.CompleteMessageAsync(args.Message, cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, "An error occured handling the event. Moving event message to dead-letter.");
+
+                        string deadLetterReason = "ManualDeadLetter";
+                        string deadLetterDescription = "This message was dead-lettered manually using ServiceBusProcessor.";
+
+                        await args.DeadLetterMessageAsync(
+                            args.Message, deadLetterReason, deadLetterDescription, cancellationToken);
+                    }
+                }
             }
         };
         processorClient.ProcessErrorAsync += args =>

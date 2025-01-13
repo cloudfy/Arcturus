@@ -12,6 +12,8 @@
 		<RepositoryType>git</RepositoryType>
 
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+
+		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
