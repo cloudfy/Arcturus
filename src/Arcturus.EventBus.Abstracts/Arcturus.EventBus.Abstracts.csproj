@@ -7,5 +7,7 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 
 	</PropertyGroup>
-
+	<ItemGroup>
+		<None Include="bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
+	</ItemGroup>
 </Project>

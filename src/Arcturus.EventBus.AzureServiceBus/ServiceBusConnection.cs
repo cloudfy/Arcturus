@@ -1,6 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
 using Azure.Messaging.ServiceBus;
-using System;
 
 namespace Arcturus.EventBus.AzureServiceBus;
 
@@ -29,9 +28,19 @@ public sealed class ServiceBusConnection : IConnection, IAsyncDisposable
 
     internal ValueTask Connect()
     {
+        ArgumentException.ThrowIfNullOrEmpty(_currentOptions.ConnectionString, nameof(_currentOptions.ConnectionString));
+
         var clientOptions = new ServiceBusClientOptions()
         {
             TransportType = ServiceBusTransportType.AmqpWebSockets
+            , Identifier = _currentOptions.ClientId
+            , RetryOptions = new ServiceBusRetryOptions()
+            {
+                Mode = ServiceBusRetryMode.Exponential
+                , Delay = TimeSpan.FromSeconds(1)
+                , MaxDelay = TimeSpan.FromSeconds(10)
+                , MaxRetries = 3
+            }
         };
         _client = new ServiceBusClient(_currentOptions.ConnectionString, clientOptions);
         _isConnected = true;
@@ -44,8 +53,5 @@ public sealed class ServiceBusConnection : IConnection, IAsyncDisposable
         await EnsureConnected();
         return _client!;
     }
-    public ValueTask DisposeAsync()
-    {
-        return _client!.DisposeAsync();
-    }
+    public ValueTask DisposeAsync() => _client!.DisposeAsync();
 }

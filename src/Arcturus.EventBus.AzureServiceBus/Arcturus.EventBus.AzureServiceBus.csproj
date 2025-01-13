@@ -4,6 +4,7 @@
 		<PackageId>Arcturus.EventBus.AzureServieBus</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus,azure,servicebus,queue</PackageTags>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -16,6 +17,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Arcturus.EventBus\Arcturus.EventBus.csproj" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<None Include="bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
+	</ItemGroup>
 
 </Project>
