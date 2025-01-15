@@ -14,7 +14,7 @@ We support responsible disclosure practices. Please allow us a reasonable timefr
 
 ## Security Roadmap
 
-PlatformPlatform is currently in the early stage. We're proactively working towards strengthening our security posture. Our ongoing efforts include:
+Arcturus is currently in the early stage. We're proactively working towards strengthening our security posture. Our ongoing efforts include:
 
 1. Engaging professional penetration testing services
 2. Implementing Static Code Analysis within pull request workflows
