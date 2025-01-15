@@ -12,6 +12,10 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 * [Arcturus.ResultObjects](https://github.com/cloudfy/Arcturus/wiki/ResultObjects): Enable control of application state via `Result` rather than exceptions.
 * [Arcturus.ResultObjects for AspNetCore](https://github.com/cloudfy/Arcturus/wiki/ResultObjects-(AspNetCore-extension)): An extension to `Arcturus.ResultObjects` which enables return of normalized HTTP status codes using `ProblemDetails`.
 
+### Patchable
+* [Arcturus.Patchable](https://github.com/cloudfy/Arcturus/wiki/Patchable): Enable Patch endpoints to partial updates.
+* [Arcturus.Extensions.Patchable.AspNetCore](https://github.com/cloudfy/Arcturus/wiki/Patchable): ASP.NET adoptation of patch endpoints.
+  
 ### ASP.Net Core
 * [Arcturus.AspNetCore.Endpoints](https://github.com/cloudfy/Arcturus/wiki/Endpoints-(AspNetCore)): Provides endpoint builder pattern to setup MVC based controller endpoints.
 
