@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.EventBus.AzureStor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.EventBus.AzureServiceBus", "src\Arcturus.EventBus.AzureServiceBus\Arcturus.EventBus.AzureServiceBus.csproj", "{61F97C2A-46FD-4183-980C-507EB1FE4D28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Patchable", "src\Arcturus.Patchable\Arcturus.Patchable.csproj", "{2AB6ADBC-8BC0-4083-B766-7BBB3A2BD7A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Extensions.Patchable.AspNetCore", "src\Arcturus.Extensions.Patchable.AspNetCore\Arcturus.Extensions.Patchable.AspNetCore.csproj", "{FFAAC84F-D01B-432D-BD56-26B1734516E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +73,14 @@ Global
 		{61F97C2A-46FD-4183-980C-507EB1FE4D28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61F97C2A-46FD-4183-980C-507EB1FE4D28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61F97C2A-46FD-4183-980C-507EB1FE4D28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AB6ADBC-8BC0-4083-B766-7BBB3A2BD7A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AB6ADBC-8BC0-4083-B766-7BBB3A2BD7A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AB6ADBC-8BC0-4083-B766-7BBB3A2BD7A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AB6ADBC-8BC0-4083-B766-7BBB3A2BD7A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
