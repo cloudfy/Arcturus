@@ -26,6 +26,9 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 * [Arcturus.EventBus.AzureStorageQueue](https://github.com/cloudfy/Arcturus/wiki/EventBs): Azure Storage Queue implementation of the event bus.
 * [Arcturus.EventBus.AzureServiceBus](https://github.com/cloudfy/Arcturus/wiki/EventBus): Azure Service Bus implementatino of the event bus.
 
+### CommandLine
+* [Arcturus.Extensions.CommandLine](): An extension to [System.CommandLine](https://learn.microsoft.com/en-us/dotnet/standard/commandline/) which enables dependency injection and command handler implementation.
+
 ## Read the Wiki
 As Arcturus consist of multiple packages, we are keeping documentation in the [Wiki](https://github.com/cloudfy/Arcturus/wiki).
 
