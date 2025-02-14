@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Patchable", "src\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Extensions.Patchable.AspNetCore", "src\Arcturus.Extensions.Patchable.AspNetCore\Arcturus.Extensions.Patchable.AspNetCore.csproj", "{FFAAC84F-D01B-432D-BD56-26B1734516E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Extensions.CommandLine", "src\Arcturus.Extensions.CommandLine\Arcturus.Extensions.CommandLine.csproj", "{0E001D55-DF45-C900-A4B0-6B735DBCEFF8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFAAC84F-D01B-432D-BD56-26B1734516E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E001D55-DF45-C900-A4B0-6B735DBCEFF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E001D55-DF45-C900-A4B0-6B735DBCEFF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E001D55-DF45-C900-A4B0-6B735DBCEFF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E001D55-DF45-C900-A4B0-6B735DBCEFF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
