@@ -29,6 +29,9 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 ### CommandLine
 * [Arcturus.Extensions.CommandLine](): An extension to [System.CommandLine](https://learn.microsoft.com/en-us/dotnet/standard/commandline/) which enables dependency injection and command handler implementation.
 
+### Configuration
+* [Arcturus.Extensions.Configuration.AzureStorageBlob](); Enable storing configuration options in Azure Blob Storage.
+
 ## Read the Wiki
 As Arcturus consist of multiple packages, we are keeping documentation in the [Wiki](https://github.com/cloudfy/Arcturus/wiki).
 
