@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Arcturus.Extensions.CommandLine</PackageId>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageTags>commandline, cli, dependency injection</PackageTags>
-		<RootNamespace>Arcturus.CommandLine</RootNamespace>
+		
 	</PropertyGroup>
 
 	<ItemGroup>
