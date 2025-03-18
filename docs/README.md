@@ -13,6 +13,7 @@ Arcturus is a ready-to-use framework designed for building modern cloud and dist
 | Arcturus.EventBus | Event bus for publish/subscribe pattern. | Arcturus.EventBus |
 | Arcturus.EventBus.RabbitMQ | RabbitMQ implementation for Arcturus.EventBus. | Arcturus.EventBus.RabbitMQ |
 | Arcturus.EventBus.Abstracts | Abstracts for EventBus implementation | Arcturus.EventBus.Abstracts |
+| Arcturus.Extensions.Configuration.AzureStorageBlob | Azure Storage Blob configuration provider. | Arcturus.Extensions.Configuration.AzureStorageBlob |
 
 ## Installation
 Using .NET CLI

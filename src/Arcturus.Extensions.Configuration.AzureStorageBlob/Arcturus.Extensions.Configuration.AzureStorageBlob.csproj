@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Arcturus.Extensions.Configuration.AzureStorageBlob</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>configuration, azure blob storage</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.24.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
+  </ItemGroup>
+
+</Project>
