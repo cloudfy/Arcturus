@@ -72,7 +72,7 @@ public static class HostExtensions
                     // we use reflection to instanciate
                     var option = CreateOptionInstance(
                         field.pinfo.PropertyType, field.attr!.Name, field.attr?.Description);
-                    option.IsRequired = !TypeExtensions.IsNullable(field.pinfo.PropertyType);
+                    option.IsRequired = !Arcturus.CommandLine.Internals.TypeExtensions.IsNullable(field.pinfo.PropertyType);
                     
                     wrappedCommand.AddOption(option);
                 }
@@ -95,10 +95,10 @@ public static class HostExtensions
                                 .FirstOrDefault();
                             if (property is not null)
                             {
-                                if (TypeExtensions.IsEnumOrNullableEnum(property.PropertyType))
+                                if (Arcturus.CommandLine.Internals.TypeExtensions.IsEnumOrNullableEnum(property.PropertyType))
                                 {
                                     ov = Enum.Parse(
-                                        TypeExtensions.GetEnumType(property.PropertyType)
+                                        Arcturus.CommandLine.Internals.TypeExtensions.GetEnumType(property.PropertyType)
                                         , ov.ToString(), true);
                                 }
                                 property.SetValue(command, ov);
