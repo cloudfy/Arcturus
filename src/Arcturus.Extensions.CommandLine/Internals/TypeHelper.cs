@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Arcturus.CommandLine.Internals;
 
-internal static class TypeExtensions
+internal static class TypeHelper
 {
     internal static bool TryGetMethod(this Type type, string name, [NotNullWhen(true)] out MethodInfo? method)
     {

@@ -72,7 +72,7 @@ public static class HostExtensions
                     // we use reflection to instanciate
                     var option = CreateOptionInstance(
                         field.pinfo.PropertyType, field.attr!.Name, field.attr?.Description);
-                    option.IsRequired = !TypeExtensions.IsNullable(field.pinfo.PropertyType);
+                    option.IsRequired = !TypeHelper.IsNullable(field.pinfo.PropertyType);
                     
                     wrappedCommand.AddOption(option);
                 }
@@ -88,6 +88,8 @@ public static class HostExtensions
                         foreach (var o in context.ParseResult.CommandResult.Command.Options) 
                         {
                             var ov = context.ParseResult.GetValueForOption(o);
+                            if (ov is null)
+                                continue;
 
                             var property = subCommandType
                                 .GetProperties()
@@ -95,10 +97,10 @@ public static class HostExtensions
                                 .FirstOrDefault();
                             if (property is not null)
                             {
-                                if (TypeExtensions.IsEnumOrNullableEnum(property.PropertyType))
+                                if (TypeHelper.IsEnumOrNullableEnum(property.PropertyType))
                                 {
                                     ov = Enum.Parse(
-                                        TypeExtensions.GetEnumType(property.PropertyType)
+                                        TypeHelper.GetEnumType(property.PropertyType)
                                         , ov.ToString(), true);
                                 }
                                 property.SetValue(command, ov);
@@ -124,7 +126,7 @@ public static class HostExtensions
         // Get the constructor that matches (string, string)
         ConstructorInfo ctor = genericType.GetConstructor([typeof(string), typeof(string)]);
 
-        if (ctor == null)
+        if (ctor is null)
             throw new InvalidOperationException("Matching constructor not found.");
 
         // Create instance using the constructor
