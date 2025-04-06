@@ -8,7 +8,12 @@ namespace Arcturus.ResultObjects;
 /// </summary>
 public class Result
 {
-    internal Result(bool isSuccess, Fault? fault = null)
+    /// <summary>
+    /// Creates a new instance of <see cref="Result"/> with a <paramref name="fault"/> and <paramref name="isSuccess"/>.
+    /// </summary>
+    /// <param name="isSuccess">A value of <see cref="bool"/> indicating is the result represens success.</param>
+    /// <param name="fault">Optional <see cref="ResultObjects.Fault"/> if <paramref name="isSuccess"/> is false.</param>
+    protected Result(bool isSuccess, Fault? fault = null)
     {
         IsSuccess = isSuccess;
         Fault = fault;
@@ -29,7 +34,7 @@ public class Result
     /// <typeparam name="TValue">Type of value.</typeparam>
     /// <param name="value">Optional. Value of result.</param>
     /// <returns><see cref="Result{T}"/></returns>
-    public static Result<TValue> Success<TValue>(TValue? value) => new(true, value);
+    public static Result<TValue> Success<TValue>(TValue? value) => Result<TValue>.Create(true, value);
     /// <summary>
     /// Returns a failure result with an optional <paramref name="fault"/>.
     /// </summary>
@@ -42,7 +47,7 @@ public class Result
     /// <typeparam name="TValue">Type of value.</typeparam>
     /// <param name="fault">Optional.</param>
     /// <returns><see cref="Result{T}"/></returns>
-    public static Result<TValue> Failure<TValue>(Fault? fault = null) => new(false, default, fault);
+    public static Result<TValue> Failure<TValue>(Fault? fault = null) => Result<TValue>.Create(false, default, fault);
     /// <summary>
     /// Returns a failure result with a fault of <paramref name="code"/> and <paramref name="message"/>
     /// </summary>
@@ -50,7 +55,7 @@ public class Result
     /// <param name="code">Optional code.</param>
     /// <param name="message">Message of the fault.</param>
     /// <returns><see cref="Result{T}"/></returns>
-    public static Result<TValue> Failure<TValue>(string? code, string message) => new(false, default, new Fault(code, message));
+    public static Result<TValue> Failure<TValue>(string? code, string message) => Result<TValue>.Create(false, default, new Fault(code, message));
     /// <summary>
     /// Returns true if the result is a success.
     /// </summary>
