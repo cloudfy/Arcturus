@@ -5,6 +5,14 @@ namespace Arcturus.AspNetCore.Endpoints;
 
 public static class MvcOptionsExtensions
 {
+    /// <summary>
+    /// Adds the <see cref="RoutePrefixConvention"/> to the <see cref="MvcOptions.Conventions"/> allowing the use of <see cref="EndpointsBuilder"/>.
+    /// <para>
+    /// Remember to call *MapControllers*.
+    /// </para>
+    /// </summary>
+    /// <param name="options">Required.</param>
+    /// <returns><see cref="MvcOptions"/></returns>
     public static MvcOptions UseEndpointsConventions(this MvcOptions options)
     {
         options.Conventions.Add(
@@ -36,5 +44,3 @@ public static class MvcOptionsExtensions
         }
     }
 }
-
-

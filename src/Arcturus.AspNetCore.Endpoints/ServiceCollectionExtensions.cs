@@ -8,14 +8,27 @@ public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Adds all classes that implement IEndPointModule to the service collection.
+    /// <para>
+    /// Remember to call <see cref="MapEndpointModules(IEndpointRouteBuilder)"/>.
+    /// </para>
     /// </summary>
     /// <param name="services">Required.</param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddEndpointModules(this IServiceCollection services)
-    {
-        var asam = Assembly.GetCallingAssembly();
+    public static IServiceCollection AddEndpointModules(this IServiceCollection services) 
+        => AddEndpointModules(services, Assembly.GetCallingAssembly());
 
-        var modules = asam
+    /// <summary>
+    /// Adds all classes that implement IEndPointModule to the service collection.
+    /// <para>
+    /// Remember to call <see cref="MapEndpointModules(IEndpointRouteBuilder)"/>.
+    /// </para>
+    /// </summary>
+    /// <param name="services">Required.</param>
+    /// <param name="assembly"><see cref="Assembly"/> to get array of <see cref="IEndPointModule"/> from.</param>
+    /// <returns><see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddEndpointModules(this IServiceCollection services, Assembly assembly)
+    {
+        var modules = assembly
             .GetTypes()
             .Where(
                 t => !t.IsAbstract
