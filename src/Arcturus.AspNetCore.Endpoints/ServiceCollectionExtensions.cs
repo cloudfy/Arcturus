@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Reflection;
 
 namespace Arcturus.AspNetCore.Endpoints;
@@ -13,9 +15,10 @@ public static class ServiceCollectionExtensions
     /// </para>
     /// </summary>
     /// <param name="services">Required.</param>
+    /// <param name="configuration">Optional. </param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddEndpointModules(this IServiceCollection services) 
-        => AddEndpointModules(services, Assembly.GetCallingAssembly());
+    public static IServiceCollection AddEndpointModules(this IServiceCollection services, Action<EndpointModuleConfiguration>? configuration = null) 
+        => AddEndpointModules(services, Assembly.GetCallingAssembly(), configuration);
 
     /// <summary>
     /// Adds all classes that implement IEndPointModule to the service collection.
@@ -25,9 +28,18 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="services">Required.</param>
     /// <param name="assembly"><see cref="Assembly"/> to get array of <see cref="IEndPointModule"/> from.</param>
+    /// <param name="configuration">Optional. </param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddEndpointModules(this IServiceCollection services, Assembly assembly)
+    public static IServiceCollection AddEndpointModules(
+        this IServiceCollection services
+        , Assembly assembly
+        , Action<EndpointModuleConfiguration>? configuration = null)
     {
+        var config = new EndpointModuleConfiguration();
+        configuration?.Invoke(config);
+
+        services.AddSingleton<EndpointModuleConfiguration>(config);
+
         var modules = assembly
             .GetTypes()
             .Where(
@@ -38,7 +50,18 @@ public static class ServiceCollectionExtensions
             );
         foreach (var module in modules)
         {
-            services.AddSingleton(typeof(IEndPointModule), module);
+            if (config.Lifetime == ServiceLifetime.Scoped)
+            {
+                services.AddScoped(typeof(IEndPointModule), module);
+            }
+            else if (config.Lifetime == ServiceLifetime.Transient)
+            {
+                services.AddTransient(typeof(IEndPointModule), module);
+            }
+            else // Default to Singleton
+            {
+                services.AddSingleton(typeof(IEndPointModule), module);
+            }
         }
 
         return services;
@@ -53,9 +76,40 @@ public static class ServiceCollectionExtensions
     /// <returns><see cref="IEndpointRouteBuilder"/></returns>
     public static IEndpointRouteBuilder MapEndpointModules(this IEndpointRouteBuilder builder)
     {
-        foreach (var moduleInterface in builder.ServiceProvider.GetServices<IEndPointModule>())
+        var config = builder.ServiceProvider.GetRequiredService<EndpointModuleConfiguration>();
+        var logger = builder.ServiceProvider.GetService<ILogger<IEndpointRouteBuilder>>();
+
+        if (config.Lifetime == ServiceLifetime.Scoped)
         {
-            moduleInterface.AddRoute(builder);
+            logger?.LogTrace("Registration using scope");
+            // Create a scope to resolve scoped services
+            using (var scope = builder.ServiceProvider.CreateScope())
+            {
+                var modules = scope.ServiceProvider.GetServices<IEndPointModule>();
+                foreach (var module in modules)
+                {
+                    try
+                    {
+                        module.AddRoute(builder);
+                    }
+                    catch (NotImplementedException)
+                    {
+                        // let it go
+                    }
+                    catch
+                    {
+                        throw;
+                    }
+                }
+            }
+        }
+        else
+        {
+            logger?.LogTrace("Registration using non-scope");
+            foreach (var moduleInterface in builder.ServiceProvider.GetServices<IEndPointModule>())
+            {
+                moduleInterface.AddRoute(builder);
+            }
         }
 
         return builder;

@@ -4,7 +4,7 @@
 /// Represents a result of an operation - success or failure.
 /// </summary>
 /// <typeparam name="T">Type fo containing result.</typeparam>
-public class Result<T> : Result
+public class Result<T> : Result, IResultValue
 {
     /// <summary>
     /// Creates a new instance of <see cref="Result{T}"/> with a <paramref name="fault"/> and <paramref name="isSuccess"/>.
@@ -23,6 +23,7 @@ public class Result<T> : Result
     /// Returns value of result or null.
     /// </summary>
     public T? Value { get; }
+    object IResultValue.Value => Value!;
     /// <summary>
     /// Returns a <see cref="Result{T}"/> as a success of <paramref name="value"/>.
     /// </summary>
