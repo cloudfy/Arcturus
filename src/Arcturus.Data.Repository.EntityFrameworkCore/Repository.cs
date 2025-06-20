@@ -2,6 +2,7 @@
 using Arcturus.Data.Repository.Abstracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Arcturus.Data.Repository.EntityFrameworkCore.Internals;
 
 namespace Arcturus.Data.Repository.EntityFrameworkCore;
 
@@ -115,5 +116,18 @@ public class Repository<T, TKey>(
         return await _context.Set<T>()
             .Where(predicate)
             .SingleOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<T?> FindOne(
+        Specification<T> specification
+        , bool tracking = false
+        , CancellationToken cancellationToken = default)
+    {
+        var exec = new SqlSpecificationExecutor<T>(specification);
+        var query = exec.Apply(_context.Set<T>());
+        if (tracking)
+            query = query.AsTracking();
+
+        return await query.SingleOrDefaultAsync(cancellationToken);
     }
 }

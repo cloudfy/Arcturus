@@ -120,4 +120,18 @@ public interface IRepository<T, TKey>
         , Expression<Func<T, R>> select
         , bool tracking = false
         , CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Finds a single entity that matches the specified predicate and projects it to the specified result type.
+    /// </summary>
+    /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
+    /// <param name="tracking">A value indicating whether the entity should be tracked by the context.  <see langword="true"/> to enable
+    /// tracking; otherwise, <see langword="false"/>.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the projected entity  of type
+    /// <typeparamref name="T"/>, or <see langword="null"/> if no entity matches the predicate.</returns>
+    /// <exception cref="NotImplementedException" />
+    Task<T?> FindOne(
+        Specification<T> specification
+        , bool tracking = false
+        , CancellationToken cancellationToken = default);
 }
