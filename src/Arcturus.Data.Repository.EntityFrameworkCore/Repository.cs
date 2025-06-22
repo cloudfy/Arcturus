@@ -117,7 +117,18 @@ public class Repository<T, TKey>(
             .Where(predicate)
             .SingleOrDefaultAsync(cancellationToken);
     }
-
+    /// <summary>
+    /// Finds a single entity that matches the specified criteria.
+    /// </summary>
+    /// <remarks>This method executes the query defined by the provided <see cref="Specification{T}"/>  and
+    /// returns the first matching entity or <see langword="null"/> if no match is found. If <paramref name="tracking"/>
+    /// is <see langword="true"/>, the returned entity will be tracked  by the context; otherwise, it will be retrieved
+    /// without tracking.</remarks>
+    /// <param name="specification">The criteria used to filter entities.</param>
+    /// <param name="tracking">A value indicating whether the entity should be tracked by the context.  <see langword="true"/> to enable
+    /// tracking; otherwise, <see langword="false"/>.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests. Defaults to <see cref="CancellationToken.None"/>.</param>
+    /// <returns>The first entity that matches the specified criteria, or <see langword="null"/> if no match is found.</returns>
     public async Task<T?> FindOne(
         Specification<T> specification
         , bool tracking = false
