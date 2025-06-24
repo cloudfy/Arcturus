@@ -128,13 +128,13 @@ public class Repository<T, TKey>(
     /// <param name="tracking">A value indicating whether the entity should be tracked by the context.  <see langword="true"/> to enable
     /// tracking; otherwise, <see langword="false"/>.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests. Defaults to <see cref="CancellationToken.None"/>.</param>
-    /// <returns>The first entity that matches the specified criteria, or <see langword="null"/> if no match is found.</returns>
+    /// <returns>The first <typeparamref name="T"/> that matches the specified criteria, or <see langword="null"/> if no match is found.</returns>
     public async Task<T?> FindOne(
         Specification<T> specification
         , bool tracking = false
         , CancellationToken cancellationToken = default)
     {
-        var exec = new SqlSpecificationExecutor<T>(specification);
+        var exec = new SqlSpecificationEvaluator<T>(specification);
         var query = exec.Apply(_context.Set<T>());
         if (tracking)
             query = query.AsTracking();
