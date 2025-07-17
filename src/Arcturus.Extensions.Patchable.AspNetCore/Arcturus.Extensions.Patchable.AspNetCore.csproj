@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Arcturus.Patchable\Arcturus.Patchable.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+
 </Project>

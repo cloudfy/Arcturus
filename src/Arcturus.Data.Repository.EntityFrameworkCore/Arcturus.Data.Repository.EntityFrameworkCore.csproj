@@ -14,4 +14,8 @@
 	  <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Data.Repository.Abstracts.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
 </Project>
