@@ -5,7 +5,7 @@
 
 ---
 
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Data.Repository.Abstracts is a .NET library that provides a set of abstractions for implementing robust, flexible, and testable data access layers using the repository and specification patterns. It enables developers to define generic, asynchronous, and strongly-typed repositories for any entity type, supporting advanced querying, projection, and entity management scenarios. The package is designed for use in modern .NET applications targeting .NET 8 and .NET 9.
 
 ## Installation
 

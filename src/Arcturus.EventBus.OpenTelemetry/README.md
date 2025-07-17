@@ -1,78 +1,41 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.EventBus.OpenTelemetry
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.EventBus.OpenTelemetry.svg)](https://www.nuget.org/packages/Arcturus.EventBus.OpenTelemetry) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.EventBus.OpenTelemetry.svg)](https://www.nuget.org/packages/Arcturus.EventBus.OpenTelemetry)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.EventBus.OpenTelemetry is a .NET library that provides seamless OpenTelemetry instrumentation for event-driven applications using the Arcturus EventBus. It enables distributed tracing and diagnostics for event publishing and subscription, allowing developers to monitor, analyze, and troubleshoot event flows across microservices and distributed systems.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.EventBus.OpenTelemetry
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.EventBus.OpenTelemetry
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+| Feature                                   | Description                                                                                       |
+|--------------------------------------------|---------------------------------------------------------------------------------------------------|
+| Distributed Tracing for EventBus           | Automatically creates and propagates OpenTelemetry traces for event publishing and handling.       |
+| Activity Source Integration                | Provides an `ActivitySource` for custom event bus activities, enabling fine-grained trace control.|
+| Configurable Instrumentation               | Supports options to customize which event bus operations are instrumented and traced.              |
+| Diagnostics and Monitoring                 | Enables collection of diagnostics data for event bus operations, improving observability.          |
+| Extensible for Custom EventBus Implementations | Designed to work with any Arcturus EventBus implementation, including RabbitMQ and Azure Service Bus. |
+| Minimal Overhead                          | Lightweight integration with minimal impact on event bus performance.                             |
+| .NET 8 and .NET 9 Support                 | Fully compatible with modern .NET platforms.                                                      |
 
 ## Documentation
 

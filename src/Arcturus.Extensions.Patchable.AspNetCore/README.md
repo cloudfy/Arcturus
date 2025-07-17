@@ -1,78 +1,39 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.Extensions.Patchable.AspNetCore
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Extensions.Patchable.AspNetCore.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Patchable.AspNetCore) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Extensions.Patchable.AspNetCore.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Patchable.AspNetCore)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Extensions.Patchable.AspNetCore is a .NET library that enables efficient partial updates of resources in ASP.NET Core applications using JSON Patch. It provides extension methods and utilities for applying RFC 6902-compliant patch operations to your models, simplifying the implementation of PATCH endpoints and improving API flexibility.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.Extensions.Patchable.AspNetCore
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.Extensions.Patchable.AspNetCore
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+- **JSON Patch Support**: Apply RFC 6902-compliant JSON Patch operations to your ASP.NET Core models.
+- **Extension Methods for Controllers**: Simplifies PATCH endpoint implementation with controller extensions for patching resources.
+- **Model Validation Integration**: Automatically validates patched models and integrates with ASP.NET Core's model validation pipeline.
+- **Error Handling**: Provides clear error responses for invalid patch documents or failed patch operations.
+- **Flexible Patch Application**: Supports patching of complex object graphs and nested properties.
+- **Seamless Integration**: Designed to work with ASP.NET Core's dependency injection and middleware pipeline.
+- **Documentation and Examples**: Includes usage documentation and code samples for quick adoption.
 
 ## Documentation
 

@@ -1,78 +1,42 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.Patchable
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Patchable.svg)](https://www.nuget.org/packages/Arcturus.Patchable) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Patchable.svg)](https://www.nuget.org/packages/Arcturus.Patchable)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Patchable is a .NET library that provides a flexible and type-safe framework for applying partial updates ("patches") to objects, commonly used in RESTful APIs and data processing scenarios. It supports JSON Patch-like operations, custom patch logic, and validation, enabling efficient and controlled modifications to your domain models.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.Patchable
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.Patchable
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+| Feature                        | Description                                                                                          |
+|--------------------------------|------------------------------------------------------------------------------------------------------|
+| Object Patch Abstraction       | Provides `IObjectPatch<T>` and `ObjectPatch<T>` for defining and applying patch operations to objects.|
+| Patch Operations               | Supports standard operations like add, remove, replace, and custom patch logic via `PatchOperation`. |
+| Patch Requests & Results       | Encapsulates patch requests (`PatchRequest<T>`) and results (`PatchResult<T>`) for robust workflows. |
+| Options & Validation           | Configurable patch options (`PatchOptions`) and built-in validation for safe updates.                |
+| JSON Patch Compatibility       | Designed to work with JSON Patch document formats for API scenarios.                                 |
+| Type Safety                    | Strongly-typed patching ensures compile-time safety and reduces runtime errors.                      |
+| Extensibility                  | Easily extendable for custom patch behaviors and domain-specific requirements.                       |
+| Error Reporting                | Detailed error information for failed patch operations.                                              |
 
 ## Documentation
 

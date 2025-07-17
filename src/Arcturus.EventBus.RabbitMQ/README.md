@@ -1,78 +1,41 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.EventBus.RabbitMQ
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.EventBus.RabbitMQ.svg)](https://www.nuget.org/packages/Arcturus.EventBus.RabbitMQ) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.EventBus.RabbitMQ.svg)](https://www.nuget.org/packages/Arcturus.EventBus.RabbitMQ)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.EventBus.RabbitMQ is a .NET library that provides a robust RabbitMQ-backed implementation of the Arcturus event bus. It enables distributed applications to reliably publish and subscribe to integration events using RabbitMQ, supporting scalable, decoupled, and resilient messaging patterns.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.EventBus.RabbitMQ
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.EventBus.RabbitMQ
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+- **Publish/Subscribe Messaging**: Send and receive integration events using RabbitMQ queues and exchanges.
+- **Reliable Delivery**: Built-in support for message acknowledgement and retry policies (via Polly) to ensure reliable event processing.
+- **Consumer and Producer Abstractions**: Easily implement event consumers and producers for your application workflows.
+- **Connection Management**: Automatic handling of RabbitMQ connections, including recovery and error handling.
+- **Dependency Injection Support**: Seamless integration with Microsoft.Extensions.DependencyInjection for easy registration and configuration.
+- **OpenTelemetry Integration**: Optional distributed tracing for event publishing and consumption using OpenTelemetry.
+- **Extensible Event Handling**: Flexible event handler registration and custom event serialization.
+- **Scalable Architecture**: Designed for high-throughput, distributed systems with support for multiple consumers and producers.
+- **Configurable Topology**: Customize exchanges, queues, and routing keys to fit your messaging requirements.
 
 ## Documentation
 

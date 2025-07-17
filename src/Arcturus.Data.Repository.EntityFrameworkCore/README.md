@@ -5,7 +5,7 @@
 
 ---
 
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Data.Repository.EntityFrameworkCore is a .NET library that provides a robust, generic repository pattern implementation for Entity Framework Core. It simplifies data access by abstracting common CRUD operations, querying, and specification-based filtering, enabling clean separation of concerns and testable data layers in your applications.
 
 ## Installation
 

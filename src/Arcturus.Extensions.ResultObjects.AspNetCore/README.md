@@ -1,78 +1,43 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.Extensions.ResultObjects.AspNetCore
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Extensions.ResultObjects.AspNetCore.svg)](https://www.nuget.org/packages/Arcturus.Extensions.ResultObjects.AspNetCore) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Extensions.ResultObjects.AspNetCore.svg)](https://www.nuget.org/packages/Arcturus.Extensions.ResultObjects.AspNetCore)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Extensions.ResultObjects.AspNetCore is a .NET library that integrates the Arcturus.ResultObjects pattern with ASP.NET Core, providing standardized error handling and response formatting. It enables seamless conversion of operation results into HTTP responses using Problem Details, supports correlation and trace IDs, and enriches error responses with exception details in development environments.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.Extensions.ResultObjects.AspNetCore
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.Extensions.ResultObjects.AspNetCore
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+| Feature                                 | Description                                                                                                         |
+|------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| ProblemDetails Integration               | Converts Arcturus.ResultObjects to RFC7807-compliant ProblemDetails responses for standardized error handling.       |
+| Correlation and Trace ID Support         | Automatically includes correlation and trace identifiers in error responses for improved diagnostics.                |
+| Exception Details in Development         | Enriches ProblemDetails with exception information when running in development environments.                         |
+| Customizable Error Mapping               | Utilizes ASP.NET Core's ApiBehaviorOptions for mapping HTTP status codes to error titles and types.                  |
+| ActionResult Extensions                  | Provides ProblemDetailsActionResult for returning operation results directly from controller actions.                |
+| Fault Object Mapping                     | Maps Arcturus Fault objects to ProblemDetails fields for clear error communication.                                 |
+| HTTP Status Code Propagation             | Propagates custom HTTP status codes from Result objects to HTTP responses.                                          |
+| Help Link and Instance URI Support       | Includes help links and request instance URIs in error responses for troubleshooting.                               |
+| Seamless ASP.NET Core Integration        | Designed to work out-of-the-box with ASP.NET Core middleware and controllers.                                       |
 
 ## Documentation
 
