@@ -14,4 +14,7 @@
 				  PackagePath="lib\$(TargetFramework)" />
 		</ItemGroup>
 	</Target>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 </Project>

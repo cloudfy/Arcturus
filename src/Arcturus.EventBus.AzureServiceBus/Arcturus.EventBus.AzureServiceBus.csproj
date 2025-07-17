@@ -17,6 +17,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Arcturus.EventBus\Arcturus.EventBus.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
 			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />

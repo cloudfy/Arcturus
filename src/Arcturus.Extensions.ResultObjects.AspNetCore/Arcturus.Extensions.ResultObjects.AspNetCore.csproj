@@ -20,4 +20,8 @@
 	  <ProjectReference Include="..\Arcturus.ResultObjects\Arcturus.ResultObjects.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
 </Project>
