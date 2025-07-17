@@ -4,6 +4,7 @@
 		<PackageId>Arcturus.Data.Repository.Abstracts</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,arcturus</PackageTags>
+		<NoWarn>IDE0130</NoWarn>
 	</PropertyGroup>
 
 </Project>

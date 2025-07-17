@@ -4,23 +4,55 @@ using System.Linq.Expressions;
 
 namespace Arcturus.Data.Repository.EntityFrameworkCore.Internals;
 
-internal sealed class SqlSpecificationEvaluator<TEntity>(Specification<TEntity> specification) 
+internal sealed class SqlSpecificationEvaluator<TEntity>(
+    ISpecification<TEntity> specification) 
     : SpecificationEvaluator<TEntity>(specification)
     where TEntity : class
 {
-    public override IQueryable<TEntity> Apply(IQueryable<TEntity> source)
+    public override IQueryable<TResult> Apply<TResult>(
+        IQueryable<TEntity> source)
     {
-        foreach (var chain in Specification.IncludeChains)
+        var result = Apply(source);
+        if (Specification is ISpecification<TEntity, TResult> specificationWithOutput &&
+            specificationWithOutput.Projection is not null)
         {
-            source = ApplyIncludeChain(source, chain);
+            return result.Select(specificationWithOutput.Projection!);
+        }
+
+        //// Try to cast if TResult is TEntity or a base type/interface
+        //if (typeof(TResult).IsAssignableFrom(typeof(TEntity)))
+        //{
+        //    // This cast works if TResult is TEntity, or a base class/interface of TEntity
+        //    return (IQueryable<TResult>)result;
+        //}
+
+        throw new InvalidOperationException(
+            $"Cannot cast {typeof(TEntity)} to {typeof(TResult)} and no projection is specified."
+    );
+    }
+
+    public override IQueryable<TEntity> Apply(
+        IQueryable<TEntity> source)
+    {
+        foreach (var chain in Specification.IncludeExpressions)
+        {
+            source = ApplyIncludeChain(source, [.. chain.Chains]);
         }
         if (Specification.UseSplitQuery)
         {
             source = source.AsSplitQuery();
         }
-        return ApplyWhere(ApplyTake(ApplyOrderBy(source)));
+        if (Specification.IgnoreQueryFilters)
+        {
+            source = source.IgnoreQueryFilters();
+        }
+        
+        return ApplyLimit(ApplySkip(ApplyWhere(ApplyOrderBy(source))));
     }
-    private static IQueryable<TEntity> ApplyIncludeChain(IQueryable<TEntity> source, List<LambdaExpression> chain)
+
+    private static IQueryable<TEntity> ApplyIncludeChain(
+        IQueryable<TEntity> source
+        , List<LambdaExpression> chain)
     {
         if (chain.Count == 0) return source;
 
