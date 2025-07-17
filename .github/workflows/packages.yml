@@ -3,6 +3,10 @@
 
 name: Publish Nuget Packages
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   workflow_dispatch: ## manual
 
