@@ -1,78 +1,39 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.Extensions.Caching
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Extensions.Caching.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Caching) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Extensions.Caching.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Caching)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Extensions.Caching is a .NET library that provides extension methods and abstractions for working with in-memory and distributed caching. It simplifies cache management, improves code reusability, and enables flexible caching strategies for .NET applications.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.Extensions.Caching
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.Extensions.Caching
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+- Provides extension methods for common cache operations (get, set, remove, refresh).
+- Supports both in-memory and distributed cache implementations.
+- Enables generic and strongly-typed cache access.
+- Simplifies cache key management and expiration policies.
+- Integrates easily with Microsoft.Extensions.Caching.Memory and Microsoft.Extensions.Caching.Distributed.
+- Facilitates cache-aside patterns for data retrieval and storage.
+- Designed for high performance and scalability in modern .NET applications.
 
 ## Documentation
 

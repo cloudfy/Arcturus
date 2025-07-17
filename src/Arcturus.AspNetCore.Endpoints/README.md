@@ -1,78 +1,44 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.AspNetCore.Endpoints
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.AspNetCore.Endpoints.svg)](https://www.nuget.org/packages/Arcturus.AspNetCore.Endpoints) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.AspNetCore.Endpoints.svg)](https://www.nuget.org/packages/Arcturus.AspNetCore.Endpoints)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.AspNetCore.Endpoints is a .NET library that provides a flexible abstraction for defining HTTP API endpoints in ASP.NET Core applications. It enables developers to implement endpoints using a consistent pattern, supporting both synchronous and asynchronous operations, with or without request objects, and integrates seamlessly with ASP.NET Core routing and controller infrastructure.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.AspNetCore.Endpoints
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.AspNetCore.Endpoints
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+- Abstraction for single endpoints using `AbstractEndpoint` base class.
+- Automatic application of `[ApiController]` and `[Route]` attributes for endpoint classes.
+- Builder pattern via `EndpointsBuilder` for defining endpoints with or without request objects.
+- Support for both synchronous and asynchronous endpoint handlers.
+- Flexible return types: plain results, `ActionResult<T>`, `IActionResult`, and `IAsyncEnumerable<T>`.
+- Endpoint definitions for:
+  - Endpoints with request and response types.
+  - Endpoints with request but no response.
+  - Endpoints without request, with or without response.
+- Integration with ASP.NET Core controller routing using the `[controller]` template.
+- Clean separation of endpoint logic from controller boilerplate.
+- Extensible for custom endpoint behaviors and patterns.
 
 ## Documentation
 

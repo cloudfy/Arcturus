@@ -1,78 +1,39 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.Extensions.Configuration.AzureStorageBlob
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Extensions.Configuration.AzureStorageBlob.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Configuration.AzureStorageBlob) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Extensions.Configuration.AzureStorageBlob.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Configuration.AzureStorageBlob)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Extensions.Configuration.AzureStorageBlob is a .NET library that enables applications to load configuration settings directly from Azure Storage Blob containers. This package integrates with the Microsoft.Extensions.Configuration system, allowing you to centralize and manage your configuration files in Azure, supporting dynamic updates and secure storage for distributed/cloud-native applications.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.Extensions.Configuration.AzureStorageBlob
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.Extensions.Configuration.AzureStorageBlob
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+- Load configuration from Azure Storage Blob containers
+- Supports JSON, XML, and other text-based formats
+- Optional local fallback if blob is unavailable
+- Automatic reload on blob changes (if enabled)
+- Secure access via connection string, SAS token, or Managed Identity
+- Seamless integration with Microsoft.Extensions.Configuration
+- Suitable for distributed and cloud-native .NET applications
 
 ## Documentation
 

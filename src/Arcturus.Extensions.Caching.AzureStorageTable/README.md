@@ -1,78 +1,40 @@
-Replace the following:
-{{PackageName}}
-{{PackageId}}
+# Arcturus.Extensions.Caching.AzureStorageTable
 
----------------------------------------------------------------
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Extensions.Caching.AzureStorageTable.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Caching.AzureStorageTable) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Extensions.Caching.AzureStorageTable.svg)](https://www.nuget.org/packages/Arcturus.Extensions.Caching.AzureStorageTable)
 
+---
 
-# {{PackageName}}
-=================
-[![NuGet](https://img.shields.io/nuget/dt/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}}) 
-[![NuGet](https://img.shields.io/nuget/vpre/{{PackageId}}.svg)](https://www.nuget.org/packages/{{PackageId}})
-
-A brief description of what this .NET NuGet package does and its purpose.
+Arcturus.Extensions.Caching.AzureStorageTable is a .NET library that provides distributed caching capabilities using Azure Storage Table as the backend. It enables applications to store, retrieve, and manage cache entries in Azure Table Storage, making it suitable for scalable cloud-native solutions that require persistent and shared cache across multiple instances.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package {{PackageId}}
+dotnet add package Arcturus.Extensions.Caching.AzureStorageTable
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package {{PackageId}}
+Install-Package Arcturus.Extensions.Caching.AzureStorageTable
 ```
 
 ## Prerequisites
 
 - .NET SDK 8 or later
 
-## Usage
-
-Provide a quick example of how to use the package in a .NET project.
-
-```csharp
-using ProjectName;
-
-// Example code demonstrating the package's functionality
-public class Program
-{
-    public static void Main()
-    {
-        // Sample usage
-        var example = new ExampleClass();
-        example.DoSomething();
-    }
-}
-```
-
-### Configuration (Optional)
-
-If your package requires configuration, explain how to set it up. For example:
-
-1. Add the following to your `appsettings.json`:
-```json
-{
-  "ProjectName": {
-    "Setting1": "value",
-    "Setting2": 123
-  }
-}
-```
-
-2. Configure services in `Startup.cs` or `Program.cs`:
-```csharp
-services.Configure<ProjectNameOptions>(Configuration.GetSection("ProjectName"));
-```
-
 ## Features
 
-- Feature 1: Description of what it does.
-- Feature 2: Description of another feature.
-- Feature 3: Highlight additional functionality.
+- Distributed caching using Azure Table Storage as the backend.
+- Implements Microsoft.Extensions.Caching.Abstractions for seamless integration.
+- Supports storing and retrieving complex objects as cache entries.
+- Configurable cache expiration and eviction policies.
+- Thread-safe operations for concurrent access.
+- Easy setup with dependency injection and configuration.
+- Scalable for cloud-native and multi-instance deployments.
+- Minimal dependencies for lightweight integration.
 
 ## Documentation
 
