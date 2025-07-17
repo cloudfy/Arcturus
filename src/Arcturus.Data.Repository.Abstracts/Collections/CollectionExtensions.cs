@@ -1,5 +1,8 @@
 ﻿namespace Arcturus.Collections;
 
+/// <summary>
+/// Provides common extensions for <see cref="IAsyncEnumerable{T}"/>.
+/// </summary>
 public static class CollectionExtensions
 {
     /// <summary>

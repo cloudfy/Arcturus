@@ -120,7 +120,9 @@ public interface IRepository<T, TKey>
         , Expression<Func<T, R>> select
         , bool tracking = false
         , CancellationToken cancellationToken = default);
+
     /// <summary>
+    /// <para>EXPERIMENTAL - SUBJECT TO CHANGE</para>
     /// Finds a single entity that matches the specified predicate and projects it to the specified result type.
     /// </summary>
     /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
@@ -131,7 +133,18 @@ public interface IRepository<T, TKey>
     /// <typeparamref name="T"/>, or <see langword="null"/> if no entity matches the predicate.</returns>
     /// <exception cref="NotImplementedException" />
     Task<T?> FindOne(
-        Specification<T> specification
+        ISpecification<T> specification
         , bool tracking = false
         , CancellationToken cancellationToken = default);
+
+    Task<TResult?> FindOne<TResult>(
+        ISpecification<T, TResult> specification
+        , bool tracking = false
+        , CancellationToken cancellationToken = default);
+    IAsyncEnumerable<T> FindMany(
+        ISpecification<T> specification
+        , bool tracking = false);
+    IAsyncEnumerable<TResult> FindMany<TResult>(
+        ISpecification<T, TResult> specification
+        , bool tracking = false);
 }

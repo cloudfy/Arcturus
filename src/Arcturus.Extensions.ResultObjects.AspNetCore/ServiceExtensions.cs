@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore;
 
@@ -19,9 +20,8 @@ public static class ServiceExtensions
         this IServiceCollection services
         , Action<Microsoft.AspNetCore.Http.ProblemDetailsOptions>? configureProblemDetailsOptions = null)
     {
-        services.AddSingleton<ProblemDetailsFactory, ArcturusAspNetCoreProblemDetailsFactory>();
-        //services.AddProblemDetails(configureProblemDetailsOptions);
-
+        services.TryAddSingleton<ProblemDetailsFactory, ArcturusAspNetCoreProblemDetailsFactory>();
+        
         services.Configure<ApiBehaviorOptions>(options =>
         {
             var mappings = new Dictionary<int, (string Title, string Link)>
