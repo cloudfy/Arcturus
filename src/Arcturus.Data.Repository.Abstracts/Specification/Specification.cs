@@ -82,4 +82,41 @@ public class Specification<T>()
     public bool IgnoreQueryFilters { get; internal set; }
     public int? Limit { get; internal set; }
     public int? Skip { get; internal set; }
+
+    internal Specification<T> InnerClear()
+    {
+        _whereExpressions.Clear();
+        _orderExpressions.Clear();
+        _includeExpressions.Clear();
+        UseSplitQuery = false;
+        IgnoreQueryFilters = false;
+        Limit = null;
+        Skip = null;
+        return this;
+    }
+    internal Specification<T> InnerClearLimit()
+    {
+        Limit = null;
+        return this;
+    }
+    internal Specification<T> InnerClearSkip()
+    {
+        Skip = null;
+        return this;
+    }
+    internal Specification<T> InnerClearWhere()
+    {
+        _whereExpressions.Clear();
+        return this;
+    }
+    internal Specification<T> InnerClearOrderBy()
+    {
+        _orderExpressions.Clear();
+        return this;
+    }
+    internal Specification<T> InnerClearIncludes()
+    {
+        _includeExpressions.Clear();
+        return this;
+    }
 }

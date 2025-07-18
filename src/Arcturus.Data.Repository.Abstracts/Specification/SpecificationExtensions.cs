@@ -125,13 +125,16 @@ public static class SpecificationExtensions
     }
 
     /// <summary>
-    /// 
+    /// Adds a navigation property to the query path for the specified entity type.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TProperty"></typeparam>
-    /// <param name="spec"></param>
-    /// <param name="navigationPropertyPath"></param>
-    /// <returns></returns>
+    /// <remarks>This method is used to specify related entities to include in the query results. It is
+    /// typically used in scenarios where eager loading of related data is required.</remarks>
+    /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+    /// <typeparam name="TProperty">The type of the navigation property to include.</typeparam>
+    /// <param name="spec">The specification to which the navigation property path is added.</param>
+    /// <param name="navigationPropertyPath">An expression representing the navigation property path to include.</param>
+    /// <returns>An <see cref="IncludableSpecificationBuilder{TEntity, TProperty}"/> that can be used to further configure the
+    /// query.</returns>
     public static IncludableSpecificationBuilder<TEntity, TProperty> Include<TEntity, TProperty>(
         this Specification<TEntity> spec,
         Expression<Func<TEntity, TProperty>> navigationPropertyPath)
@@ -142,14 +145,16 @@ public static class SpecificationExtensions
         return builder;
     }
     /// <summary>
-    /// 
+    /// Specifies additional related data to be included in the query result.
     /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <typeparam name="TPreviousProperty"></typeparam>
-    /// <typeparam name="TNextProperty"></typeparam>
-    /// <param name="source"></param>
-    /// <param name="navigationPropertyPath"></param>
-    /// <returns></returns>
+    /// <remarks>This method is used to specify additional navigation properties to include in the query
+    /// result, allowing for the inclusion of related data beyond the initial include operation.</remarks>
+    /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+    /// <typeparam name="TPreviousProperty">The type of the previous property in the include chain.</typeparam>
+    /// <typeparam name="TNextProperty">The type of the next property to include.</typeparam>
+    /// <param name="source">The builder for the current include chain.</param>
+    /// <param name="navigationPropertyPath">An expression representing the navigation property to include.</param>
+    /// <returns>An <see cref="IncludableSpecificationBuilder{TEntity, TNextProperty}"/> for chaining further include operations.</returns>
     public static IncludableSpecificationBuilder<TEntity, TNextProperty> ThenInclude<TEntity, TPreviousProperty, TNextProperty>(
         this IncludableSpecificationBuilder<TEntity, IEnumerable<TPreviousProperty>> source,
         Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
@@ -158,7 +163,16 @@ public static class SpecificationExtensions
             source.IncludeChain
             , navigationPropertyPath);
     }
-
+    /// <summary>
+    /// Adds a secondary related entity to be included in the query result.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+    /// <typeparam name="TPreviousProperty">The type of the previous navigation property.</typeparam>
+    /// <typeparam name="TNextProperty">The type of the next navigation property to include.</typeparam>
+    /// <param name="source">The builder for the current include operation.</param>
+    /// <param name="navigationPropertyPath">An expression representing the navigation property path for the next related entity to include.</param>
+    /// <returns>An <see cref="IncludableSpecificationBuilder{TEntity, TNextProperty}"/> that can be used to further specify
+    /// related entities to include.</returns>
     public static IncludableSpecificationBuilder<TEntity, TNextProperty> ThenInclude<TEntity, TPreviousProperty, TNextProperty>(
         this IncludableSpecificationBuilder<TEntity, TPreviousProperty> source,
         Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
@@ -167,4 +181,103 @@ public static class SpecificationExtensions
             source.IncludeChain
             , navigationPropertyPath);
     }
+
+    /// <summary>
+    /// Clears all criteria from the current specification, resulting in a specification with no conditions.
+    /// </summary>
+    /// <typeparam name="T">The type of the entity to which the specification applies.</typeparam>
+    /// <param name="specification">The specification to be cleared. Cannot be null.</param>
+    /// <returns>A new specification with no conditions.</returns>
+    public static Specification<T> Clear<T>(this Specification<T> specification)
+        => specification.InnerClear();
+    /// <summary>
+    /// Clears all criteria from the current specification, resulting in a specification with no conditions.
+    /// </summary>
+    /// <typeparam name="T">The type of the entity to which the specification applies.</typeparam>
+    /// <param name="specification">The specification to be cleared. Cannot be null.</param>
+    /// <returns>A new specification with no conditions.</returns>
+    public static Specification<T, R> Clear<T, R>(this Specification<T, R> specification)
+        => (Specification<T, R>)specification.InnerClear();
+    /// <summary>
+    /// Removes any limit constraints from the specified specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <param name="specification">The specification from which to clear limit constraints.</param>
+    /// <returns>A new <see cref="Specification{T}"/> instance without limit constraints.</returns>
+    public static Specification<T> ClearLimit<T>(this Specification<T> specification)
+        => specification.InnerClearLimit();
+    /// <summary>
+    /// Removes any limit constraints from the specified specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <param name="specification">The specification from which to clear limit constraints.</param>
+    /// <returns>A new <see cref="Specification{T}"/> instance without limit constraints.</returns>
+    public static Specification<T, R> ClearLimit<T, R>(this Specification<T, R> specification)
+        => (Specification<T, R>)specification.InnerClearLimit();
+    /// <summary>
+    /// Removes any skip operation from the current specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <param name="specification">The specification from which to clear the skip operation.</param>
+    /// <returns>A new specification without any skip operation applied.</returns>
+    public static Specification<T> ClearSkip<T>(this Specification<T> specification)
+        => specification.InnerClearSkip();
+    /// <summary>
+    /// Removes any skip operation from the current specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <param name="specification">The specification from which to clear the skip operation.</param>
+    /// <returns>A new specification without any skip operation applied.</returns>
+    public static Specification<T, R> ClearSkip<T, R>(this Specification<T, R> specification)
+        => (Specification<T, R>)specification.InnerClearSkip();
+    /// <summary>
+    /// Removes all conditions from the current specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements to which the specification applies.</typeparam>
+    /// <param name="specification">The specification instance from which to clear conditions.</param>
+    /// <returns>A new specification with all conditions removed.</returns>
+    public static Specification<T> ClearWhere<T>(this Specification<T> specification)
+        => specification.ClearWhere();
+    /// <summary>
+    /// Removes all conditions from the current specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements to which the specification applies.</typeparam>
+    /// <param name="specification">The specification instance from which to clear conditions.</param>
+    /// <returns>A new specification with all conditions removed.</returns>
+    public static Specification<T, R> ClearWhere<T, R>(this Specification<T, R> specification)
+        => (Specification<T, R>)specification.ClearWhere();
+    /// <summary>
+    /// Removes all ordering criteria from the current specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <param name="specification">The specification from which to clear ordering criteria.</param>
+    /// <returns>The modified specification with all ordering criteria removed.</returns>
+    public static Specification<T> ClearOrderBy<T>(this Specification<T> specification)
+        => specification.ClearOrderBy();
+    /// <summary>
+    /// Removes all ordering criteria from the current specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <typeparam name="R">The type of the result produced by the specification.</typeparam>
+    /// <param name="specification">The specification from which to clear ordering criteria.</param>
+    /// <returns>A new specification instance without any ordering criteria.</returns>
+    public static Specification<T, R> ClearOrderBy<T, R>(this Specification<T, R> specification)
+        => (Specification<T, R>)specification.ClearOrderBy();
+    /// <summary>
+    /// Removes all include expressions from the specified specification.
+    /// </summary>
+    /// <typeparam name="T">The type of the entity for which the specification is defined.</typeparam>
+    /// <param name="specification">The specification from which to clear include expressions.</param>
+    /// <returns>The modified specification with all include expressions removed.</returns>
+    public static Specification<T> ClearIncludes<T>(this Specification<T> specification)
+           => specification.ClearIncludes();
+    /// <summary>
+    /// Removes all include expressions from the specified specification.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="R"></typeparam>
+    /// <param name="specification">The specification from which to clear include expressions.</param>
+    /// <returns>A new specification instance with all include expressions removed.</returns>
+    public static Specification<T, R> ClearIncludes<T, R>(this Specification<T, R> specification)
+           => (Specification<T, R>)specification.ClearIncludes();
 }
