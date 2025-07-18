@@ -310,7 +310,7 @@ internal static class ExpressionHelper
             }
         }
 
-        throw new ArgumentException($"Invalid value '{values}' for enum type {enumType.Name}");
+        throw new ArgumentException($"Invalid value '{value}' for enum type {enumType.Name}");
     }
 }
 
