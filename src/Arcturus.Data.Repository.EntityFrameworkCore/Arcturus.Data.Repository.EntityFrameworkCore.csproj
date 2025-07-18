@@ -11,11 +11,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Data.Repository.Abstracts.csproj" />
+		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+	  <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Data.Repository.Abstracts.csproj" />
 	</ItemGroup>
 
 </Project>
