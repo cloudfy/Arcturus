@@ -274,8 +274,8 @@ public static class SpecificationExtensions
     /// <summary>
     /// Removes all include expressions from the specified specification.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="R"></typeparam>
+    /// <typeparam name="T">The type of the entity for which the specification is defined.</typeparam>
+    /// <typeparam name="R">The type of the result produced by the specification.</typeparam>
     /// <param name="specification">The specification from which to clear include expressions.</param>
     /// <returns>A new specification instance with all include expressions removed.</returns>
     public static Specification<T, R> ClearIncludes<T, R>(this Specification<T, R> specification)
