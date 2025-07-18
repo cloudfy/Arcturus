@@ -237,7 +237,7 @@ public static class SpecificationExtensions
     /// <param name="specification">The specification instance from which to clear conditions.</param>
     /// <returns>A new specification with all conditions removed.</returns>
     public static Specification<T> ClearWhere<T>(this Specification<T> specification)
-        => specification.ClearWhere();
+        => specification.InnerClearWhere();
     /// <summary>
     /// Removes all conditions from the current specification.
     /// </summary>
@@ -245,7 +245,7 @@ public static class SpecificationExtensions
     /// <param name="specification">The specification instance from which to clear conditions.</param>
     /// <returns>A new specification with all conditions removed.</returns>
     public static Specification<T, R> ClearWhere<T, R>(this Specification<T, R> specification)
-        => (Specification<T, R>)specification.ClearWhere();
+        => (Specification<T, R>)specification.InnerClearWhere();
     /// <summary>
     /// Removes all ordering criteria from the current specification.
     /// </summary>
@@ -253,7 +253,7 @@ public static class SpecificationExtensions
     /// <param name="specification">The specification from which to clear ordering criteria.</param>
     /// <returns>The modified specification with all ordering criteria removed.</returns>
     public static Specification<T> ClearOrderBy<T>(this Specification<T> specification)
-        => specification.ClearOrderBy();
+        => specification.InnerClearOrderBy();
     /// <summary>
     /// Removes all ordering criteria from the current specification.
     /// </summary>
@@ -262,7 +262,7 @@ public static class SpecificationExtensions
     /// <param name="specification">The specification from which to clear ordering criteria.</param>
     /// <returns>A new specification instance without any ordering criteria.</returns>
     public static Specification<T, R> ClearOrderBy<T, R>(this Specification<T, R> specification)
-        => (Specification<T, R>)specification.ClearOrderBy();
+        => (Specification<T, R>)specification.InnerClearOrderBy();
     /// <summary>
     /// Removes all include expressions from the specified specification.
     /// </summary>
@@ -270,7 +270,7 @@ public static class SpecificationExtensions
     /// <param name="specification">The specification from which to clear include expressions.</param>
     /// <returns>The modified specification with all include expressions removed.</returns>
     public static Specification<T> ClearIncludes<T>(this Specification<T> specification)
-           => specification.ClearIncludes();
+           => specification.InnerClearIncludes();
     /// <summary>
     /// Removes all include expressions from the specified specification.
     /// </summary>
@@ -279,5 +279,5 @@ public static class SpecificationExtensions
     /// <param name="specification">The specification from which to clear include expressions.</param>
     /// <returns>A new specification instance with all include expressions removed.</returns>
     public static Specification<T, R> ClearIncludes<T, R>(this Specification<T, R> specification)
-           => (Specification<T, R>)specification.ClearIncludes();
+           => (Specification<T, R>)specification.InnerClearIncludes();
 }
