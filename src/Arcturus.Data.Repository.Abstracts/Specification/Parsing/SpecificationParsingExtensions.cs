@@ -32,7 +32,7 @@ public static class SpecificationParsingExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">Data model type.</typeparam>
-    /// <typeparam name="R">Proejcted type.</typeparam>
+    /// <typeparam name="R">Projected type.</typeparam>
     /// <param name="specification">The specification to be filtered.</param>
     /// <param name="filter">A string representing the filter criteria to apply.</param>
     /// <remarks>Use operators: eq (equal), ne (not equal), lk (like), ge (greater or equal), gt (greater), lt (less), le (less or equal)</remarks>
