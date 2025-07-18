@@ -72,7 +72,7 @@ public static class SpecificationParsingExtensions
     /// </para>
     /// </summary>
     /// <typeparam name="T">Data model type.</typeparam>
-    /// <typeparam name="R">Proejcted type.</typeparam>
+    /// <typeparam name="R">Projected type.</typeparam>
     /// <param name="specification">The specification to be ordered.</param>
     /// <param name="orderBy">The name of the property to order by.</param>
     /// <remarks>Use operators: asc or desc</remarks>
