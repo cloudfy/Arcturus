@@ -130,16 +130,7 @@ internal static class FilterExpressionParser
         {
             return value;
         }
-        //else if (targetType == typeof(MonetaryAmount) &&
-        //    MonetaryAmount.TryParse(value, out var monetaryValue))
-        //{
-        //    return monetaryValue;
-        //}
-        //else if (targetType == typeof(Currency) &&
-        //    Currency.TryParse(value, out var currencyValue))
-        //{
-        //    return currencyValue;
-        //}
+// Removed commented-out code related to MonetaryAmount and Currency parsing logic.
         else if (targetType == typeof(DateTime) &&
             DateTime.TryParse(value, out var dateTimeValue))
         {
