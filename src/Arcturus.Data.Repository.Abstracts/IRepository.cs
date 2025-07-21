@@ -37,7 +37,7 @@ public interface IRepository<T, TKey>
     /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains  <see langword="true"/> if any
-    /// elements satisfy the condition specified by <paramref name="predicate"/>;  otherwise, <see langword="false"/>.</returns>
+    /// elements satisfy the condition specified by <paramref name="specification"/>;  otherwise, <see langword="false"/>.</returns>
     ValueTask<bool> Any(
         ISpecification<T> specification
         , CancellationToken cancellationToken);
