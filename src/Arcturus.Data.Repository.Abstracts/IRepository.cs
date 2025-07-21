@@ -29,6 +29,19 @@ public interface IRepository<T, TKey>
         Expression<Func<T, bool>> predicate
         , CancellationToken cancellationToken);
     /// <summary>
+    /// Determines whether any elements in the data source satisfy the specified condition.
+    /// <para>
+    /// Void using take, skip, order by, and include expressions.
+    /// </para>
+    /// </summary>
+    /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains  <see langword="true"/> if any
+    /// elements satisfy the condition specified by <paramref name="specification"/>;  otherwise, <see langword="false"/>.</returns>
+    ValueTask<bool> Any(
+        ISpecification<T> specification
+        , CancellationToken cancellationToken);
+    /// <summary>
     /// Asynchronously counts the number of entities that satisfy the specified predicate.
     /// </summary>
     /// <param name="predicate">An expression that defines the conditions the entities must satisfy to be included in the count.</param>
@@ -37,6 +50,19 @@ public interface IRepository<T, TKey>
     /// specified predicate.</returns>
     Task<long> Count(
         Expression<Func<T, bool>> predicate
+        , CancellationToken cancellationToken);
+    /// <summary>
+    /// Asynchronously counts the number of entities that satisfy the specified predicate.
+    /// <para>
+    /// Void using take, skip, order by, and include expressions.
+    /// </para>
+    /// </summary>
+    /// <param name="specification">Specification expression that defines the conditions.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests. Passing a canceled token will result in the task being canceled.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the count of entities that match the
+    /// specified predicate.</returns>
+    Task<long> Count(
+        ISpecification<T> specification
         , CancellationToken cancellationToken);
     /// <summary>
     /// Adds the specified entity to the underlying data store asynchronously.
@@ -122,7 +148,6 @@ public interface IRepository<T, TKey>
         , CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// <para>EXPERIMENTAL - SUBJECT TO CHANGE</para>
     /// Finds a single entity that matches the specified predicate and projects it to the specified result type.
     /// </summary>
     /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
@@ -137,13 +162,46 @@ public interface IRepository<T, TKey>
         , bool tracking = false
         , CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Finds a single entity that matches the specified predicate and projects it to the specified result type.
+    /// </summary>
+    /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
+    /// <param name="tracking">A value indicating whether the entity should be tracked by the context.  <see langword="true"/> to enable
+    /// tracking; otherwise, <see langword="false"/>.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <typeparam name="TResult">The type of the result to project the entity to.</typeparam>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the projected entity  of type
+    /// <typeparamref name="T"/>, or <see langword="null"/> if no entity matches the predicate.</returns>
+    /// <exception cref="NotImplementedException" />
     Task<TResult?> FindOne<TResult>(
         ISpecification<T, TResult> specification
         , bool tracking = false
         , CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Retrieves a sequence of items from the data source that match the specified predicate,  projects them into a new
+    /// form, and optionally applies ordering, limits, and tracking behavior.
+    /// </summary>
+    /// <remarks>This method is designed for scenarios where large result sets may be processed incrementally 
+    /// using asynchronous enumeration. Ensure proper disposal of the enumerator to release resources.</remarks>
+    /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
+    /// <param name="tracking">An optional parameter that specifies whether the returned entities should be tracked by the underlying context. 
+    /// If <see langword="true"/>, tracking is enabled; otherwise, tracking is disabled. Defaults to <see
+    /// langword="false"/>.</param>
+    /// <returns>An asynchronous stream of projected items that match the specified conditions.</returns>
     IAsyncEnumerable<T> FindMany(
         ISpecification<T> specification
         , bool tracking = false);
+    /// <summary>
+    /// Retrieves a sequence of items from the data source that match the specified predicate,  projects them into a new
+    /// form, and optionally applies ordering, limits, and tracking behavior.
+    /// </summary>
+    /// <param name="specification">A given <see cref="Specification{T}"/> to use for query.</param>
+    /// <param name="tracking">An optional parameter that specifies whether the returned entities should be tracked by the underlying context. 
+    /// If <see langword="true"/>, tracking is enabled; otherwise, tracking is disabled. Defaults to <see
+    /// langword="false"/>.</param>
+    /// <remarks>This method is designed for scenarios where large result sets may be processed incrementally 
+    /// using asynchronous enumeration. Ensure proper disposal of the enumerator to release resources.</remarks>
+    /// <returns>An asynchronous stream of projected items that match the specified conditions.</returns>
     IAsyncEnumerable<TResult> FindMany<TResult>(
         ISpecification<T, TResult> specification
         , bool tracking = false);

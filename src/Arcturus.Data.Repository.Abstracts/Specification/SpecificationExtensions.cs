@@ -204,7 +204,7 @@ public static class SpecificationExtensions
     /// <typeparam name="T">The type of the elements in the specification.</typeparam>
     /// <param name="specification">The specification from which to clear limit constraints.</param>
     /// <returns>A new <see cref="Specification{T}"/> instance without limit constraints.</returns>
-    public static Specification<T> ClearLimit<T>(this Specification<T> specification)
+    public static Specification<T> ClearTake<T>(this Specification<T> specification)
         => specification.InnerClearLimit();
     /// <summary>
     /// Removes any limit constraints from the specified specification.
@@ -212,7 +212,7 @@ public static class SpecificationExtensions
     /// <typeparam name="T">The type of the elements in the specification.</typeparam>
     /// <param name="specification">The specification from which to clear limit constraints.</param>
     /// <returns>A new <see cref="Specification{T}"/> instance without limit constraints.</returns>
-    public static Specification<T, R> ClearLimit<T, R>(this Specification<T, R> specification)
+    public static Specification<T, R> ClearTake<T, R>(this Specification<T, R> specification)
         => (Specification<T, R>)specification.InnerClearLimit();
     /// <summary>
     /// Removes any skip operation from the current specification.

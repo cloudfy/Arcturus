@@ -19,4 +19,14 @@ public class Specification<T, TResult> : Specification<T>, ISpecification<T, TRe
         Projection = selector;
         return this;
     }
+
+    /// <summary>
+    /// Clears the current projection expression, effectively removing any transformation logic
+    /// </summary>
+    /// <returns></returns>
+    public Specification<T, TResult> ClearProjection()
+    {
+        Projection = null;
+        return this;
+    }
 }
