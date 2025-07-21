@@ -169,4 +169,26 @@ public class Repository<T, TKey>(
         
         return query.AsAsyncEnumerable();
     }
+    public async Task<long> Count(
+        ISpecification<T> specification
+        , CancellationToken cancellationToken)
+    {
+        var exec = new SqlSpecificationEvaluator<T>((Specification<T>)specification);
+        var query = exec.Apply(_context.Set<T>());
+
+        return await query
+            .AsNoTracking()
+            .LongCountAsync(cancellationToken);
+    }
+    public async ValueTask<bool> Any(
+        ISpecification<T> specification
+        , CancellationToken cancellationToken)
+    {
+        var exec = new SqlSpecificationEvaluator<T>((Specification<T>)specification);
+        var query = exec.Apply(_context.Set<T>());
+
+        return await query
+            .AsNoTracking()
+            .AnyAsync(cancellationToken);
+    }
 }
