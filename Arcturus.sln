@@ -35,11 +35,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Extensions.Command
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Extensions.Configuration.AzureStorageBlob", "src\Arcturus.Extensions.Configuration.AzureStorageBlob\Arcturus.Extensions.Configuration.AzureStorageBlob.csproj", "{71FDBEC7-98CC-4598-AEB4-9F7D1E6386CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Data.Repository.Abstracts", "src\Arcturus.Data.Repository.Abstracts\Arcturus.Data.Repository.Abstracts.csproj", "{F6EF5FE0-D93B-4037-A952-27159A9DCAA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Repository.Abstracts", "src\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj", "{F6EF5FE0-D93B-4037-A952-27159A9DCAA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Data.Repository.EntityFrameworkCore", "src\Arcturus.Data.Repository.EntityFrameworkCore\Arcturus.Data.Repository.EntityFrameworkCore.csproj", "{28B9E4AF-30B8-4E69-A0AB-9BD0CC291E73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Repository.EntityFrameworkCore.SqlServer", "src\Arcturus.Data.Repository.EntityFrameworkCore\Arcturus.Repository.EntityFrameworkCore.SqlServer.csproj", "{28B9E4AF-30B8-4E69-A0AB-9BD0CC291E73}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Arcturus.Data.Repository", "Arcturus.Data.Repository", "{44D7744A-19F0-339F-3C06-69F8ABDF9930}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Arcturus.Repository", "Arcturus.Repository", "{2704D691-5F57-F6FE-87A1-3485E03145A0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Arcturus.EventBus", "Arcturus.EventBus", "{964417FA-C755-7093-BA4C-6353CF7D51A4}"
 EndProject
@@ -140,8 +140,8 @@ Global
 		{61F97C2A-46FD-4183-980C-507EB1FE4D28} = {964417FA-C755-7093-BA4C-6353CF7D51A4}
 		{2AB6ADBC-8BC0-4083-B766-7BBB3A2BD7A3} = {FC749AA0-5C41-1888-952B-DAC495F27F68}
 		{FFAAC84F-D01B-432D-BD56-26B1734516E5} = {FC749AA0-5C41-1888-952B-DAC495F27F68}
-		{F6EF5FE0-D93B-4037-A952-27159A9DCAA0} = {44D7744A-19F0-339F-3C06-69F8ABDF9930}
-		{28B9E4AF-30B8-4E69-A0AB-9BD0CC291E73} = {44D7744A-19F0-339F-3C06-69F8ABDF9930}
+		{F6EF5FE0-D93B-4037-A952-27159A9DCAA0} = {2704D691-5F57-F6FE-87A1-3485E03145A0}
+		{28B9E4AF-30B8-4E69-A0AB-9BD0CC291E73} = {2704D691-5F57-F6FE-87A1-3485E03145A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {892EBAB5-9416-41D4-8195-C1A7E9BE754F}

@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using Arcturus.Repository.Specification.Parsing;
 
-namespace Arcturus.Data.Repository.Abstracts.Specification.Parsing.Internals;
+namespace Arcturus.Repository.Specification.Parsing.Internals;
 
 internal static class FilterExpressionParser
 {

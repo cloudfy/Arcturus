@@ -1,8 +1,6 @@
-﻿using Arcturus.Data.Repository.Abstracts.Specification.Expressions;
-using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Arcturus.Data.Repository.Abstracts.Specification.Parsing.Internals;
+namespace Arcturus.Repository.Specification.Parsing.Internals;
 
 internal static class OrderByExpressionParser
 {

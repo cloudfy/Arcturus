@@ -1,6 +1,4 @@
-﻿    using System.Linq.Expressions;
-
-namespace Arcturus.Data.Repository.Abstracts;
+﻿namespace Arcturus.Repository.Specification;
 
 public static class SpecificationExtensions
 {

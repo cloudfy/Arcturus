@@ -1,24 +1,24 @@
-# Arcturus.Data.Repository.EntityFrameworkCore
+# Arcturus.Repository.EntityFrameworkCore
 
-[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Data.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Data.Repository.EntityFrameworkCore) 
-[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Data.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Data.Repository.EntityFrameworkCore)
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Repository.EntityFrameworkCore) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Repository.EntityFrameworkCore)
 
 ---
 
-Arcturus.Data.Repository.EntityFrameworkCore is a .NET library that provides a robust, generic repository pattern implementation for Entity Framework Core. It simplifies data access by abstracting common CRUD operations, querying, and specification-based filtering, enabling clean separation of concerns and testable data layers in your applications.
+Arcturus.Repository.EntityFrameworkCore is a .NET library that provides a robust, generic repository pattern implementation for Entity Framework Core. It simplifies data access by abstracting common CRUD operations, querying, and specification-based filtering, enabling clean separation of concerns and testable data layers in your applications.
 
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:
 
 ```bash
-dotnet add package Arcturus.Data.Repository.EntityFrameworkCore
+dotnet add package Arcturus.Repository.EntityFrameworkCore
 ```
 
 Or, using the Package Manager Console:
 
 ```powershell
-Install-Package Arcturus.Data.Repository.EntityFrameworkCore
+Install-Package Arcturus.Repository.EntityFrameworkCore
 ```
 
 ## Prerequisites

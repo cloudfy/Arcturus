@@ -1,4 +1,4 @@
-﻿namespace Arcturus.Data.Repository.Abstracts;
+﻿namespace Arcturus.Repository.Specification;
 
 /// <summary>
 /// Provides a base class for executing specifications on a queryable source.

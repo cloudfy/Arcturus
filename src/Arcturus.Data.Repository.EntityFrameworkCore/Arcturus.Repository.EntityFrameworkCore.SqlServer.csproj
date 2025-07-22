@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Arcturus.Data.Repository.EntityFrameworkCore</PackageId>
+		<PackageId>Arcturus.Repository.EntityFrameworkCore</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,arcturus</PackageTags>
 	</PropertyGroup>
@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Data.Repository.Abstracts.csproj" />
+	  <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
 	</ItemGroup>
 
 </Project>
