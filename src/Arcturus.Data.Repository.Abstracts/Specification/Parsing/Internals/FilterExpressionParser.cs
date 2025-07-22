@@ -1,4 +1,4 @@
-﻿using Arcturus.Repository.Abstracts.Specification.Parsing;
+﻿using Arcturus.Repository.Specification.Parsing;
 
 namespace Arcturus.Repository.Specification.Parsing.Internals;
 
