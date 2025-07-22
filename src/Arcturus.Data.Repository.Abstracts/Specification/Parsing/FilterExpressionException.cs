@@ -1,4 +1,4 @@
-﻿namespace Arcturus.Repository.Abstracts.Specification.Parsing;
+﻿namespace Arcturus.Repository.Specification.Parsing;
 
 /// <summary>
 /// Represents errors that occur during the evaluation of a filter expression.
