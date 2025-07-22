@@ -2,57 +2,58 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2025-07-22
+## \[Released] - 2025-07-22
 
 ### Added
 
-- None
+* None
 
 ### Fixed
 
-- String comparison support for FilterExpressionParser - Added proper string comparison support for gt, ge, lt, le operators using string.Compare method
+* String comparison support for FilterExpressionParser - Added proper string comparison support for gt, ge, lt, le operators using string.Compare method
 
 ### Changed
 
-- Enhanced FilterExpressionParser to handle string comparisons properly for comparison operators (gt, ge, lt, le)
-- Refactored comparison expression creation into a dedicated CreateComparisonExpression method
+* Enhanced FilterExpressionParser to handle string comparisons properly for comparison operators (gt, ge, lt, le)
+* Refactored comparison expression creation into a dedicated CreateComparisonExpression method
+* \[Breaking change] Renamed Arcturus.Data.Repository\* > Arcturus.Repository. Package name is changed as well.
 
 ### Removed
 
-- None
+* None
 
-## [2025.2.14.61] - 2025-02-14
+## \[2025.2.14.61] - 2025-02-14
 
 ### Added
 
-- v2025.2.14.61 Arcturus.Extensions.CommandLine
+* v2025.2.14.61 Arcturus.Extensions.CommandLine
 
 ### Fixed
 
-- None
+* None
 
 ### Changed
 
-- None
+* None
 
 ### Removed
 
-- None
+* None
 
-## [2025.1.15.60] - 2025-01-15
+## \[2025.1.15.60] - 2025-01-15
 
 ### Added
 
-- v2025.1.15.60 Patchable
+* v2025.1.15.60 Patchable
 
 ### Fixed
 
-- None
+* None
 
 ### Changed
 
-- None
+* None
 
 ### Removed
 
-- None
+* None
