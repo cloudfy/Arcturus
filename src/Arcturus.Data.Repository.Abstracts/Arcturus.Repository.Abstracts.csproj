@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Arcturus.Data.Repository.Abstracts</PackageId>
+		<PackageId>Arcturus.Repository.Abstracts</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,arcturus</PackageTags>
 		<NoWarn>IDE0130</NoWarn>
