@@ -28,7 +28,7 @@ public interface IMediator
     /// <typeparam name="TNotification">The type of notification to publish.</typeparam>
     /// <param name="notification">The notification to publish.</param>
     /// <param name="cancellationToken">A cancellation token to cancel the operation.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <returns>A <see cref="Task" /> that represents the asynchronous operation.</returns>
     Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
         where TNotification : INotification;
 }
