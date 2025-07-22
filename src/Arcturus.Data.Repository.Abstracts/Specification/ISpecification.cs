@@ -1,6 +1,6 @@
-﻿using Arcturus.Data.Repository.Abstracts.Specification.Expressions;
+﻿using Arcturus.Repository.Specification.Expressions;
 
-namespace Arcturus.Data.Repository.Abstracts;
+namespace Arcturus.Repository.Specification;
 
 /// <summary>
 /// Defines a specification pattern interface for querying data with filtering, sorting, and inclusion criteria.

@@ -1,7 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿namespace Arcturus.Repository.Specification.Expressions;
 
-namespace Arcturus.Data.Repository.Abstracts.Specification.Expressions;
-
+/// <summary>
+/// Represents a filter expression used to determine which elements satisfy a specified condition.
+/// </summary>
+/// <remarks>This class encapsulates a filter expression and provides a compiled function for evaluating the
+/// condition.</remarks>
+/// <typeparam name="T">The type of elements to which the filter expression is applied.</typeparam>
 public sealed class WhereExpression<T>
 {
     private Func<T, bool>? _filterFunc;
@@ -10,6 +14,9 @@ public sealed class WhereExpression<T>
         _ = filter ?? throw new ArgumentNullException(nameof(filter));
         Filter = filter;
     }
+    /// <summary>
+    /// Gets the filter expression used to determine which elements satisfy a specified condition.
+    /// </summary>
     public Expression<Func<T, bool>> Filter { get; }
-    public Func<T, bool> FilterFunc => _filterFunc ??= Filter.Compile();
+    internal Func<T, bool> FilterFunc => _filterFunc ??= Filter.Compile();
 }

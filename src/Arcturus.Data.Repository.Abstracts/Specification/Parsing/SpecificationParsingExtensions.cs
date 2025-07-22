@@ -1,6 +1,6 @@
-﻿using Arcturus.Data.Repository.Abstracts.Specification.Parsing.Internals;
+﻿using Arcturus.Repository.Specification.Parsing.Internals;
 
-namespace Arcturus.Data.Repository.Abstracts.Specification.Parsing;
+namespace Arcturus.Repository.Specification.Parsing;
 
 /// <summary>
 /// Provides extension methods for creating and manipulating specifications with filtering and ordering capabilities.

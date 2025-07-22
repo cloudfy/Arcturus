@@ -1,4 +1,4 @@
-﻿namespace Arcturus.Data.Abstracts;
+﻿namespace Arcturus.Repository.Abstracts;
 
 /// <summary>
 /// Represents an entity with a unique identifier.

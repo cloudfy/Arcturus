@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Arcturus.Data.Repository.Abstracts;
+﻿namespace Arcturus.Repository.Specification;
 
 /// <summary>
 /// Provides a builder for constructing a chain of include expressions to specify related entities to be included in a

@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-
-namespace Arcturus.Data.Repository.Abstracts;
+﻿namespace Arcturus.Repository.Specification;
 
 /// <summary>
 /// Represents a specification pattern that includes a projection for transforming elements of type <typeparamref
@@ -12,6 +10,10 @@ namespace Arcturus.Data.Repository.Abstracts;
 /// <typeparam name="TResult">The type of the result produced by the projection.</typeparam>
 public class Specification<T, TResult> : Specification<T>, ISpecification<T, TResult>
 {
+    /// <summary>
+    /// Gets the expression used to project an object of type <typeparamref name="T"/> into an object of type
+    /// <typeparamref name="TResult"/>.
+    /// </summary>
     public Expression<Func<T, TResult>>? Projection { get; private set; }
 
     internal Specification<T, TResult> InnerProject(Expression<Func<T, TResult>> selector)
