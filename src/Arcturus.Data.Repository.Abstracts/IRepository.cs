@@ -1,7 +1,6 @@
-﻿using Arcturus.Data.Abstracts;
-using System.Linq.Expressions;
+﻿using Arcturus.Repository.Specification;
 
-namespace Arcturus.Data.Repository.Abstracts;
+namespace Arcturus.Repository.Abstracts;
 
 /// <summary>
 /// Defines a generic repository interface for managing entities of type <typeparamref name="T"/> with a primary key of

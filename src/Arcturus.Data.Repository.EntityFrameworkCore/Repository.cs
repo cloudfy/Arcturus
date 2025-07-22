@@ -1,10 +1,8 @@
-﻿using Arcturus.Data.Abstracts;
-using Arcturus.Data.Repository.Abstracts;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using Arcturus.Data.Repository.EntityFrameworkCore.Internals;
+﻿using Arcturus.Repository.Abstracts;
+using Arcturus.Repository.EntityFrameworkCore.Internals;
+using Arcturus.Repository.Specification;
 
-namespace Arcturus.Data.Repository.EntityFrameworkCore;
+namespace Arcturus.Repository.EntityFrameworkCore;
 
 /// <summary>
 /// Provides a generic repository implementation for managing entities in a database context.

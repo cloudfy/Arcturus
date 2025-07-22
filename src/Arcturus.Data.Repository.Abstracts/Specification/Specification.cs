@@ -1,10 +1,8 @@
-﻿using Arcturus.Data.Repository.Abstracts.Specification.Expressions;
-using System.Linq.Expressions;
+﻿using Arcturus.Repository.Specification.Expressions;
 
-namespace Arcturus.Data.Repository.Abstracts;
+namespace Arcturus.Repository.Specification;
 
 /// <summary>
-/// <para>EXPERIMENTAL - SUBJECT TO CHANGE</para>
 /// Represents a specification for querying <typeparamref name="T"/>, including filtering, sorting, and related data inclusion.
 /// </summary>
 /// <remarks>This class encapsulates query criteria, such as filtering conditions, sorting rules, and inclusion of

@@ -1,8 +1,7 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace Arcturus.Data.Repository.Abstracts.Specification.Parsing.Internals;
+namespace Arcturus.Repository.Specification.Parsing.Internals;
 
 internal static class ExpressionHelper
 {

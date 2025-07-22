@@ -1,9 +1,16 @@
-﻿using Arcturus.Data.Repository.Abstracts;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using Arcturus.Repository.Specification;
 
-namespace Arcturus.Data.Repository.EntityFrameworkCore.Internals;
+namespace Arcturus.Repository.EntityFrameworkCore.Internals;
 
+/// <summary>
+/// Evaluates and applies a given specification to an <see cref="IQueryable{TEntity}"/> source, transforming it
+/// according to the specification's criteria and projections.
+/// </summary>
+/// <remarks>This evaluator processes include expressions, query splitting, and query filter ignoring as specified
+/// by the <see cref="ISpecification{TEntity}"/>. It also handles projections if the specification includes a projection
+/// for a different result type.</remarks>
+/// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+/// <param name="specification"></param>
 internal sealed class SqlSpecificationEvaluator<TEntity>(
     ISpecification<TEntity> specification) 
     : SpecificationEvaluator<TEntity>(specification)
