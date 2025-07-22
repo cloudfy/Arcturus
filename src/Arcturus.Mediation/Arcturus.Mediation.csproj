@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Arcturus.Mediation</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>mediation,cqrs,mediator,arcturus</PackageTags>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
+	
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml"
+				  Pack="true"
+				  PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
+	
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\Arcturus.Mediation.Abstracts\Arcturus.Mediation.Abstracts.csproj" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+	</ItemGroup>
+	
+</Project>
