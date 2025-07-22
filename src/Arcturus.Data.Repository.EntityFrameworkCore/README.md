@@ -1,7 +1,7 @@
 # Arcturus.Repository.EntityFrameworkCore
 
-[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Data.Repository.EntityFrameworkCore) 
-[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Data.Repository.EntityFrameworkCore)
+[![NuGet](https://img.shields.io/nuget/dt/Arcturus.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Repository.EntityFrameworkCore) 
+[![NuGet](https://img.shields.io/nuget/vpre/Arcturus.Repository.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Arcturus.Repository.EntityFrameworkCore)
 
 ---
 
