@@ -51,10 +51,10 @@ internal static class FilterExpressionParser
                 "eq" => Expression.Equal(property, constant),
                 "ne" => Expression.NotEqual(property, constant),
                 "lk" => ExpressionLike(property, constant),
-                "gt" => Expression.GreaterThan(property, constant),
-                "ge" => Expression.GreaterThanOrEqual(property, constant),
-                "lt" => Expression.LessThan(property, constant),
-                "le" => Expression.LessThanOrEqual(property, constant),
+                "gt" => CreateComparisonExpression(property, constant, operatorSymbol),
+                "ge" => CreateComparisonExpression(property, constant, operatorSymbol),
+                "lt" => CreateComparisonExpression(property, constant, operatorSymbol),
+                "le" => CreateComparisonExpression(property, constant, operatorSymbol),
                 _ => throw new FilterExpressionException($"Operator '{operatorSymbol}' is not supported.")
             };
             // Build the lambda expression
@@ -68,6 +68,38 @@ internal static class FilterExpressionParser
         {
             throw;
         }
+    }
+
+    private static Expression CreateComparisonExpression(MemberExpression property, ConstantExpression constant, string operatorSymbol)
+    {
+        var propertyType = property.Type;
+        
+        // Handle string comparisons using string.Compare
+        if (propertyType == typeof(string))
+        {
+            var compareMethod = typeof(string).GetMethod(nameof(string.Compare), new[] { typeof(string), typeof(string) });
+            var compareCall = Expression.Call(compareMethod, property, constant);
+            var constantValue = Expression.Constant(0);
+            
+            return operatorSymbol switch
+            {
+                "gt" => Expression.GreaterThan(compareCall, constantValue),
+                "ge" => Expression.GreaterThanOrEqual(compareCall, constantValue),
+                "lt" => Expression.LessThan(compareCall, constantValue),
+                "le" => Expression.LessThanOrEqual(compareCall, constantValue),
+                _ => throw new FilterExpressionException($"Operator '{operatorSymbol}' is not supported.")
+            };
+        }
+        
+        // Handle numeric and other comparable types using standard operators
+        return operatorSymbol switch
+        {
+            "gt" => Expression.GreaterThan(property, constant),
+            "ge" => Expression.GreaterThanOrEqual(property, constant),
+            "lt" => Expression.LessThan(property, constant),
+            "le" => Expression.LessThanOrEqual(property, constant),
+            _ => throw new FilterExpressionException($"Operator '{operatorSymbol}' is not supported.")
+        };
     }
 
     private static MethodCallExpression ExpressionLike(MemberExpression property, ConstantExpression constant)
