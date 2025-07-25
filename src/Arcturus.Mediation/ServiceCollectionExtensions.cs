@@ -1,5 +1,6 @@
 using Arcturus.Mediation.Abstracts;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 
 namespace Arcturus.Mediation;
@@ -23,18 +24,19 @@ public static class ServiceCollectionExtensions
         configureAction?.Invoke(configuration);
 
         // Register the mediator
-        services.AddScoped<IMediator, Mediator>();
+        services.Add(new ServiceDescriptor(typeof(IMediator), typeof(Mediator), configuration.LifeTime));
+        services.AddSingleton<MediationConfiguration>(configuration);
 
         // Register handlers from assemblies
         foreach (var assembly in configuration.Assemblies)
         {
-            RegisterHandlersFromAssembly(services, assembly);
+            RegisterHandlersFromAssembly(services, assembly, configuration.LifeTime);
         }
 
         // Register middleware
         foreach (var middlewareType in configuration.MiddlewareTypes)
         {
-            services.AddScoped(typeof(IMiddleware), middlewareType);
+            services.Add(new ServiceDescriptor(typeof(IMiddleware), middlewareType, configuration.LifeTime));
         }
 
         return services;
@@ -51,7 +53,9 @@ public static class ServiceCollectionExtensions
         return services.AddMediation(config => config.RegisterHandlersFromAssembly(callingAssembly));
     }
 
-    private static void RegisterHandlersFromAssembly(IServiceCollection services, Assembly assembly)
+    // run during startup to register handlers from a specific assembly, no need to cache
+    private static void RegisterHandlersFromAssembly(
+        IServiceCollection services, Assembly assembly, ServiceLifetime lifeTime)
     {
         var types = assembly.GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract)
@@ -66,7 +70,7 @@ public static class ServiceCollectionExtensions
 
             foreach (var handlerInterface in handlerInterfaces)
             {
-                services.AddScoped(handlerInterface, type);
+                services.Add(new ServiceDescriptor(handlerInterface, type, lifeTime));
             }
         }
 
@@ -79,7 +83,7 @@ public static class ServiceCollectionExtensions
 
             foreach (var handlerInterface in handlerInterfaces)
             {
-                services.AddScoped(handlerInterface, type);
+                services.Add(new ServiceDescriptor(handlerInterface, type, lifeTime));
             }
         }
 
@@ -92,7 +96,7 @@ public static class ServiceCollectionExtensions
 
             foreach (var handlerInterface in handlerInterfaces)
             {
-                services.AddScoped(handlerInterface, type);
+                services.Add(new ServiceDescriptor(handlerInterface, type, lifeTime));
             }
         }
     }

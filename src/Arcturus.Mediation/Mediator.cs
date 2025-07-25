@@ -83,8 +83,13 @@ public class Mediator : IMediator
         return response!;
     }
 
+    public Task<object?> Send(object request, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
     /// <inheritdoc />
-    public async Task Send(IRequest request, CancellationToken cancellationToken = default)
+    public async Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default)
+        where TRequest: IRequest
     {
         if (request == null)
         {
@@ -166,7 +171,7 @@ public class Mediator : IMediator
         }
     }
 
-    private RequestDelegate BuildPipeline(IMiddlewareContext context, RequestDelegate innerHandler)
+    private PipelineRequestDelegate BuildPipeline(IMiddlewareContext context, PipelineRequestDelegate innerHandler)
     {
         var pipeline = innerHandler;
 

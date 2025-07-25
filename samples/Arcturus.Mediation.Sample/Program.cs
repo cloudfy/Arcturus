@@ -219,7 +219,7 @@ public class PerformanceMiddleware : IMiddleware
         _logger = logger;
     }
 
-    public async Task InvokeAsync(IMiddlewareContext context, RequestDelegate next)
+    public async Task InvokeAsync(IMiddlewareContext context, PipelineRequestDelegate next)
     {
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         

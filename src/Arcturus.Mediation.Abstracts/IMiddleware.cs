@@ -4,7 +4,7 @@ namespace Arcturus.Mediation.Abstracts;
 /// Delegate representing the next step in the middleware pipeline.
 /// </summary>
 /// <returns>A task that represents the asynchronous operation.</returns>
-public delegate Task RequestDelegate();
+public delegate Task PipelineRequestDelegate();
 
 /// <summary>
 /// Interface for middleware components that can wrap request handling with custom behaviors.
@@ -17,7 +17,7 @@ public interface IMiddleware
     /// <param name="context">The current middleware context.</param>
     /// <param name="next">The next delegate in the pipeline.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task InvokeAsync(IMiddlewareContext context, RequestDelegate next);
+    Task InvokeAsync(IMiddlewareContext context, PipelineRequestDelegate next);
 }
 
 /// <summary>
@@ -43,5 +43,5 @@ public interface IMiddlewareContext
     /// <summary>
     /// Gets or sets arbitrary data associated with the current request.
     /// </summary>
-    IDictionary<string, object> Items { get; }
+    IDictionary<string, object?> Items { get; }
 }

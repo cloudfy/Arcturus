@@ -23,7 +23,7 @@ public class ValidationMiddleware : IMiddleware
     }
 
     /// <inheritdoc />
-    public async Task InvokeAsync(IMiddlewareContext context, RequestDelegate next)
+    public async Task InvokeAsync(IMiddlewareContext context, PipelineRequestDelegate next)
     {
         var request = context.Request;
         var requestType = context.RequestType;
