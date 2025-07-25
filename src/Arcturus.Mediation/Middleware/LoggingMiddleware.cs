@@ -21,7 +21,7 @@ public class LoggingMiddleware : IMiddleware
     }
 
     /// <inheritdoc />
-    public async Task InvokeAsync(IMiddlewareContext context, RequestDelegate next)
+    public async Task InvokeAsync(IMiddlewareContext context, PipelineRequestDelegate next)
     {
         var requestType = context.RequestType;
         var correlationId = Guid.NewGuid().ToString("N")[..8];

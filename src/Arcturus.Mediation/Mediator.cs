@@ -83,8 +83,31 @@ public class Mediator : IMediator
         return response!;
     }
 
+    public async Task<object?> Send(object request, CancellationToken cancellationToken = default)
+    {
+        if (request == null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
+        var requestType = request.GetType();
+        var responseType = typeof(object);
+        var sendMethod = typeof(Mediator).GetMethod(nameof(Send), new[] { typeof(IRequest<>).MakeGenericType(responseType), typeof(CancellationToken) });
+
+        if (sendMethod == null)
+        {
+            throw new InvalidOperationException($"Unable to find a suitable Send method for request type {requestType.Name}");
+        }
+
+        var task = (Task)sendMethod.Invoke(this, new object[] { request, cancellationToken })!;
+        await task.ConfigureAwait(false);
+
+        var resultProperty = task.GetType().GetProperty("Result");
+        return resultProperty?.GetValue(task);
+    }
     /// <inheritdoc />
-    public async Task Send(IRequest request, CancellationToken cancellationToken = default)
+    public async Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default)
+        where TRequest: IRequest
     {
         if (request == null)
         {
@@ -166,7 +189,7 @@ public class Mediator : IMediator
         }
     }
 
-    private RequestDelegate BuildPipeline(IMiddlewareContext context, RequestDelegate innerHandler)
+    private PipelineRequestDelegate BuildPipeline(IMiddlewareContext context, PipelineRequestDelegate innerHandler)
     {
         var pipeline = innerHandler;
 

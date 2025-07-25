@@ -5,6 +5,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>mediation,cqrs,mediator,arcturus</PackageTags>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Description>Abstractions for building mediator-based CQRS and request/response pipelines in .NET applications.</Description>
 	</PropertyGroup>
 	
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">

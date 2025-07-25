@@ -5,18 +5,17 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>mediation,cqrs,mediator,arcturus</PackageTags>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <Description>A lightweight, extensible CQRS and mediation library for .NET, enabling decoupled request/response and notification handling.</Description>
 	</PropertyGroup>
 	
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
-			<None Include="$(OutputPath)$(AssemblyName).xml"
-				  Pack="true"
-				  PackagePath="lib\$(TargetFramework)" />
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
 		</ItemGroup>
 	</Target>
 	
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
 	<ItemGroup>

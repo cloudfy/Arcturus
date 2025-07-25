@@ -1,4 +1,5 @@
 using Arcturus.Mediation.Abstracts;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Arcturus.Mediation;
@@ -8,8 +9,8 @@ namespace Arcturus.Mediation;
 /// </summary>
 public class MediationConfiguration
 {
-    private readonly List<Assembly> _assemblies = new();
-    private readonly List<Type> _middlewareTypes = new();
+    private readonly List<Assembly> _assemblies = [];
+    private readonly List<Type> _middlewareTypes = [];
 
     /// <summary>
     /// Registers handlers from the specified assembly.
@@ -99,4 +100,12 @@ public class MediationConfiguration
     /// Gets the middleware types to register.
     /// </summary>
     internal IReadOnlyCollection<Type> MiddlewareTypes => _middlewareTypes.AsReadOnly();
+
+    /// <summary>
+    /// Gets or sets the service lifetime, which determines the lifetime of the service instance.
+    /// <para>
+    /// Default <see cref="ServiceLifetime.Scoped" />.
+    /// </para>
+    /// </summary>
+    public ServiceLifetime LifeTime { get; set; } = ServiceLifetime.Scoped;
 }
