@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Arcturus.Repository.Pagination</RootNamespace>
+		<PackageId>Arcturus.Extensions.Repository.Pagination</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>repository,data,pagination,arcturus</PackageTags>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Description>
+			Provides extension methods and utilities for implementing efficient data pagination in repository patterns. Designed for .NET applications to simplify paged data access and improve repository layer maintainability.
+		</Description>
+		<NoWarn>IDE0130</NoWarn>
+	</PropertyGroup>
+
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
+	
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
+  </ItemGroup>
+</Project>
