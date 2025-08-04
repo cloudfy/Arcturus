@@ -49,20 +49,20 @@ public static class RepositoryExtensions
         where T : IEntity<TKey>
         where TKey : notnull
     {
-        var querySpecificiation = new Specification<T, TResult>();
+        var querySpecification = new Specification<T, TResult>();
         if (predicate is not null)
-            querySpecificiation.Where(predicate);
+            querySpecification.Where(predicate);
 
         _ = PagingCursor<TKey>.TryParse(after, out PagingCursor<TKey>? afterCursor);
 
         if (!string.IsNullOrEmpty(orderBy))
         {
-            querySpecificiation.OrderBy(orderBy);
+            querySpecification.OrderBy(orderBy);
         }
 
         if (afterCursor is not null && !string.IsNullOrEmpty(orderBy) && afterCursor.OrderByValue is not null)
         {
-            querySpecificiation.Where(QueryableExtensions.KeysetPagePredicate<T>(
+            querySpecification.Where(QueryableExtensions.KeysetPagePredicate<T>(
                 (orderBy, (object)afterCursor.OrderByValue),
                 ("ID", (object)afterCursor.DefaultValue)
             ));
