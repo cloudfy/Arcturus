@@ -4,7 +4,7 @@ using Arcturus.Extensions.ResultObjects.AspNetCore.ActionResults;
 
 namespace Arcturus.ResultObjects;
 
-public static class ActionResultExtensions
+public static class AspNetCoreActionResultExtensions
 {
     private static HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
 
