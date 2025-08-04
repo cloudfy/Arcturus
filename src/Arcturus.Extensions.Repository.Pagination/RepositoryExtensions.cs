@@ -192,12 +192,15 @@ public static class RepositoryExtensions
             object? orderByValue = null;
             if (orderBy is not null)
             {
-                // TODO: cache
-                var prop = typeof(T).GetProperty(
-                    orderBy
-                    , System.Reflection.BindingFlags.IgnoreCase |
+                // Use cached property info for performance
+                var prop = _propertyCache.GetOrAdd(
+                    (typeof(T), orderBy),
+                    key => key.Item1.GetProperty(
+                        key.Item2,
+                        System.Reflection.BindingFlags.IgnoreCase |
                         System.Reflection.BindingFlags.Public |
-                        System.Reflection.BindingFlags.Instance);
+                        System.Reflection.BindingFlags.Instance)
+                );
                 orderByValue = prop?.GetValue(lastItem);
             }
 
