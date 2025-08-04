@@ -3,7 +3,7 @@ using Arcturus.Extensions.ResultObjects.AspNetCore.Results;
 
 namespace Arcturus.ResultObjects;
 
-public static class ResultExtensions
+public static class AspNetCoreResultExtensions
 {
     private static HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
 

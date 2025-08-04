@@ -70,23 +70,23 @@ public static class RepositoryExtensions
         }
         else if (afterCursor is not null)
         {
-            querySpecificiation.Where($"ID ge '{afterCursor.DefaultValue}'");
+            querySpecification.Where($"ID ge '{afterCursor.DefaultValue}'");
         }
 
-        querySpecificiation
+        querySpecification
             .OrderBy(_ => _.Id)
             .Take(limit + 1) // last +1
             .WhereRange(where)
             .Project(projection);
 
         var results = await repository
-            .FindMany(querySpecificiation)
+            .FindMany(querySpecification)
             .ToArrayAsync(cancellationToken);
 
         if (results.Length > 0)
         {
             var resultCount = await repository.Count(
-                querySpecificiation.Clear().WhereRange(where).WhereIfNotNull(predicate)
+                querySpecification.Clear().WhereRange(where).WhereIfNotNull(predicate)
                 , cancellationToken);
 
             var lastItem = results.Last();
@@ -95,7 +95,6 @@ public static class RepositoryExtensions
             object? orderByValue = null;
             if (orderBy is not null)
             {
-                // TODO: cache
                 var prop = typeof(TResult).GetProperty(
                     orderBy
                     , System.Reflection.BindingFlags.IgnoreCase |
@@ -168,22 +167,22 @@ public static class RepositoryExtensions
         }
         else if (afterCursor is not null)
         {
-            querySpecificiation.Where($"ID ge '{afterCursor.DefaultValue}'");
+            querySpecification.Where($"ID ge '{afterCursor.DefaultValue}'");
         }
 
-        querySpecificiation
+        querySpecification
             .OrderBy(_ => _.Id)
             .Take(limit + 1) // last +1
             .WhereRange(where);
 
         var results = await repository
-            .FindMany(querySpecificiation)
+            .FindMany(querySpecification)
             .ToArrayAsync(cancellationToken);
 
         if (results.Length > 0)
         {
             var resultCount = await repository.Count(
-                querySpecificiation.Clear().WhereRange(where).WhereIfNotNull(predicate)
+                querySpecification.Clear().WhereRange(where).WhereIfNotNull(predicate)
                 , cancellationToken);
 
             var lastItem = results.Last();
@@ -192,15 +191,11 @@ public static class RepositoryExtensions
             object? orderByValue = null;
             if (orderBy is not null)
             {
-                // Use cached property info for performance
-                var prop = _propertyCache.GetOrAdd(
-                    (typeof(T), orderBy),
-                    key => key.Item1.GetProperty(
-                        key.Item2,
-                        System.Reflection.BindingFlags.IgnoreCase |
+                var prop = typeof(T).GetProperty(
+                    orderBy
+                    , System.Reflection.BindingFlags.IgnoreCase |
                         System.Reflection.BindingFlags.Public |
-                        System.Reflection.BindingFlags.Instance)
-                );
+                        System.Reflection.BindingFlags.Instance);
                 orderByValue = prop?.GetValue(lastItem);
             }
 
