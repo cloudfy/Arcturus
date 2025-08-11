@@ -6,7 +6,7 @@ namespace Arcturus.EventBus.Serialization;
 
 public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
 {
-    private const string DiscriminatorPropertyName = "$eventType";
+    private const string _discriminatorPropertyName = "$eventType";
     private readonly DefaultEventMessageTypeResolver _typeResolver;
 
     public DefaultEventMessageConverter() => _typeResolver = new DefaultEventMessageTypeResolver();
@@ -17,9 +17,9 @@ public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
         var root = document.RootElement;
 
         // Get the discriminator
-        if (!root.TryGetProperty(DiscriminatorPropertyName, out var typeProperty))
+        if (!root.TryGetProperty(_discriminatorPropertyName, out var typeProperty))
         {
-            throw new JsonException($"Missing discriminator property '{DiscriminatorPropertyName}'.");
+            throw new JsonException($"Missing discriminator property '{_discriminatorPropertyName}'.");
         }
 
         var typeName = typeProperty.GetString() ?? throw new JsonException("Discriminator property value is null.");
@@ -39,7 +39,7 @@ public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
         writer.WriteStartObject();
 
         // Write the discriminator (type)
-        writer.WriteString(DiscriminatorPropertyName, GetEventName(type));
+        writer.WriteString(_discriminatorPropertyName, GetEventName(type));
 
         // Serialize the object properties
         var properties = type.GetProperties();

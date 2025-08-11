@@ -1,6 +1,6 @@
 ﻿using Arcturus.EventBus.Abstracts;
 using Arcturus.EventBus.Diagnostics;
-using Arcturus.EventBus.RabbitMQ.Internals;
+using Arcturus.EventBus.Serialization;
 using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
@@ -49,7 +49,7 @@ public sealed class RabbitMQPublisher : IPublisher
             await _connection.Channel.QueueDeclareAsync(
                 queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
-            var message = EventMessageSerializer.Serialize(@event);
+            var message = DefaultEventSerializer.Serialize(@event);
             var body = Encoding.UTF8.GetBytes(message);
 
             using Activity? sendActivity = EventBusActivitySource.PublisherHasListeners

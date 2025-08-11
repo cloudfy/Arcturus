@@ -1,5 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
-using Arcturus.EventBus.AzureStorageQueue.Internals;
+using Arcturus.EventBus.Serialization;
 
 namespace Arcturus.EventBus.AzureStorageQueue;
 
@@ -36,7 +36,7 @@ public sealed class StorageQueueProcessor : IProcessor
                 foreach (var receiveMessage in receiveMessages.Value)
                 {
                     var messageBody = receiveMessage.Body.ToString();
-                    var @event = EventMessageSerializer.Deserialize(messageBody);
+                    var @event = DefaultEventSerializer.Deserialize(messageBody);
 
                     if (OnProcessAsync is not null)
                     {

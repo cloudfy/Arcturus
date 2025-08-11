@@ -1,5 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
-using Arcturus.EventBus.AzureStorageQueue.Internals;
+using Arcturus.EventBus.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus.AzureStorageQueue;
@@ -28,7 +28,7 @@ public sealed class StorageQueuePublisher : IPublisher
         _logger.LogTrace("Publishing event {EventName} to queue {QueueName}", @event.GetType().Name, _queue);
 
         await queueClient.SendMessageAsync(
-            EventMessageSerializer.Serialize(@event)
+            DefaultEventSerializer.Serialize(@event)
             , null
             , null
             , cancellationToken);
