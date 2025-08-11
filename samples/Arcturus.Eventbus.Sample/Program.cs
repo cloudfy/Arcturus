@@ -14,8 +14,8 @@ builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Register mediation services
-builder.Services.AddSqliteEventBus(o => { 
-    o.DatabasePath = "c:\\Temp\\eventbus.db"; // Specify your SQLite database path
+builder.Services.AddSqliteEventBus(o => {
+    o.ConnectionString = "Data Source=:memory:;";
 });
 
 var app = builder.Build();
@@ -56,9 +56,9 @@ while (!cts.IsCancellationRequested)
 
     await eventBusPublisher.Publish(new MyEvent() { Name = "Jack!" });
 }
-//await processor.WaitForEvents();
+
 
 public class MyEvent : IEventMessage
 {
-    public string Name { get; set; } = "Test Event";
+    public string Name { get; set; } = "My Event";
 }
