@@ -19,15 +19,15 @@ public sealed class SqliteEventBusFactory(
         // and fallback to the processor if no handlers are found
         if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
             return new EventHandlersProcessor(
-                new SqliteProcessor(_connection, queue, _eventBusOptions.ProcessInterval.GetValueOrDefault(100))
+                new SqliteProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName, _eventBusOptions.ProcessInterval.GetValueOrDefault(100))
                 , _serviceProvider
                 , loggerFactory);
 
-        return new SqliteProcessor(_connection, queue, _eventBusOptions.ProcessInterval.GetValueOrDefault(100));
+        return new SqliteProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName, _eventBusOptions.ProcessInterval.GetValueOrDefault(100));
     }
 
     public IPublisher CreatePublisher(string? queue = null)
     {
-        return new SqlitePublisher(_connection, loggerFactory, queue);
+        return new SqlitePublisher(_connection, loggerFactory, queue ?? _eventBusOptions.DefaultQueueName);
     }
 }

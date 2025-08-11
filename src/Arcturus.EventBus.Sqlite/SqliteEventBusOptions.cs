@@ -11,6 +11,10 @@ public class SqliteEventBusOptions
     /// </summary>
     public string? ClientName { get; set; }
     /// <summary>
+    /// Gets or sets a default queue name. Queue name can also be specificed when creating the <see cref="Arcturus.EventBus.Abstracts.IProcessor"/> or <see cref="Arcturus.EventBus.Abstracts.IPublisher"/>, otherwise it will default to 'default_queue'.
+    /// </summary>
+    public string? DefaultQueueName { get; set; }
+    /// <summary>
     /// Gets or sets a host name. Defaults to <see cref="Environment.MachineName" />.
     /// </summary>
     public string? HostName { get; set; }
