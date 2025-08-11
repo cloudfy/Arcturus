@@ -1,8 +1,8 @@
 ﻿using Arcturus.EventBus.Abstracts;
-using Arcturus.EventBus.RabbitMQ.Internals;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
+using Arcturus.EventBus.Serialization;
 
 namespace Arcturus.EventBus.RabbitMQ;
 
@@ -43,7 +43,7 @@ public sealed class RabbitMQProcessor : IProcessor
             byte[] body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-            var @event = EventMessageSerializer.Deserialize(message);
+            var @event = DefaultEventSerializer.Deserialize(message);
 
             if (OnProcessAsync is not null)
                 await OnProcessAsync.Invoke(
