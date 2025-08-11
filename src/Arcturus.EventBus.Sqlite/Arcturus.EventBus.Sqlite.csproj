@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<PackageId>Arcturus.EventBus.Sqlite</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageTags>eventbus,events,arcturus,sqlite,deveopment</PackageTags>
+		<PackageTags>eventbus,events,arcturus,sqlite,development</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
