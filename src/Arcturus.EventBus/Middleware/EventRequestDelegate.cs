@@ -5,4 +5,4 @@
 /// </summary>
 /// <param name="context">The context of the event being processed.</param>
 /// <returns>A <see cref="Task" /> that represents the completion of the event processing.</returns>
-public delegate Task RequestDelegate(EventContext context);
+public delegate Task EventRequestDelegate(EventContext context);
