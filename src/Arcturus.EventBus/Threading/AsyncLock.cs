@@ -25,17 +25,11 @@ public sealed class AsyncLock
     {
         private readonly SemaphoreSlim _semaphore;
 
-        internal Releaser(SemaphoreSlim semaphore)
-        {
-            _semaphore = semaphore;
-        }
+        internal Releaser(SemaphoreSlim semaphore) => _semaphore = semaphore;
 
         /// <summary>
         /// Releases the semaphore.
         /// </summary>
-        public void Dispose()
-        {
-            _semaphore.Release();
-        }
+        public void Dispose() => _semaphore.Release();
     }
 }

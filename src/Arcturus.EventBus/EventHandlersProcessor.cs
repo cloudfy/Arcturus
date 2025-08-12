@@ -25,9 +25,9 @@ public sealed class EventHandlersProcessor : IProcessor
 
         _logger = loggerFactory.CreateLogger<EventHandlersProcessor>();
     }
-
+    /// <inheritdoc />
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
-
+    /// <inheritdoc />
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
     {
         await _processor.WaitForEvents(cancellationToken);
@@ -41,7 +41,6 @@ public sealed class EventHandlersProcessor : IProcessor
             eventHandlerType
             , (t) =>
             {
-                // TODO: Cache
                 return AppDomain.CurrentDomain
                     .GetAssemblies()
                     .SelectMany(a => a.GetTypes())
@@ -62,15 +61,19 @@ public sealed class EventHandlersProcessor : IProcessor
 #pragma warning disable IDE0063 // Use simple 'using' statement
         using (var scope = _serviceProvider.CreateScope())
         {
+            // resolve the handler from the scope, if no handler is found, log and return
+            var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerType);
+            if (handler == null)
+            {
+                _logger.LogTrace("There are no handlers for the following event: {EventName}", eventType.Name);
+                return;
+            }
+
             var pipeline = HostExtensions.BuildByRequestDelegate(
                 async () => {
-                    var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, handlerType);
-                    //var handler = scope.ServiceProvider.GetService(eventHandlerType); // Requires that they are registered using DI
-                    if (handler == null)
-                    {
-                        _logger.LogTrace("There are no handlers for the following event: {EventName}", eventType.Name);
-                        return;
-                    }
+                    //var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, handlerType);
+                    
+                    //NO - var handler = scope.ServiceProvider.GetService(eventHandlerType); // Requires that they are registered using DI
                     await (Task)eventHandlerType.GetMethod(nameof(IEventMessageHandler<IEventMessage>.Handle))!.Invoke(handler, [@event!, e?.CancellationToken])!;
                 });
 

@@ -134,7 +134,7 @@ public sealed class SqliteConnection : IConnection
         if (datasource == ":memory:" || File.Exists(datasource))
             return;
         
-        if (Path.Exists(Path.GetPathRoot(datasource)) == false)
+        if (datasource != ":memory:" && Path.Exists(Path.GetPathRoot(datasource)) == false)
             throw new ArgumentException("Database path must be a valid file path or in-memory. " +
                 "If you want to use in-memory, set the connection string to ':memory:'.");
 

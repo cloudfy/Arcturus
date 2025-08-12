@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
@@ -9,37 +10,57 @@ public static class HostExtensions
 {
     private const string _invokeMethodName = "Invoke";
     private const string _invokeAsyncMethodName = "InvokeAsync";
-    private readonly static List<Func<RequestDelegate, RequestDelegate>> _components = [];
+    private readonly static List<Func<EventRequestDelegate, EventRequestDelegate>> _components = [];
     private readonly static MethodInfo _getServiceInfo
         = typeof(HostExtensions).GetMethod(nameof(GetService), BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    // We're going to keep all public constructors and public methods on middleware
+    private const DynamicallyAccessedMemberTypes _middlewareAccessibility =
+        DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods;
 
     /// <summary>
     /// Injects an event middleware into the event pipeline.
     /// </summary>
     /// <typeparam name="TMiddleware"></typeparam>
-    /// <param name="app"></param>
-    /// <param name="args"></param>
-    /// <returns></returns>
-    public static IHost UseEventMiddleware<TMiddleware>(
-        this IHost app, params object?[] args) where TMiddleware : IEventMiddleware
+    /// <param name="app">The <see cref="IHost"/> instance.</param>
+    /// <param name="args">The arguments to pass to the middleware type instance's constructor.</param>
+    /// <returns>The <see cref="IHost"/> instance.</returns>
+    public static IHost UseEventMiddleware<[DynamicallyAccessedMembers(_middlewareAccessibility)] TMiddleware>(
+        this IHost app, params object?[] args)
     {
         return app.UseEventMiddleware(typeof(TMiddleware), args);
+    }
+    public static IHost UseEventMiddleware(
+        this IHost app
+        , Func<EventContext, Func<Task>, Task> middleware)
+    {
+        return app.UseEventMiddleware(next => (context) => middleware(context, () => next(context)));
+    }
+    private static IHost UseEventMiddleware(
+        this IHost app
+        , Func<EventRequestDelegate, EventRequestDelegate> middleware)
+    {
+        _components.Add(middleware);
+        return app;
     }
 
     private static IHost UseEventMiddleware(
         this IHost app
         , Type middleware
         , params object?[] args)
+    
     {
+        // find all methods in the middleware type that match the expected signature
         var methods = middleware.GetMethods(BindingFlags.Instance | BindingFlags.Public);
         MethodInfo? invokeMethod = null;
         foreach (var method in methods)
         {
-            if (string.Equals(method.Name, _invokeMethodName, StringComparison.Ordinal) || string.Equals(method.Name, _invokeAsyncMethodName, StringComparison.Ordinal))
+            if (string.Equals(method.Name, _invokeMethodName, StringComparison.Ordinal) || 
+                string.Equals(method.Name, _invokeAsyncMethodName, StringComparison.Ordinal))
             {
                 if (invokeMethod is not null)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Middleware must contain a public Invoke or InvokeAsync method with the correct signature.");
                 }
 
                 invokeMethod = method;
@@ -47,12 +68,12 @@ public static class HostExtensions
         }
         if (invokeMethod is null)
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Middleware must contain a public Invoke or InvokeAsync method with the correct signature.");
         }
 
         if (!typeof(Task).IsAssignableFrom(invokeMethod.ReturnType))
         {
-            throw new InvalidOperationException();
+            throw new InvalidOperationException("Middleware must contain a public Invoke or InvokeAsync method with the correct signature.");
         }
         var parameters = invokeMethod.GetParameters();
         if (parameters.Length == 0 || parameters[0].ParameterType != typeof(EventContext))
@@ -61,20 +82,12 @@ public static class HostExtensions
         }
 
         var reflectionBinder = new ReflectionMiddlewareBinder(app, middleware, args, invokeMethod, parameters);
-        return app.Use(reflectionBinder.CreateMiddleware);
+        return app.UseEventMiddleware(reflectionBinder.CreateMiddleware);
     }
 
-    public static IHost Use(
-        this IHost app
-        , Func<RequestDelegate, RequestDelegate> middleware)
+    internal static EventRequestDelegate BuildByRequestDelegate(Func<Task> innerEventDelegate)
     {
-        _components.Add(middleware);
-        return app;
-    }
-
-    internal static RequestDelegate BuildByRequestDelegate(Func<Task> innerEventDelegate)
-    {
-        RequestDelegate app = context => {
+        EventRequestDelegate app = context => {
             return innerEventDelegate();
         };
 
@@ -109,32 +122,42 @@ public static class HostExtensions
         }
 
         // The CreateMiddleware method name is used by ApplicationBuilder to resolve the middleware type.
-        internal RequestDelegate CreateMiddleware(RequestDelegate next)
+        internal EventRequestDelegate CreateMiddleware(EventRequestDelegate next)
         {
+            // build constructor arguments and ensure EventContext is the first argument
             var ctorArgs = new object[_args.Length + 1];
             ctorArgs[0] = next;
             Array.Copy(_args, 0, ctorArgs, 1, _args.Length);
-            var instance = ActivatorUtilities.CreateInstance(_app.Services, _middleware, ctorArgs);
-            if (_parameters.Length == 1)
+
+            try
             {
-                return (RequestDelegate)_invokeMethod.CreateDelegate(typeof(RequestDelegate), instance);
-            }
-
-            // Performance optimization: Use compiled expressions to invoke middleware with services injected in Invoke.
-            // If IsDynamicCodeCompiled is false then use standard reflection to avoid overhead of interpreting expressions.
-            var factory = System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled
-                ? CompileExpression<object>(_invokeMethod, _parameters)
-                : ReflectionFallback<object>(_invokeMethod, _parameters);
-
-            return context => {
-                var serviceProvider = context.RequestServices ?? _app.Services;
-                if (serviceProvider == null)
+                var instance = ActivatorUtilities.CreateInstance(_app.Services, _middleware, ctorArgs);
+                if (_parameters.Length == 1)
                 {
-                    throw new InvalidOperationException();
+                    return (EventRequestDelegate)_invokeMethod.CreateDelegate(typeof(EventRequestDelegate), instance);
                 }
 
-                return factory(instance, context, serviceProvider);
-            };
+                // Performance optimization: Use compiled expressions to invoke middleware with services injected in Invoke.
+                // If IsDynamicCodeCompiled is false then use standard reflection to avoid overhead of interpreting expressions.
+                var factory = System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeCompiled
+                    ? CompileExpression<object>(_invokeMethod, _parameters)
+                    : ReflectionFallback<object>(_invokeMethod, _parameters);
+
+                return context => {
+                    var serviceProvider = context.RequestServices ?? _app.Services;
+                    if (serviceProvider == null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    return factory(instance, context, serviceProvider);
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to create middleware of type '{_middleware.FullName}' with method '{_invokeMethod.Name}'.", ex);
+            }
         }
 
         public override string ToString() => _middleware.ToString();
