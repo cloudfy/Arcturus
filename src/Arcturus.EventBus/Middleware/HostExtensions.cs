@@ -54,7 +54,7 @@ public static class HostExtensions
             {
                 if (invokeMethod is not null)
                 {
-                    throw new InvalidOperationException("Middleware must implement IEventMiddleware. No Invoice or InvoiceAsync found.");
+                    throw new InvalidOperationException("Middleware must implement IEventMiddleware. No Invoke or InvokeAsync found.");
                 }
 
                 invokeMethod = method;
