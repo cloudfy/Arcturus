@@ -34,7 +34,7 @@ public static class HostExtensions
         this IHost app
         , Func<EventContext, Func<Task>, Task> middleware)
     {
-        return app.UseEventMiddleware(middleware);
+        return app.UseEventMiddleware(next => (context) => middleware(context, () => next(context)));
     }
     private static IHost UseEventMiddleware(
         this IHost app
