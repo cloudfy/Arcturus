@@ -26,9 +26,15 @@ public static class HostExtensions
     /// <param name="args">The arguments to pass to the middleware type instance's constructor.</param>
     /// <returns>The <see cref="IHost"/> instance.</returns>
     public static IHost UseEventMiddleware<[DynamicallyAccessedMembers(_middlewareAccessibility)] TMiddleware>(
-        this IHost app, params object?[] args) //where TMiddleware : IEventMiddleware
+        this IHost app, params object?[] args)
     {
         return app.UseEventMiddleware(typeof(TMiddleware), args);
+    }
+    public static IHost UseEventMiddleware(
+        this IHost app
+        , Func<EventContext, Func<Task>, Task> middleware)
+    {
+        return app.UseEventMiddleware(middleware);
     }
     private static IHost UseEventMiddleware(
         this IHost app
@@ -54,7 +60,7 @@ public static class HostExtensions
             {
                 if (invokeMethod is not null)
                 {
-                    throw new InvalidOperationException("Middleware must implement IEventMiddleware. No Invoke or InvokeAsync found.");
+                    throw new InvalidOperationException("Middleware must contain a public Invoke or InvokeAsync method with the correct signature.");
                 }
 
                 invokeMethod = method;
@@ -62,12 +68,12 @@ public static class HostExtensions
         }
         if (invokeMethod is null)
         {
-            throw new InvalidOperationException("Middleware must implement IEventMiddleware. No Invoke or InvokeAsync found.");
+            throw new InvalidOperationException("Middleware must contain a public Invoke or InvokeAsync method with the correct signature.");
         }
 
         if (!typeof(Task).IsAssignableFrom(invokeMethod.ReturnType))
         {
-            throw new InvalidOperationException("Middleware Invoice or InvoiceAsync must return Task.");
+            throw new InvalidOperationException("Middleware must contain a public Invoke or InvokeAsync method with the correct signature.");
         }
         var parameters = invokeMethod.GetParameters();
         if (parameters.Length == 0 || parameters[0].ParameterType != typeof(EventContext))

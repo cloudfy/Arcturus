@@ -1,4 +1,6 @@
-﻿namespace Arcturus.EventBus.Internals;
+﻿using System.Collections.Concurrent;
+
+namespace Arcturus.EventBus.Internals;
 
 internal static class ReflectionCache
 {
@@ -8,7 +10,7 @@ internal static class ReflectionCache
     private static readonly object _lock = new();
 #endif
 
-    private static readonly Dictionary<Type, Type> _cache = [];
+    private static readonly ConcurrentDictionary<Type, Type> _cache = [];
 
     internal static Type? GetOrCreate(
         Type reflectedType
@@ -23,7 +25,7 @@ internal static class ReflectionCache
             if (type is null)
                 return null;
 
-            _cache.Add(reflectedType, type);
+            _cache.TryAdd(reflectedType, type);
             return type;
         }
     }

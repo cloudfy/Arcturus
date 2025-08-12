@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Middleware;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -19,7 +20,12 @@ builder.Services.AddSqliteEventBus(o => {
 });
 
 var app = builder.Build();
+app.UseEventMiddleware((context, next) => {
+    // Middleware logic can be added here
+    Console.WriteLine($"Middleware processing event {context.EventName}...");
 
+    return next.Invoke(); 
+});
 CancellationTokenSource cts = new ();
 
 var eventBusFactory = app.Services.GetRequiredService<Arcturus.EventBus.Abstracts.IEventBusFactory>();
