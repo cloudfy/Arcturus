@@ -11,6 +11,10 @@ public sealed class RabbitMQEventBusOptions
     /// </summary>
     public string? ClientName { get; set; }
     /// <summary>
+    /// Gets or sets a default exchange name. Defaults to "events".
+    /// </summary>
+    public string? DefaultQueueName { get; set; }
+    /// <summary>
     /// Gets or sets a host name. Defaults to localhost.
     /// </summary>
     public string? HostName { get; set; }

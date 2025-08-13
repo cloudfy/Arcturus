@@ -24,7 +24,7 @@ public static class ConfigurationExtensions
         {
             throw new ArgumentNullException(nameof(builder));
         }
-        
+
         return builder.AddAzureStorageBlob(options => options.Connect(connectionString, containerName, blobName));
     }
     /// <summary>

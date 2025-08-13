@@ -22,7 +22,7 @@ public class Result
             HttpStatusCode = specializedFault.HttpStatusCode;
         }
     }
-    
+
     /// <summary>
     /// Returns a success result.
     /// </summary>

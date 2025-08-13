@@ -40,8 +40,8 @@ public sealed class StorageQueueProcessor : IProcessor
 
                     if (OnProcessAsync is not null)
                     {
-                        if (_options.MessageProcessing.DeleteMessageBeforeProcessing.GetValueOrDefault(true)) 
-                        { 
+                        if (_options.MessageProcessing.DeleteMessageBeforeProcessing.GetValueOrDefault(true))
+                        {
                             // delete message before it resurface
                             await queueClient.DeleteMessageAsync(
                                 receiveMessage.MessageId, receiveMessage.PopReceipt, cancellationToken);

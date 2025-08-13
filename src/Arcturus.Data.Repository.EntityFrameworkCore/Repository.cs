@@ -164,7 +164,7 @@ public class Repository<T, TKey>(
             set = set.AsTracking();
 
         var query = exec.Apply<TResult>(set);
-        
+
         return query.AsAsyncEnumerable();
     }
     public async Task<long> Count(

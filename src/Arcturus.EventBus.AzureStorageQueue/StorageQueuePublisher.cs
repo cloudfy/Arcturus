@@ -20,7 +20,7 @@ public sealed class StorageQueuePublisher : IPublisher
         _logger = loggerFactory.CreateLogger<StorageQueuePublisher>();
     }
 
-    public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) 
+    public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
         where TEvent : IEventMessage
     {
         var queueClient = await _connection.GetQueueClient(_queue);

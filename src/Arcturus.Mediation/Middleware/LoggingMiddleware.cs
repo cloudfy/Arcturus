@@ -25,14 +25,14 @@ public class LoggingMiddleware : IMiddleware
     {
         var requestType = context.RequestType;
         var correlationId = Guid.NewGuid().ToString("N")[..8];
-        
+
         context.Items["CorrelationId"] = correlationId;
 
-        _logger.LogInformation("Handling request {RequestType} [{CorrelationId}]", 
+        _logger.LogInformation("Handling request {RequestType} [{CorrelationId}]",
             requestType.Name, correlationId);
 
         var stopwatch = Stopwatch.StartNew();
-        
+
         try
         {
             await next();
@@ -44,10 +44,10 @@ public class LoggingMiddleware : IMiddleware
         catch (Exception ex)
         {
             stopwatch.Stop();
-            
+
             _logger.LogError(ex, "Failed to handle request {RequestType} [{CorrelationId}] after {ElapsedMs}ms",
                 requestType.Name, correlationId, stopwatch.ElapsedMilliseconds);
-            
+
             throw;
         }
     }

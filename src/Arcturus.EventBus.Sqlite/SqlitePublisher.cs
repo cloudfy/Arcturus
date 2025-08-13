@@ -20,7 +20,7 @@ public sealed class SqlitePublisher : IPublisher
         _logger = loggerFactory.CreateLogger<SqlitePublisher>();
     }
 
-    public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) 
+    public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
         where TEvent : IEventMessage
     {
         _logger.LogDebug(

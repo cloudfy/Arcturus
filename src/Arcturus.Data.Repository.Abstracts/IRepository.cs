@@ -11,7 +11,7 @@ namespace Arcturus.Repository.Abstracts;
 /// for flexible querying.</remarks>
 /// <typeparam name="T">The type of the entity managed by the repository. Must implement <see cref="IEntity{TKey}"/>.</typeparam>
 /// <typeparam name="TKey">The type of the primary key for the entity. Must be non-nullable.</typeparam>
-public interface IRepository<T, TKey> 
+public interface IRepository<T, TKey>
     where T : IEntity<TKey> where TKey : notnull
 {
     /// <summary>

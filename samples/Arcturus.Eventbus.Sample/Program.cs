@@ -15,18 +15,20 @@ builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Register mediation services
-builder.Services.AddSqliteEventBus(o => {
+builder.Services.AddSqliteEventBus(o =>
+{
     o.ConnectionString = "Data Source=:memory:;";
 });
 
 var app = builder.Build();
-app.UseEventMiddleware((context, next) => {
+app.UseEventMiddleware((context, next) =>
+{
     // Middleware logic can be added here
     Console.WriteLine($"Middleware processing event {context.EventName}...");
 
-    return next.Invoke(); 
+    return next.Invoke();
 });
-CancellationTokenSource cts = new ();
+CancellationTokenSource cts = new();
 
 var eventBusFactory = app.Services.GetRequiredService<Arcturus.EventBus.Abstracts.IEventBusFactory>();
 

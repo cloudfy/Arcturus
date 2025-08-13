@@ -12,7 +12,7 @@ namespace Arcturus.Repository.EntityFrameworkCore.Internals;
 /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
 /// <param name="specification"></param>
 internal sealed class SqlSpecificationEvaluator<TEntity>(
-    ISpecification<TEntity> specification) 
+    ISpecification<TEntity> specification)
     : SpecificationEvaluator<TEntity>(specification)
     where TEntity : class
 {
@@ -53,7 +53,7 @@ internal sealed class SqlSpecificationEvaluator<TEntity>(
         {
             source = source.IgnoreQueryFilters();
         }
-        
+
         return ApplyLimit(ApplySkip(ApplyWhere(ApplyOrderBy(source))));
     }
 

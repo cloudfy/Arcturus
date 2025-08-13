@@ -29,7 +29,7 @@ public static class HostExtensions
 
         var commandLineCommand = new RootCommand(commandDetails?.Description ?? "CLI");
 
-        CommandLineBuilder commandLineBuilder = new (commandLineCommand);
+        CommandLineBuilder commandLineBuilder = new(commandLineCommand);
         HostBuilderExtensions.AssignCommandLineBuilder(commandLineBuilder);
 
         var parser = commandLineBuilder.Build();
@@ -73,7 +73,7 @@ public static class HostExtensions
                     var option = CreateOptionInstance(
                         field.pinfo.PropertyType, field.attr!.Name, field.attr?.Description);
                     option.IsRequired = !Arcturus.CommandLine.Internals.TypeExtensions.IsNullable(field.pinfo.PropertyType);
-                    
+
                     wrappedCommand.AddOption(option);
                 }
 
@@ -82,10 +82,11 @@ public static class HostExtensions
                 var handler = services.GetService(handlerType);
                 if (handler is not null && handlerType.TryGetMethod("Handle", out var methodHandler))
                 {
-                    wrappedCommand.SetHandler(async (context) => {
+                    wrappedCommand.SetHandler(async (context) =>
+                    {
                         //context.ParseResult.GetValueForOption()
                         // context.ParseResult.CommandResult.Children
-                        foreach (var o in context.ParseResult.CommandResult.Command.Options) 
+                        foreach (var o in context.ParseResult.CommandResult.Command.Options)
                         {
                             var ov = context.ParseResult.GetValueForOption(o);
 

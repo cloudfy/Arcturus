@@ -76,7 +76,7 @@ public class Specification<T>()
         }
     }
 
-    public bool UseSplitQuery { get; internal set; }    
+    public bool UseSplitQuery { get; internal set; }
     public bool IgnoreQueryFilters { get; internal set; }
     public int? Limit { get; internal set; }
     public int? Skip { get; internal set; }

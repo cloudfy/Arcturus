@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace Arcturus.AspNetCore.Endpoints;
 
 public sealed class RoutePrefixConvention : IControllerModelConvention
-{  
+{
     /// <summary>
     /// Applies a route prefix convention to the controller if it inherits from <see cref="AbstractEndpoint"/>.
     /// Updates the route template for selectors with a template of "[controller]" to a formatted route

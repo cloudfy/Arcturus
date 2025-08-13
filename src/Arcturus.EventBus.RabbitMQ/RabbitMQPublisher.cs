@@ -29,7 +29,7 @@ public sealed class RabbitMQPublisher : IPublisher
 
         _logger = loggerFactory.CreateLogger<RabbitMQPublisher>();
     }
-        
+
     public async Task Publish<TEvent>(
         TEvent @event
         , CancellationToken cancellationToken = default) where TEvent : IEventMessage
@@ -39,11 +39,13 @@ public sealed class RabbitMQPublisher : IPublisher
             .Handle<AlreadyClosedException>()
             .Or<SocketException>()
             .Or<IOException>()
-            .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan) => {
+            .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan) =>
+            {
                 //_logger.LogWarning(exception, "Could not publish event #{EventId} after {Timeout} seconds: {ExceptionMessage}.", @event, $"{timeSpan.TotalSeconds:n1}", exception.Message);
             });
 
-        await policy.Execute(async () => {
+        await policy.Execute(async () =>
+        {
             await _connection.EnsureConnected(cancellationToken);
 
             await _connection.Channel.QueueDeclareAsync(
@@ -60,10 +62,14 @@ public sealed class RabbitMQPublisher : IPublisher
             var properties = new BasicProperties
             {
                 Persistent = true
-                , AppId = _connection.ApplicationId
-                , CorrelationId = null
-                , Headers = null
-                , MessageId = Guid.NewGuid().ToString()
+                ,
+                AppId = _connection.ApplicationId
+                ,
+                CorrelationId = null
+                ,
+                Headers = null
+                ,
+                MessageId = Guid.NewGuid().ToString()
             };
 
             await _connection.Channel.BasicPublishAsync(

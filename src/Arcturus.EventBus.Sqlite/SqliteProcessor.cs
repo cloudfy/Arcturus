@@ -22,7 +22,8 @@ public sealed class SqliteProcessor : IProcessor
 
     public Task WaitForEvents(CancellationToken cancellationToken = default)
     {
-        return Task.Run(async () => {
+        return Task.Run(async () =>
+        {
             while (!cancellationToken.IsCancellationRequested)
             {
                 var events = await _connection.PullEvents(_queueName, 5, cancellationToken);

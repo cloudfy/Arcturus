@@ -48,14 +48,14 @@ public static class HostExtensions
         this IHost app
         , Type middleware
         , params object?[] args)
-    
+
     {
         // find all methods in the middleware type that match the expected signature
         var methods = middleware.GetMethods(BindingFlags.Instance | BindingFlags.Public);
         MethodInfo? invokeMethod = null;
         foreach (var method in methods)
         {
-            if (string.Equals(method.Name, _invokeMethodName, StringComparison.Ordinal) || 
+            if (string.Equals(method.Name, _invokeMethodName, StringComparison.Ordinal) ||
                 string.Equals(method.Name, _invokeAsyncMethodName, StringComparison.Ordinal))
             {
                 if (invokeMethod is not null)
@@ -87,7 +87,8 @@ public static class HostExtensions
 
     internal static EventRequestDelegate BuildByRequestDelegate(Func<Task> innerEventDelegate)
     {
-        EventRequestDelegate app = context => {
+        EventRequestDelegate app = context =>
+        {
             return innerEventDelegate();
         };
 
@@ -143,7 +144,8 @@ public static class HostExtensions
                     ? CompileExpression<object>(_invokeMethod, _parameters)
                     : ReflectionFallback<object>(_invokeMethod, _parameters);
 
-                return context => {
+                return context =>
+                {
                     var serviceProvider = context.RequestServices ?? _app.Services;
                     if (serviceProvider == null)
                     {
@@ -176,7 +178,8 @@ public static class HostExtensions
             }
         }
 
-        return (middleware, context, serviceProvider) => {
+        return (middleware, context, serviceProvider) =>
+        {
             var methodArguments = new object[parameters.Length];
             methodArguments[0] = context;
             for (var i = 1; i < parameters.Length; i++)

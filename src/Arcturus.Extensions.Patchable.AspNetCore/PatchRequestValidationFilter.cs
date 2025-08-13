@@ -22,7 +22,7 @@ internal sealed class PatchRequestValidationFilter : IEndpointFilter
                 {
                     modelValidation.Add(property.Key, ["Property is not known"]);
                 }
-                if (property.Value is null && IsPropertyNullable(propertyInfo!) == false) 
+                if (property.Value is null && IsPropertyNullable(propertyInfo!) == false)
                 {
                     modelValidation.Add(property.Key, [$"Property '{propertyInfo!.Name}' does not allow null."]);
                 }
@@ -30,7 +30,7 @@ internal sealed class PatchRequestValidationFilter : IEndpointFilter
             if (modelValidation.Count > 0)
                 return Results.ValidationProblem(modelValidation);
         }
-        
+
         return await next(context);
     }
     private static bool IsPropertyNullable(PropertyInfo propertyInfo)

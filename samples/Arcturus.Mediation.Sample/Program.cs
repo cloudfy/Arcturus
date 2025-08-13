@@ -89,10 +89,10 @@ public class GetUserHandler : IRequestHandler<GetUserQuery, User>
     public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         _logger.LogDebug("Fetching user {UserId}", request.UserId);
-        
+
         // Simulate async database call
         await Task.Delay(50, cancellationToken);
-        
+
         return new User(request.UserId, "John Doe", "john@example.com");
     }
 }
@@ -112,10 +112,10 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand>
     public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Creating user: {Name} ({Email})", request.Name, request.Email);
-        
+
         // Simulate async database save
         await Task.Delay(100, cancellationToken);
-        
+
         _logger.LogInformation("User created successfully");
     }
 }
@@ -135,10 +135,10 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, User>
     public async Task<User> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Updating user {UserId}", request.UserId);
-        
+
         // Simulate async database update
         await Task.Delay(75, cancellationToken);
-        
+
         return new User(request.UserId, request.Name, request.Email);
     }
 }
@@ -158,10 +158,10 @@ public class EmailNotificationHandler : INotificationHandler<UserCreatedNotifica
     public async Task Handle(UserCreatedNotification notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Sending welcome email to {Email}", notification.Email);
-        
+
         // Simulate email sending
         await Task.Delay(200, cancellationToken);
-        
+
         _logger.LogInformation("Welcome email sent successfully");
     }
 }
@@ -178,10 +178,10 @@ public class AuditLogHandler : INotificationHandler<UserCreatedNotification>
     public async Task Handle(UserCreatedNotification notification, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Logging user creation to audit system: User {UserId}", notification.UserId);
-        
+
         // Simulate audit logging
         await Task.Delay(50, cancellationToken);
-        
+
         _logger.LogInformation("Audit log entry created");
     }
 }
@@ -201,8 +201,8 @@ public class CreateUserCommandValidator : IValidator<CreateUserCommand>
         else if (!request.Email.Contains('@'))
             errors.Add("Email must be a valid email address");
 
-        var result = errors.Count == 0 
-            ? ValidationResult.Success() 
+        var result = errors.Count == 0
+            ? ValidationResult.Success()
             : ValidationResult.Failure(errors.ToArray());
 
         return Task.FromResult(result);
@@ -222,14 +222,14 @@ public class PerformanceMiddleware : IMiddleware
     public async Task InvokeAsync(IMiddlewareContext context, PipelineRequestDelegate next)
     {
         var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        
+
         await next();
-        
+
         stopwatch.Stop();
-        
+
         if (stopwatch.ElapsedMilliseconds > 150)
         {
-            _logger.LogWarning("SLOW REQUEST: {RequestType} took {ElapsedMs}ms", 
+            _logger.LogWarning("SLOW REQUEST: {RequestType} took {ElapsedMs}ms",
                 context.RequestType.Name, stopwatch.ElapsedMilliseconds);
         }
     }

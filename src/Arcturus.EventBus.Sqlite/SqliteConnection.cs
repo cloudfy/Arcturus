@@ -63,7 +63,7 @@ public sealed class SqliteConnection : IConnection
             SET EventState = 1 
             WHERE EventId IN (SELECT EventId FROM TopTasks)
             RETURNING EventId, EventData;";
-        
+
         using var connection = new MDS.SqliteConnection(_connectionString);
         await connection.OpenAsync(cancellationToken);
         using var transaction = connection.BeginTransaction();
@@ -133,7 +133,7 @@ public sealed class SqliteConnection : IConnection
         var datasource = GetDataSource(_connectionString);
         if (datasource == ":memory:" || File.Exists(datasource))
             return;
-        
+
         if (datasource != ":memory:" && Path.Exists(Path.GetPathRoot(datasource)) == false)
             throw new ArgumentException("Database path must be a valid file path or in-memory. " +
                 "If you want to use in-memory, set the connection string to ':memory:'.");

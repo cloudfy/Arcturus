@@ -2,7 +2,7 @@
 
 namespace Arcturus.Extensions.Patchable.AspNetCore;
 
-public sealed class PatchRequest<T> 
+public sealed class PatchRequest<T>
     : Patchable<T>, IPatchRequest, IEnumerable<KeyValuePair<string, object?>>
     where T : class, new()
 {
