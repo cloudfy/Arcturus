@@ -5,7 +5,8 @@ namespace Arcturus.CommandLine;
 
 public static class HostBuilderExtensions
 {
-    private static Action<CommandLineBuilder> _configureCommandLineBuilder = (builder) => {
+    private static Action<CommandLineBuilder> _configureCommandLineBuilder = (builder) =>
+    {
         builder.UseDefaults();
     };
 

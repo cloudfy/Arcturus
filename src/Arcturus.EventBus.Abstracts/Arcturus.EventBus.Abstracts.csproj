@@ -5,7 +5,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus</PackageTags>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-
+		<Description>Abstractions and contracts for building event-driven applications with the Arcturus EventBus. Provides interfaces and base types for event publishing, subscription, and message handling.</Description>
 	</PropertyGroup>
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">

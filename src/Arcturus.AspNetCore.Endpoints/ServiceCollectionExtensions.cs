@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">Required.</param>
     /// <param name="configuration">Optional. </param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddEndpointModules(this IServiceCollection services, Action<EndpointModuleConfiguration>? configuration = null) 
+    public static IServiceCollection AddEndpointModules(this IServiceCollection services, Action<EndpointModuleConfiguration>? configuration = null)
         => AddEndpointModules(services, Assembly.GetCallingAssembly(), configuration);
 
     /// <summary>

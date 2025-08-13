@@ -107,7 +107,7 @@ public class Mediator : IMediator
     }
     /// <inheritdoc />
     public async Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default)
-        where TRequest: IRequest
+        where TRequest : IRequest
     {
         if (request == null)
         {
@@ -180,7 +180,7 @@ public class Mediator : IMediator
         if (tasks.Count > 0)
         {
             await Task.WhenAll(tasks);
-            _logger.LogDebug("Successfully published notification {NotificationType} to {HandlerCount} handlers", 
+            _logger.LogDebug("Successfully published notification {NotificationType} to {HandlerCount} handlers",
                 notificationType.Name, tasks.Count);
         }
         else

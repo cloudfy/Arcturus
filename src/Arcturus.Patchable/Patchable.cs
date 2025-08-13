@@ -14,8 +14,8 @@ public class Patchable<T>
     private readonly Dictionary<string, object?> _valueDictionary = [];
     public Patchable() { }
 
-    public object? this[string key] 
-    { 
+    public object? this[string key]
+    {
         get => _valueDictionary[key];
         set => _valueDictionary[key] = value;
     }
@@ -46,7 +46,7 @@ public class Patchable<T>
 
     public bool TryGetValue(string key, [MaybeNullWhen(false)] out object value)
         => _valueDictionary.TryGetValue(key, out value);
-    
+
     IEnumerator IEnumerable.GetEnumerator()
         => _valueDictionary.GetEnumerator();
 }

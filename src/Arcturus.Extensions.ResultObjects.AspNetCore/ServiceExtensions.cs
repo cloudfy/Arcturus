@@ -21,7 +21,7 @@ public static class ServiceExtensions
         , Action<Microsoft.AspNetCore.Http.ProblemDetailsOptions>? configureProblemDetailsOptions = null)
     {
         services.TryAddSingleton<ProblemDetailsFactory, ArcturusAspNetCoreProblemDetailsFactory>();
-        
+
         services.Configure<ApiBehaviorOptions>(options =>
         {
             var mappings = new Dictionary<int, (string Title, string Link)>

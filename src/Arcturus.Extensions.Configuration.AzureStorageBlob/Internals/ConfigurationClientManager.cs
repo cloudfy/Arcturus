@@ -9,7 +9,7 @@ internal class ConfigurationClientManager : IDisposable
     private readonly string _container;
     private readonly string _blobName;
     private readonly AzureStorageBlobConfigurationOptions _options;
-    
+
     private bool _isInitialLoadComplete = false;
 
     internal ConfigurationClientManager(

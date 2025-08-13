@@ -33,13 +33,18 @@ public sealed class ServiceBusConnection : IConnection, IAsyncDisposable
         var clientOptions = new ServiceBusClientOptions()
         {
             TransportType = ServiceBusTransportType.AmqpWebSockets
-            , Identifier = _currentOptions.ClientId
-            , RetryOptions = new ServiceBusRetryOptions()
+            ,
+            Identifier = _currentOptions.ClientId
+            ,
+            RetryOptions = new ServiceBusRetryOptions()
             {
                 Mode = ServiceBusRetryMode.Exponential
-                , Delay = TimeSpan.FromSeconds(1)
-                , MaxDelay = TimeSpan.FromSeconds(10)
-                , MaxRetries = 3
+                ,
+                Delay = TimeSpan.FromSeconds(1)
+                ,
+                MaxDelay = TimeSpan.FromSeconds(10)
+                ,
+                MaxRetries = 3
             }
         };
         _client = new ServiceBusClient(_currentOptions.ConnectionString, clientOptions);

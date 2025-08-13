@@ -34,7 +34,7 @@ public static class AspNetCoreResultExtensions
 
         if (result.IsSuccess && result.HttpStatusCode is not null)
             return new ObjectResult<T>(result.Value, result.HttpStatusCode.Value);
- 
+
         if (result.HttpStatusCode is not null)
             return new ProblemDetailsResult(result);
 
@@ -83,7 +83,7 @@ public static class AspNetCoreResultExtensions
 
         if (result.IsSuccess && result.HttpStatusCode is not null)
             return new Extensions.ResultObjects.AspNetCore.Results.ObjectResult(value, result.HttpStatusCode.Value);
-        
+
         if (result.HttpStatusCode is not null)
             return new ProblemDetailsResult(result);
 

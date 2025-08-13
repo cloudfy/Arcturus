@@ -5,8 +5,8 @@ public static class EventBusActivitySource
     private static readonly string AssemblyVersion = typeof(EventBusActivitySource).Assembly
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
             ?.InformationalVersion ?? "";
-    private static readonly ActivitySource _publisherSource = new (PublisherSourceName, AssemblyVersion);
-    private static readonly ActivitySource _subscriberSource = new (SubscriberSourceName, AssemblyVersion);
+    private static readonly ActivitySource _publisherSource = new(PublisherSourceName, AssemblyVersion);
+    private static readonly ActivitySource _subscriberSource = new(SubscriberSourceName, AssemblyVersion);
 
     internal const string MessageId = "eventbus.message.id";
     internal const string MessageConversationId = "eventbus.message.conversation_id";
@@ -85,9 +85,9 @@ public static class EventBusActivitySource
     {
         activity
             .SetTag(MessagingOperationType, operation);
-            //.SetTag(MessagingDestination, string.IsNullOrEmpty(exchange) ? "amq.default" : exchange)
-            //.SetTag(MessagingDestinationRoutingKey, routingKey)
-            //.SetTag(MessagingBodySize, bodySize);
+        //.SetTag(MessagingDestination, string.IsNullOrEmpty(exchange) ? "amq.default" : exchange)
+        //.SetTag(MessagingDestinationRoutingKey, routingKey)
+        //.SetTag(MessagingBodySize, bodySize);
 
         //if (deliveryTag > 0)
         //{

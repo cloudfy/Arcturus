@@ -30,11 +30,15 @@ public sealed class ServiceBusProcessor : IProcessor
         var queueClient = await _connection.GetServiceBusClient();
         var processorClient = queueClient.CreateProcessor(
             _queueName
-            , new Azure.Messaging.ServiceBus.ServiceBusProcessorOptions {
+            , new Azure.Messaging.ServiceBus.ServiceBusProcessorOptions
+            {
                 ReceiveMode = Azure.Messaging.ServiceBus.ServiceBusReceiveMode.PeekLock //.PeekLock
-                , Identifier = _options.ClientId
-                , MaxConcurrentCalls = 1
-                , AutoCompleteMessages = false // true
+                ,
+                Identifier = _options.ClientId
+                ,
+                MaxConcurrentCalls = 1
+                ,
+                AutoCompleteMessages = false // true
             });
 
         processorClient.ProcessMessageAsync += async args =>
@@ -45,7 +49,7 @@ public sealed class ServiceBusProcessor : IProcessor
 
                 var messageBody = args.Message.Body.ToString();
                 var @event = EventMessageSerializer.Deserialize(messageBody);
-                
+
                 if (OnProcessAsync is not null)
                 {
                     try

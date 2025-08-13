@@ -23,10 +23,11 @@ public static class ServiceExtensions
         }
 
         services.AddSingleton<IConnection, SqliteConnection>(
-            (sp) => { 
+            (sp) =>
+            {
                 return new SqliteConnection(
                     currentOptions
-                    , sp.GetRequiredService<ILoggerFactory>().CreateLogger<SqliteConnection>()); 
+                    , sp.GetRequiredService<ILoggerFactory>().CreateLogger<SqliteConnection>());
             });
         services.AddSingleton<IEventBusFactory, SqliteEventBusFactory>();
         services.AddSingleton<SqliteEventBusOptions>(currentOptions);

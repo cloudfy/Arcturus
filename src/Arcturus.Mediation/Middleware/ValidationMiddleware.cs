@@ -46,9 +46,9 @@ public class ValidationMiddleware : IMiddleware
                     if (!validationResult.IsValid)
                     {
                         var errors = string.Join(", ", validationResult.Errors);
-                        _logger.LogWarning("Validation failed for request {RequestType}: {Errors}", 
+                        _logger.LogWarning("Validation failed for request {RequestType}: {Errors}",
                             requestType.Name, errors);
-                        
+
                         throw new ValidationException($"Validation failed for {requestType.Name}: {errors}");
                     }
                 }
@@ -102,10 +102,10 @@ public class ValidationResult
     /// </summary>
     /// <param name="errors">The validation errors.</param>
     /// <returns>A failed validation result.</returns>
-    public static ValidationResult Failure(params string[] errors) => new() 
-    { 
-        IsValid = false, 
-        Errors = errors.ToList().AsReadOnly() 
+    public static ValidationResult Failure(params string[] errors) => new()
+    {
+        IsValid = false,
+        Errors = errors.ToList().AsReadOnly()
     };
 }
 

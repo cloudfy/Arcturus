@@ -15,7 +15,7 @@ public sealed class RabbitMQEventBusFactory(
 
     public IPublisher CreatePublisher(string? queue = null)
     {
-        return new RabbitMQPublisher(_connection, loggerFactory, queue);
+        return new RabbitMQPublisher(_connection, loggerFactory, queue ?? _eventBusOptions.DefaultQueueName);
     }
     public IProcessor CreateProcessor(string? queue = null)
     {
@@ -23,12 +23,8 @@ public sealed class RabbitMQEventBusFactory(
         // and fallback to the processor if no handlers are found
         if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
             return new EventHandlersProcessor(
-                new RabbitMQProcessor(_connection, queue), _serviceProvider, loggerFactory);
+                new RabbitMQProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName), _serviceProvider, loggerFactory);
 
-        return new RabbitMQProcessor(_connection, queue);
+        return new RabbitMQProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName);
     }
-    //public ISubscriber CreateSubscriber()
-    //{
-    //    throw new NotImplementedException();
-    //}
 }

@@ -36,7 +36,7 @@ public sealed class AzureStorageTableCache : IDistributedCache
         _deleteExpiredCachedItemsDelegate = DeleteExpiredCacheItems;
         _partitionKey = options.PartitionKey;
 
-        _tableClient = new Lazy<TableClient>(() => 
+        _tableClient = new Lazy<TableClient>(() =>
         {
             TableServiceClient serviceClient;
 
@@ -66,7 +66,7 @@ public sealed class AzureStorageTableCache : IDistributedCache
                 tableClient.CreateIfNotExists();
             }
             return tableClient;
-        }); 
+        });
     }
     public byte[]? Get(string key)
         => GetAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -104,7 +104,7 @@ public sealed class AzureStorageTableCache : IDistributedCache
                 await RemoveAsync(key, cancellationToken);
                 return;
             }
-            
+
             item.LastAccessTime = DateTimeOffset.UtcNow;
 
             await _tableClient.Value.UpsertEntityAsync<CacheItem>(item, TableUpdateMode.Replace, cancellationToken);
@@ -115,7 +115,7 @@ public sealed class AzureStorageTableCache : IDistributedCache
 
     public void Remove(string key)
         => RemoveAsync(key).ConfigureAwait(false).GetAwaiter().GetResult();
-    
+
     public async Task RemoveAsync(string key, CancellationToken token = default)
     {
         try
@@ -139,11 +139,15 @@ public sealed class AzureStorageTableCache : IDistributedCache
         var utcNow = _systemClock.UtcNow;
         var expiresAtTime = GetExpiryTime(options, utcNow);
 
-        var cacheItem = new CacheItem(_partitionKey, key) {
+        var cacheItem = new CacheItem(_partitionKey, key)
+        {
             Data = value
-            , ExpiresAtTime = expiresAtTime
-            , LastAccessTime = utcNow
-            , Timestamp = utcNow
+            ,
+            ExpiresAtTime = expiresAtTime
+            ,
+            LastAccessTime = utcNow
+            ,
+            Timestamp = utcNow
         };
 
         await _tableClient.Value.UpsertEntityAsync<CacheItem>(cacheItem, TableUpdateMode.Replace, cancellationToken);

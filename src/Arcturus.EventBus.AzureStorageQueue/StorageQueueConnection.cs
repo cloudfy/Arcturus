@@ -23,9 +23,11 @@ public sealed class StorageQueueConnection : IConnection
     {
         _queueServiceClient = new(
             _currentOptions.ConnectionString
-            , new QueueClientOptions {
+            , new QueueClientOptions
+            {
                 MessageEncoding = QueueMessageEncoding.None
-                , Retry = {
+                ,
+                Retry = {
                     Mode = Azure.Core.RetryMode.Exponential
                     , MaxRetries = 10
                     , Delay = TimeSpan.FromSeconds(2)

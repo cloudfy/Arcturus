@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Arcturus.EventBus.AzureServieBus</PackageId>
+		<PackageId>Arcturus.EventBus.AzureServiceBus</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus,azure,servicebus,queue</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -9,7 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.7" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
 		<PackageReference Include="Polly" Version="8.6.2" />
 		<PackageReference Include="OpenTelemetry.Api" Version="1.12.0" />
 	</ItemGroup>
@@ -18,7 +18,7 @@
 		<ProjectReference Include="..\Arcturus.EventBus\Arcturus.EventBus.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">

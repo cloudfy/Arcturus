@@ -6,12 +6,12 @@ namespace Arcturus.Patchable;
 
 public class PatchHandler : IPatchHandler
 {
-    public R Apply<T, R>(Patchable<T> patchable, R targetObject, PatchHandleOptions? options = null) 
+    public R Apply<T, R>(Patchable<T> patchable, R targetObject, PatchHandleOptions? options = null)
         where T : class, new()
     {
         // TODO: cache and add support for nested properties
         var properties = typeof(R).GetProperties();
-        
+
         foreach (var prop in patchable)
         {
             var propertyInfo = properties

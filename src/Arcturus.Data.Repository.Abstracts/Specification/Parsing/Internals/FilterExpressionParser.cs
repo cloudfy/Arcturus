@@ -73,14 +73,14 @@ internal static class FilterExpressionParser
     private static Expression CreateComparisonExpression(MemberExpression property, ConstantExpression constant, string operatorSymbol)
     {
         var propertyType = property.Type;
-        
+
         // Handle string comparisons using string.Compare
         if (propertyType == typeof(string))
         {
             var compareMethod = typeof(string).GetMethod(nameof(string.Compare), new[] { typeof(string), typeof(string) });
             var compareCall = Expression.Call(compareMethod, property, constant);
             var constantValue = Expression.Constant(0);
-            
+
             return operatorSymbol switch
             {
                 "gt" => Expression.GreaterThan(compareCall, constantValue),
@@ -90,7 +90,7 @@ internal static class FilterExpressionParser
                 _ => throw new FilterExpressionException($"Operator '{operatorSymbol}' is not supported.")
             };
         }
-        
+
         // Handle numeric and other comparable types using standard operators
         return operatorSymbol switch
         {
@@ -162,7 +162,7 @@ internal static class FilterExpressionParser
         {
             return value;
         }
-// Removed commented-out code related to MonetaryAmount and Currency parsing logic.
+        // Removed commented-out code related to MonetaryAmount and Currency parsing logic.
         else if (targetType == typeof(DateTime) &&
             DateTime.TryParse(value, out var dateTimeValue))
         {

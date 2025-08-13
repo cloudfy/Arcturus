@@ -40,13 +40,13 @@ public abstract class SpecificationEvaluator<TEntity>(ISpecification<TEntity> sp
     }
     protected internal IQueryable<TEntity> ApplySkip(IQueryable<TEntity> source)
     {
-        if (Specification.Skip is not null) 
+        if (Specification.Skip is not null)
         {
             source = source.Skip(Specification.Skip.Value);
         }
         return source;
     }
-    protected internal IQueryable<TEntity> ApplyWhere(IQueryable<TEntity> source) 
+    protected internal IQueryable<TEntity> ApplyWhere(IQueryable<TEntity> source)
     {
         foreach (var where in Specification.WhereExpressions)
         {

@@ -70,9 +70,10 @@ public sealed class EventHandlersProcessor : IProcessor
             }
 
             var pipeline = HostExtensions.BuildByRequestDelegate(
-                async () => {
+                async () =>
+                {
                     //var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, handlerType);
-                    
+
                     //NO - var handler = scope.ServiceProvider.GetService(eventHandlerType); // Requires that they are registered using DI
                     await (Task)eventHandlerType.GetMethod(nameof(IEventMessageHandler<IEventMessage>.Handle))!.Invoke(handler, [@event!, e?.CancellationToken])!;
                 });
