@@ -131,8 +131,11 @@ public sealed class SqliteConnection : IConnection
 
         // if the datasource is in-memory or already exists, skip initialization
         var datasource = GetDataSource(_connectionString);
-        if (datasource == ":memory:" || File.Exists(datasource))
+        if (datasource != ":memory:" && File.Exists(datasource))
+        {
+            _isConnected = true;
             return;
+        }
 
         if (datasource != ":memory:" && Path.Exists(Path.GetPathRoot(datasource)) == false)
             throw new ArgumentException("Database path must be a valid file path or in-memory. " +

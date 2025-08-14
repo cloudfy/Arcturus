@@ -32,11 +32,14 @@ internal sealed class DefaultEventMessageTypeResolver
             // select single or default - an exception is thrown if more than one type is found
             type = AppDomain.CurrentDomain
                 .GetAssemblies()
-                .SelectMany(a => a.GetTypes()) // Get all types from all assemblies
-                .Where(t => typeof(IEventMessage).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-                .SingleOrDefault(t =>
-                    t.GetCustomAttribute<EventMessageAttribute>() is EventMessageAttribute attr &&
-                    attr.Name == typeName);
+                .SelectMany(a =>
+                {
+                    try { return a.GetTypes(); }
+                    catch { return Type.EmptyTypes; } // Handle reflection errors gracefully
+                })
+                .Where(t => !t.IsInterface && !t.IsAbstract && typeof(IEventMessage).IsAssignableFrom(t))
+                .FirstOrDefault(t =>
+                    t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName);
         }
         // todo: implement more advanced type resolution (user delegates etc. from startup configuration)
         // - alternatively allow overriding the type resolver to a custom resolver.
