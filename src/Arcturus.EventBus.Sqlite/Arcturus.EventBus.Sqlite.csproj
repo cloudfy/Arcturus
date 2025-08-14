@@ -4,11 +4,12 @@
 		<PackageId>Arcturus.EventBus.Sqlite</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus,sqlite,development</PackageTags>
+		<Description>Provides a lightweight, SQLite-backed implementation of the Arcturus EventBus for reliable event storage and delivery in .NET applications.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.8" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.8" />
 	</ItemGroup>
 
 	<ItemGroup>

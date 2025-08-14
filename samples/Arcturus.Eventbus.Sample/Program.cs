@@ -17,7 +17,7 @@ builder.Logging.SetMinimumLevel(LogLevel.Information);
 // Register mediation services
 builder.Services.AddSqliteEventBus(o =>
 {
-    o.ConnectionString = "Data Source=:memory:;";
+    o.ConnectionString = "Data Source=EventbusSqlite;Mode=Memory;Cache=Shared;";
 });
 
 var app = builder.Build();
