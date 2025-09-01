@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.EventBus.Sqlite", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Eventbus.Sample", "samples\Arcturus.Eventbus.Sample\Arcturus.Eventbus.Sample.csproj", "{EE4B512A-7620-418D-8208-2F60080B327B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Xunit", "src\Arcturus.Xunit\Arcturus.Xunit.csproj", "{3C4F1409-9E0A-4326-A167-9B9913B31840}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,10 @@ Global
 		{EE4B512A-7620-418D-8208-2F60080B327B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE4B512A-7620-418D-8208-2F60080B327B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE4B512A-7620-418D-8208-2F60080B327B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C4F1409-9E0A-4326-A167-9B9913B31840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4F1409-9E0A-4326-A167-9B9913B31840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4F1409-9E0A-4326-A167-9B9913B31840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4F1409-9E0A-4326-A167-9B9913B31840}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
