@@ -10,5 +10,8 @@
 	  <PackageReference Include="Xunit.DependencyInjection" Version="10.6.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>

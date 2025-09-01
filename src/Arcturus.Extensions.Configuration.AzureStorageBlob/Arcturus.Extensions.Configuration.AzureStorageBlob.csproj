@@ -4,6 +4,8 @@
     <PackageId>Arcturus.Extensions.Configuration.AzureStorageBlob</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>configuration, azure blob storage</PackageTags>
+	  <PackageIcon>nuget.png</PackageIcon>
+	  <Description>Provides a Microsoft.Extensions.Configuration provider that loads application settings from Azure Blob Storage, enabling centralized, cloud-hosted configuration for .NET applications.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+	  <None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
