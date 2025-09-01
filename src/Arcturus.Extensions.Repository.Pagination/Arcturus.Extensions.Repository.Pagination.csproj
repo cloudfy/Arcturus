@@ -4,6 +4,7 @@
 		<PackageId>Arcturus.Extensions.Repository.Pagination</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,pagination,arcturus</PackageTags>
+		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Description>
 			Provides extension methods and utilities for implementing efficient data pagination in repository patterns. Designed for .NET applications to simplify paged data access and improve repository layer maintainability.
