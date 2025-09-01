@@ -4,7 +4,7 @@
 		<PackageId>Arcturus.AspNetCore.Endpoints</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>api,endpoints,mvc,aspnetcore,arcturus</PackageTags>
-		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
+		<PackageIcon>nuget.png</PackageIcon>
 		<Description>Lightweight utilities for building, grouping, and configuring ASP.NET Core API endpoints with minimal boilerplate. Works with MVC and minimal APIs, promoting clear routing, DI-friendly handlers, and discoverable endpoint registration.</Description>
 	</PropertyGroup>
 
@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>
