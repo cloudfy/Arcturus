@@ -12,7 +12,14 @@ public class Patchable<T>
     where T : class, new()
 {
     private readonly Dictionary<string, object?> _valueDictionary = [];
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Patchable"/> class.
+    /// </summary>
+    /// <remarks>This constructor creates a default instance of the <see cref="Patchable"/> class.</remarks>
     public Patchable() { }
+
+    internal Dictionary<string, object?> ValueDictionary => _valueDictionary;
 
     public object? this[string key]
     {
@@ -24,7 +31,6 @@ public class Patchable<T>
     public ICollection<object?> Values => _valueDictionary.Values;
     public int Count => _valueDictionary.Count;
     public bool IsReadOnly => ((IDictionary<string, object?>)_valueDictionary).IsReadOnly;
-
     public void Add(string key, object? value) => _valueDictionary.Add(key, value);
     public void Add(KeyValuePair<string, object?> item) => _valueDictionary.Add(item.Key, item.Value);
     public void Clear() => _valueDictionary.Clear();
@@ -49,4 +55,5 @@ public class Patchable<T>
 
     IEnumerator IEnumerable.GetEnumerator()
         => _valueDictionary.GetEnumerator();
+
 }

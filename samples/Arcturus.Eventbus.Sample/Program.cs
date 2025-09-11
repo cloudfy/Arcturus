@@ -64,9 +64,3 @@ while (!cts.IsCancellationRequested)
 
     await eventBusPublisher.Publish(new MyEvent() { Name = "Jack!" });
 }
-
-
-public class MyEvent : IEventMessage
-{
-    public string Name { get; set; } = "My Event";
-}

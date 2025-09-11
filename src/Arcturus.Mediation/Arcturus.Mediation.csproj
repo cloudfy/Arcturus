@@ -4,6 +4,7 @@
 		<PackageId>Arcturus.Mediation</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>mediation,cqrs,mediator,arcturus</PackageTags>
+		<PackageIcon>nuget.png</PackageIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
         <Description>A lightweight, extensible CQRS and mediation library for .NET, enabling decoupled request/response and notification handling.</Description>
 	</PropertyGroup>
@@ -16,6 +17,7 @@
 	
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
 	<ItemGroup>

@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Arcturus.Patchable;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Arcturus.Extensions.Patchable.AspNetCore;
 
 internal sealed class PatchRequestValidationFilter : IEndpointFilter
 {
+    private IPatchHandler GetHandler(EndpointFilterInvocationContext context)
+    {
+        var handler = context.HttpContext.RequestServices.GetService<IPatchHandler>();
+        return handler ?? new PatchHandler();
+    }
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
+        var handler = GetHandler(context);
+
         if (context.Arguments.Count >= 1 && context.Arguments[0] is IPatchRequest patchRequest)
         {
             Dictionary<string, string[]> modelValidation = [];
