@@ -122,7 +122,6 @@ public static class HostExtensions
             _parameters = parameters;
         }
 
-        // The CreateMiddleware method name is used by ApplicationBuilder to resolve the middleware type.
         internal EventRequestDelegate CreateMiddleware(EventRequestDelegate next)
         {
             // build constructor arguments and ensure EventContext is the first argument
@@ -132,6 +131,8 @@ public static class HostExtensions
 
             try
             {
+                // creates an instance of the middleware, constructors of the middleware will
+                //   be created as a singleton
                 var instance = ActivatorUtilities.CreateInstance(_app.Services, _middleware, ctorArgs);
                 if (_parameters.Length == 1)
                 {
@@ -146,12 +147,8 @@ public static class HostExtensions
 
                 return context =>
                 {
-                    var serviceProvider = context.RequestServices ?? _app.Services;
-                    if (serviceProvider == null)
-                    {
-                        throw new InvalidOperationException();
-                    }
-
+                    var serviceProvider = (context.RequestServices ?? _app.Services) 
+                        ?? throw new InvalidOperationException();
                     return factory(instance, context, serviceProvider);
                 };
             }

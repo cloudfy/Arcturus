@@ -27,11 +27,10 @@ public sealed class EventHandlersProcessor : IProcessor
     }
     /// <inheritdoc />
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
+
     /// <inheritdoc />
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
-    {
-        await _processor.WaitForEvents(cancellationToken);
-    }
+        => await _processor.WaitForEvents(cancellationToken);
 
     private async Task InternalOnProcessAsync(IEventMessage @event, OnProcessEventArgs? e)
     {
@@ -59,7 +58,8 @@ public sealed class EventHandlersProcessor : IProcessor
         // initiate a scope for the pipeline
         // - the scopes service provider is passed onto the eventhandler
 #pragma warning disable IDE0063 // Use simple 'using' statement
-        using (var scope = _serviceProvider.CreateScope())
+        await using var scope = _serviceProvider.CreateAsyncScope();
+        try
         {
             // resolve the handler from the scope, if no handler is found, log and return
             var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerType);
@@ -75,10 +75,15 @@ public sealed class EventHandlersProcessor : IProcessor
                     //var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, handlerType);
 
                     //NO - var handler = scope.ServiceProvider.GetService(eventHandlerType); // Requires that they are registered using DI
-                    await (Task)eventHandlerType.GetMethod(nameof(IEventMessageHandler<IEventMessage>.Handle))!.Invoke(handler, [@event!, e?.CancellationToken])!;
+                    await (Task)eventHandlerType.GetMethod(
+                        nameof(IEventMessageHandler<IEventMessage>.Handle))!.Invoke(handler, [@event!, e?.CancellationToken])!;
                 });
 
             await pipeline(new EventContext(@event, nameof(@event), scope.ServiceProvider));
+        }
+        catch
+        {
+            throw;
         }
 #pragma warning restore IDE0063 // Use simple 'using' statement
     }

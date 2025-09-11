@@ -77,6 +77,11 @@ public sealed class RabbitMQPublisher : IPublisher
         });
     }
 
+    /// <summary>
+    /// Gets the name of the event, either from the EventMessageAttribute or the class name.
+    /// </summary>
+    /// <param name="event">Event.</param>
+    /// <returns>Name of event.</returns>
     private static string GetEventName(IEventMessage @event)
     {
         var messageAttribute = @event.GetType().GetCustomAttribute<EventMessageAttribute>();

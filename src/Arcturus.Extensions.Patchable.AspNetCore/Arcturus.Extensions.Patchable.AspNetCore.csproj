@@ -6,6 +6,10 @@
     <PackageTags>patch,json,api,aspnetcore,arcturus</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+	<PackageIcon>nuget.png</PackageIcon>
+	  <Description>
+ASP.NET Core integration for Arcturus.Patchable. Provides model binding and JSON serialization support for Patch&lt;T&gt; types to enable safe, explicit partial updates in Web APIs (e.g., HTTP PATCH). Includes helpers to validate and apply patches within controllers.
+	  </Description>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -22,6 +26,7 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\"/>
+    <None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

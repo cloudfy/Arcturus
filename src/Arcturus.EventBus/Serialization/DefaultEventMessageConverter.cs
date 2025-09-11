@@ -61,6 +61,12 @@ public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
 
         writer.WriteEndObject();
     }
+
+    /// <summary>
+    /// Gets the name of the event, either from the EventMessageAttribute or the class name.
+    /// </summary>
+    /// <param name="event">Event.</param>
+    /// <returns>Name of event.</returns>
     private static string GetEventName(Type type)
     {
         var messageAttribute = type.GetCustomAttribute<EventMessageAttribute>();
