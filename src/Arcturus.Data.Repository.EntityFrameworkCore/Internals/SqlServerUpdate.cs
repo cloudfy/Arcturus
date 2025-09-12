@@ -139,9 +139,10 @@ internal static class EfAddOrUpdateExtensions
         var onSql = string.Join(" AND ", matchProps.Select(p => $"{tAlias}.{Column(p)} = {sAlias}.{Column(p)}"));
 
         // SET clause
+        var firstMatchProp = matchProps.First();
         var setSql = updateProps.Any()
             ? "SET " + string.Join(", ", updateProps.Select(p => $"{tAlias}.{Column(p)} = {sAlias}.{Column(p)}"))
-            : $"SET {tAlias}.{Column(matchProps.First())} = {tAlias}.{Column(matchProps.First())}"; // no-op to keep MERGE valid
+            : $"SET {tAlias}.{Column(firstMatchProp)} = {tAlias}.{Column(firstMatchProp)}"; // no-op to keep MERGE valid
 
         // INSERT lists
         var insertCols = string.Join(", ", insertProps.Select(Column));
