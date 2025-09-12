@@ -170,7 +170,7 @@ OUTPUT $action;
         await using (var conn = (SqlConnection)ctx.Database.GetDbConnection())
         {
             if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync(ct);
-            await using var cmd = new SqlCommand(sql, conn) { Parameters = { } };
+            await using var cmd = new SqlCommand(sql, conn);
             cmd.Parameters.AddRange(parameters.ToArray());
             action = (string?)await cmd.ExecuteScalarAsync(ct);
         }
