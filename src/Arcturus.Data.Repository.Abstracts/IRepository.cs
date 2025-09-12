@@ -204,4 +204,22 @@ public interface IRepository<T, TKey>
     IAsyncEnumerable<TResult> FindMany<TResult>(
         ISpecification<T, TResult> specification
         , bool tracking = false);
+    /// <summary>
+    /// Adds a new entity or updates an existing entity in the data store based on the specified predicate.
+    /// </summary>
+    /// <remarks>This method performs an upsert operation. If the predicate matches an existing entity, the
+    /// entity is updated;  otherwise, a new entity is added. The operation is performed atomically.</remarks>
+    /// <param name="value">The entity to add or update.</param>
+    /// <param name="predicate">A predicate expression used to determine whether an existing entity matches the specified value.</param>
+    /// <param name="updateColumns">An optional expression specifying the columns to update if an existing entity is found.  If <see
+    /// langword="null"/>, all columns will be updated.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an <see
+    /// cref="AddOrUpdateResult{T}"/>  indicating whether the operation resulted in an add or an update, along with the
+    /// affected entity.</returns>
+    Task<AddOrUpdateResult<T>> AddOrUpdate(
+        T value
+        , Expression<Func<T, bool>> predicate
+        , Expression<Func<T, object>>? updateColumns = null
+        , CancellationToken cancellationToken = default);
 }
