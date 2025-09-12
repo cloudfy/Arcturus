@@ -4,7 +4,9 @@
 		<PackageId>Arcturus.Repository.Abstracts</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,arcturus</PackageTags>
+		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
 		<NoWarn>IDE0130</NoWarn>
+		<Description>Abstractions for the repository pattern in Arcturus. Provides core interfaces and contracts for data-access repositories and units of work. Contains no concrete persistence implementations.</Description>
 	</PropertyGroup>
 
 	<ItemGroup>

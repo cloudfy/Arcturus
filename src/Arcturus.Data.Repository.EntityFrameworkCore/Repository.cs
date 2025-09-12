@@ -1,6 +1,8 @@
 ﻿using Arcturus.Repository.Abstracts;
 using Arcturus.Repository.EntityFrameworkCore.Internals;
+using Arcturus.Repository.EntityFrameworkCore.SqlServer.Internals;
 using Arcturus.Repository.Specification;
+using static Arcturus.Repository.EntityFrameworkCore.SqlServer.Internals.EfAddOrUpdateExtensions;
 
 namespace Arcturus.Repository.EntityFrameworkCore;
 
@@ -188,5 +190,15 @@ public class Repository<T, TKey>(
         return await query
             .AsNoTracking()
             .AnyAsync(cancellationToken);
+    }
+
+    public Task<AddOrUpdateResult<T>> AddOrUpdate(
+        T value
+        , Expression<Func<T, bool>> predicate
+        , Expression<Func<T, object>>? updateColumns = null
+        , CancellationToken cancellationToken = default)
+    {
+        return EfAddOrUpdateExtensions.AddOrUpdateWithResult<T>(
+            _context.Set<T>(), value, predicate, updateColumns, cancellationToken);
     }
 }
