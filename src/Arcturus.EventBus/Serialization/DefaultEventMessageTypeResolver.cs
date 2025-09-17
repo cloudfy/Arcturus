@@ -42,7 +42,6 @@ internal sealed class DefaultEventMessageTypeResolver
                 $"Event named '{typeName}' is duplicated. Only one named event using EventMessageAttribute is allowed.")
         };
 
-
         // TODO: implement more advanced type resolution (user delegates etc. from startup configuration)
         // - alternatively allow overriding the type resolver to a custom resolver.
         // - https://github.com/cloudfy/Arcturus/issues/102
