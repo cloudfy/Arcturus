@@ -54,7 +54,7 @@ internal static class EfAddOrUpdateExtensions
         T value,
         Expression<Func<T, bool>> predicate,
         Expression<Func<T, object>>? updateColumns,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
         where T : class
     {
         var ctx = set.GetDbContext();
@@ -62,21 +62,21 @@ internal static class EfAddOrUpdateExtensions
         // FAST PATH: SQL Server MERGE
         if (ctx.Database.IsSqlServer())
         {
-            return await MergeOneSqlServer(set, value, predicate, updateColumns, ct);
+            return await MergeOneSqlServer(set, value, predicate, updateColumns, cancellationToken);
         }
 
         // GENERIC PATH: ExecuteUpdate → Insert
         var et = set.EntityType();
         var updateExpr = BuildSetPropertyCalls(value, et, updateColumns);
-        var updated = await set.Where(predicate).ExecuteUpdateAsync(updateExpr, ct);
+        var updated = await set.Where(predicate).ExecuteUpdateAsync(updateExpr, cancellationToken);
 
         if (updated > 0)
         {
             return new AddOrUpdateResult<T>(Updated: true, RowsAffected: updated, InsertedEntity: null);
         }
 
-        await set.AddAsync(value, ct);
-        await ctx.SaveChangesAsync(ct);
+        await set.AddAsync(value, cancellationToken);
+        await ctx.SaveChangesAsync(cancellationToken);
         return new AddOrUpdateResult<T>(Updated: false, RowsAffected: 1, InsertedEntity: value);
     }
 
@@ -91,7 +91,7 @@ internal static class EfAddOrUpdateExtensions
         T value,
         Expression<Func<T, bool>> predicate,
         Expression<Func<T, object>>? updateColumns,
-        CancellationToken ct)
+        CancellationToken cancellationToken)
         where T : class
     {
         var ctx = set.GetDbContext();
@@ -102,7 +102,7 @@ internal static class EfAddOrUpdateExtensions
         if (!TryExtractEqualityMembers(et, predicate, out var matchProps))
         {
             // fallback
-            return await AddOrUpdateInternal(set, value, predicate, updateColumns, ct);
+            return await AddOrUpdateInternal(set, value, predicate, updateColumns, cancellationToken);
         }
 
         // Determine updatable columns (default: non-key, non-store-generated)
@@ -168,17 +168,30 @@ OUTPUT $action;
 
         // Execute and read a single $action row
         string? action;
-        await using (var conn = (SqlConnection)ctx.Database.GetDbConnection())
+        var conn = (SqlConnection)ctx.Database.GetDbConnection();  // No await using here—let DbContext manage disposal
+        if (conn.State != System.Data.ConnectionState.Open)
         {
-            if (conn.State != System.Data.ConnectionState.Open) await conn.OpenAsync(ct);
-            await using var cmd = new SqlCommand(sql, conn);
-            cmd.Parameters.AddRange(parameters.ToArray());
-            action = (string?)await cmd.ExecuteScalarAsync(ct);
+            await conn.OpenAsync(cancellationToken);
+        }
+        await using var cmd = new SqlCommand(sql, conn);
+        cmd.Parameters.AddRange([.. parameters]);
+
+        using var transaction = await ctx.Database.BeginTransactionAsync(cancellationToken);
+        try
+        {
+            action = (string?)await cmd.ExecuteScalarAsync(cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+            return action?.Equals("UPDATE", StringComparison.OrdinalIgnoreCase) == true
+                ? new AddOrUpdateResult<T>(Updated: true, RowsAffected: 1, InsertedEntity: null)
+                : new AddOrUpdateResult<T>(Updated: false, RowsAffected: 1, InsertedEntity: value);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(cancellationToken);
+            throw;
         }
 
-        return action?.Equals("UPDATE", StringComparison.OrdinalIgnoreCase) == true
-            ? new AddOrUpdateResult<T>(Updated: true, RowsAffected: 1, InsertedEntity: null)
-            : new AddOrUpdateResult<T>(Updated: false, RowsAffected: 1, InsertedEntity: value);
     }
 
     // ----------------- small utilities -----------------
