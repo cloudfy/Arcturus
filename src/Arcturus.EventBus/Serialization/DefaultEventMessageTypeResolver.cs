@@ -1,4 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Internals;
 
 namespace Arcturus.EventBus.Serialization;
 
@@ -22,27 +23,28 @@ internal sealed class DefaultEventMessageTypeResolver
         if (_reflectionCache.TryGetValue(typeName, out var type))
             return type;
 
-        type = AppDomain.CurrentDomain
+        // TODO: reduce the footprint by configuration (see https://github.com/cloudfy/Arcturus/issues/102)
+        var matchingTypes = AppDomain.CurrentDomain
             .GetAssemblies()
-            .Select(a => a.GetType(typeName))
-            .Where(_ => _ is not null)
-            .FirstOrDefault();
-        if (type is null)
+            .SelectMany(a => a.GetTypesSafe()) // Use extension method for safe type retrieval
+            .Where(t => t != null
+                && !t.IsInterface
+                && !t.IsAbstract
+                && typeof(IEventMessage).IsAssignableFrom(t)
+                && t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName)
+            .ToArray();
+
+        type = matchingTypes.Length switch
         {
-            // select single or default - an exception is thrown if more than one type is found
-            type = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .SelectMany(a =>
-                {
-                    try { return a.GetTypes(); }
-                    catch { return Type.EmptyTypes; } // Handle reflection errors gracefully
-                })
-                .Where(t => !t.IsInterface && !t.IsAbstract && typeof(IEventMessage).IsAssignableFrom(t))
-                .FirstOrDefault(t =>
-                    t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName);
-        }
-        // todo: implement more advanced type resolution (user delegates etc. from startup configuration)
+            0 => null,
+            1 => matchingTypes[0],
+            _ => throw new UnprocessableEventException(
+                $"Event named '{typeName}' is duplicated. Only one named event using EventMessageAttribute is allowed.")
+        };
+
+        // TODO: implement more advanced type resolution (user delegates etc. from startup configuration)
         // - alternatively allow overriding the type resolver to a custom resolver.
+        // - https://github.com/cloudfy/Arcturus/issues/102
         if (type is not null)
         {
             _reflectionCache.Add(typeName, type);

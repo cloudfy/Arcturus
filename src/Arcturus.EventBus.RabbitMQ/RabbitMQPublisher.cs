@@ -62,14 +62,10 @@ public sealed class RabbitMQPublisher : IPublisher
             var properties = new BasicProperties
             {
                 Persistent = true
-                ,
-                AppId = _connection.ApplicationId
-                ,
-                CorrelationId = null
-                ,
-                Headers = null
-                ,
-                MessageId = Guid.NewGuid().ToString()
+                , AppId = _connection.ApplicationId
+                , CorrelationId = null
+                , Headers = null
+                , MessageId = Guid.NewGuid().ToString()
             };
 
             await _connection.Channel.BasicPublishAsync(
