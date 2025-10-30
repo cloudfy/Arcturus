@@ -8,6 +8,8 @@ If you like or are using this project to learn or start your solution, please gi
 ## Packages
 Arcturus consist of multiple independant packages. Some are extensions of other packages, most are individual packages.
 
+> Find all Nuget [packages here](https://www.nuget.org/packages?q=Arcturus&includeComputedFrameworks=true&prerel=false).
+
 ### Result Object
 * [Arcturus.ResultObjects](https://github.com/cloudfy/Arcturus/wiki/ResultObjects): Enable control of application state via `Result` rather than exceptions.
 * [Arcturus.ResultObjects for AspNetCore](https://github.com/cloudfy/Arcturus/wiki/ResultObjects-(AspNetCore-extension)): An extension to `Arcturus.ResultObjects` which enables return of normalized HTTP status codes using `ProblemDetails`.
