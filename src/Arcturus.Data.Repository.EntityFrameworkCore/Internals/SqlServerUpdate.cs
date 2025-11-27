@@ -1,5 +1,6 @@
 ﻿using Arcturus.Repository.Abstracts;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Query;
@@ -65,6 +66,10 @@ internal static class EfAddOrUpdateExtensions
             return await MergeOneSqlServer(set, value, predicate, updateColumns, cancellationToken);
         }
 
+#if NET10_0_OR_GREATER
+        // https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/breaking-changes#ExecuteUpdateAsync-lambda
+        throw new NotImplementedException("EF Core 10+ supports ExecuteUpdate with MERGE; implement provider-specific fast paths here.");
+#else
         // GENERIC PATH: ExecuteUpdate → Insert
         var et = set.EntityType();
         var updateExpr = BuildSetPropertyCalls(value, et, updateColumns);
@@ -74,6 +79,7 @@ internal static class EfAddOrUpdateExtensions
         {
             return new AddOrUpdateResult<T>(Updated: true, RowsAffected: updated, InsertedEntity: null);
         }
+#endif
 
         await set.AddAsync(value, cancellationToken);
         await ctx.SaveChangesAsync(cancellationToken);
@@ -300,6 +306,8 @@ OUTPUT $action;
     }
 
 
+#if NET10_0_OR_GREATER
+#else
     // Build: set => set.SetProperty(x => x.Prop, x => value.Prop) for chosen columns
     private static Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> BuildSetPropertyCalls<T>(
         T value,
@@ -333,4 +341,5 @@ OUTPUT $action;
 
         return Expression.Lambda<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>>(body, setParam);
     }
+#endif
 }

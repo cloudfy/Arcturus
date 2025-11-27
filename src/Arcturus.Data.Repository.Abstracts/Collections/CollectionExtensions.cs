@@ -1,5 +1,9 @@
 ﻿namespace Arcturus.Collections;
 
+
+#if NET10_0_OR_GREATER
+// not used
+#else
 /// <summary>
 /// Provides common extensions for <see cref="IAsyncEnumerable{T}"/>.
 /// </summary>
@@ -74,3 +78,4 @@ public static class CollectionExtensions
         return dictionary;
     }
 }
+#endif

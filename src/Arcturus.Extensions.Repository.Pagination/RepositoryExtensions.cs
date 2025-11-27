@@ -175,9 +175,15 @@ public static class RepositoryExtensions
             .Take(limit + 1) // last +1
             .WhereRange(where);
 
+#if NET10_0_OR_GREATER
         var results = await repository
             .FindMany(querySpecification)
             .ToArrayAsync(cancellationToken);
+#else
+        var results = await repository
+            .FindMany(querySpecification)
+            .ToArrayAsync(cancellationToken);
+#endif
 
         if (results.Length > 0)
         {
