@@ -1,4 +1,6 @@
-﻿namespace Arcturus.ResultObjects;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Arcturus.ResultObjects;
 
 /// <summary>
 /// Represents a result of an operation - success or failure.
@@ -23,6 +25,9 @@ public class Result<T> : Result, IResultValue
     /// Returns value of result or null.
     /// </summary>
     public T? Value { get; }
+    /// <summary>
+    /// Returns value of result or null.
+    /// </summary>
     object IResultValue.Value => Value!;
     /// <summary>
     /// Returns a <see cref="Result{T}"/> as a success of <paramref name="value"/>.
