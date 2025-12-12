@@ -157,7 +157,7 @@ public static class SpecificationExtensions
     /// <param name="navigationPropertyPath">An expression that specifies the path to the related property to include. Cannot be null.</param>
     /// <returns>A specification that includes the specified related property in the query results.</returns>
     public static Specification<TEntity> Include<TEntity, TPreviousProperty, TNextProperty>(
-        this IncludableSpecificationBuilder<TEntity, IEnumerable<TPreviousProperty>> source,
+        this IncludableSpecificationBuilder<TEntity, TNextProperty> source,
         Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
     {
         return source.Include(navigationPropertyPath);
@@ -170,11 +170,11 @@ public static class SpecificationExtensions
     /// <remarks>Use this method to access the parent specification when working with chained include
     /// operations, enabling additional configuration or execution.</remarks>
     /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
-    /// <typeparam name="TPreviousProperty">The type of the property included in the previous step of the specification.</typeparam>
+    /// <typeparam name="TNextProperty">The type of the next property in the include chain.</typeparam>
     /// <param name="source">The includable specification builder from which to retrieve the parent specification. Cannot be null.</param>
     /// <returns>The specification associated with the provided includable specification builder.</returns>
-    public static Specification<TEntity> Parent<TEntity, TPreviousProperty>(
-        this IncludableSpecificationBuilder<TEntity, IEnumerable<TPreviousProperty>> source)
+    public static Specification<TEntity> Parent<TEntity, TNextProperty>(
+        this IncludableSpecificationBuilder<TEntity, TNextProperty> source)
     {
         return source.Specification;
     }
@@ -195,7 +195,8 @@ public static class SpecificationExtensions
     {
         return new IncludableSpecificationBuilder<TEntity, TNextProperty>(
             source.IncludeChain
-            , navigationPropertyPath);
+            , navigationPropertyPath
+            , source.Specification);
     }
     /// <summary>
     /// Adds a secondary related entity to be included in the query result.
@@ -213,7 +214,8 @@ public static class SpecificationExtensions
     {
         return new IncludableSpecificationBuilder<TEntity, TNextProperty>(
             source.IncludeChain
-            , navigationPropertyPath);
+            , navigationPropertyPath
+            , source.Specification);
     }
 
     /// <summary>
