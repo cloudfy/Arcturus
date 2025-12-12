@@ -1,4 +1,6 @@
-﻿namespace Arcturus.Repository.Specification;
+﻿using Arcturus.Repository.Abstracts;
+
+namespace Arcturus.Repository.Specification;
 
 public static class SpecificationExtensions
 {
@@ -141,6 +143,40 @@ public static class SpecificationExtensions
         var builder = new IncludableSpecificationBuilder<TEntity, TProperty>(navigationPropertyPath);
         spec.Add(new Specification.Expressions.IncludeExpression(builder.IncludeChain));
         return builder;
+    }
+    /// <summary>
+    /// Specifies a nested related object to include in the query results, allowing for eager loading of multiple levels
+    /// of related data.
+    /// </summary>
+    /// <remarks>Use this method to include additional levels of related data after a previous include
+    /// operation. This is typically used for eager loading of nested navigation properties in queries.</remarks>
+    /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+    /// <typeparam name="TPreviousProperty">The type of the property from the previous include operation.</typeparam>
+    /// <typeparam name="TNextProperty">The type of the related property to include.</typeparam>
+    /// <param name="source">The builder representing the current include chain for the entity. Cannot be null.</param>
+    /// <param name="navigationPropertyPath">An expression that specifies the path to the related property to include. Cannot be null.</param>
+    /// <returns>A specification that includes the specified related property in the query results.</returns>
+    public static Specification<TEntity> Include<TEntity, TPreviousProperty, TNextProperty>(
+        this IncludableSpecificationBuilder<TEntity, IEnumerable<TPreviousProperty>> source,
+        Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
+    {
+        return source.Include(navigationPropertyPath);
+    }
+
+    /// <summary>
+    /// Returns the underlying specification from an includable specification builder, allowing further composition or
+    /// execution of the specification.
+    /// </summary>
+    /// <remarks>Use this method to access the parent specification when working with chained include
+    /// operations, enabling additional configuration or execution.</remarks>
+    /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+    /// <typeparam name="TPreviousProperty">The type of the property included in the previous step of the specification.</typeparam>
+    /// <param name="source">The includable specification builder from which to retrieve the parent specification. Cannot be null.</param>
+    /// <returns>The specification associated with the provided includable specification builder.</returns>
+    public static Specification<TEntity> Parent<TEntity, TPreviousProperty>(
+        this IncludableSpecificationBuilder<TEntity, IEnumerable<TPreviousProperty>> source)
+    {
+        return source.Specification;
     }
     /// <summary>
     /// Specifies additional related data to be included in the query result.

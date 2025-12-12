@@ -15,10 +15,11 @@ public sealed class IncludableSpecificationBuilder<TEntity, TProperty>
     /// Gets the collection of lambda expressions representing the include chain for query navigation.
     /// </summary>
     public List<LambdaExpression> IncludeChain { get; }
-
-    internal IncludableSpecificationBuilder(Expression<Func<TEntity, TProperty>> root)
+    public Specification<TEntity> Specification { get; private set; }
+    internal IncludableSpecificationBuilder(Expression<Func<TEntity, TProperty>> root, Specification<TEntity> specification)
     {
         IncludeChain = [root];
+        Specification = specification;
     }
 
     internal IncludableSpecificationBuilder(List<LambdaExpression> chain, LambdaExpression next)
