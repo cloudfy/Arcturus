@@ -140,7 +140,7 @@ public static class SpecificationExtensions
         Expression<Func<TEntity, TProperty>> navigationPropertyPath)
         where TEntity : class
     {
-        var builder = new IncludableSpecificationBuilder<TEntity, TProperty>(navigationPropertyPath);
+        var builder = new IncludableSpecificationBuilder<TEntity, TProperty>(navigationPropertyPath, spec);
         spec.Add(new Specification.Expressions.IncludeExpression(builder.IncludeChain));
         return builder;
     }
