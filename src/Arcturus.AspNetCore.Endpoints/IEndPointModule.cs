@@ -8,8 +8,8 @@ namespace Arcturus.AspNetCore.Endpoints;
 public interface IEndPointModule
 {
     /// <summary>
-    /// Adds an <see cref="IEndPointModule"/> route to the <see cref="IEndpointRouteBuilder">.
+    /// Adds an <see cref="IEndPointModule"/> route to the <see cref="IEndpointRouteBuilder" />.
     /// </summary>
-    /// <param name="app">Required.</param>
+    /// <param name="app">Required. The endpoint route builder.</param>
     void AddRoute(IEndpointRouteBuilder app);
 }

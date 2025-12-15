@@ -32,6 +32,7 @@ public static class RepositoryExtensions
     /// <param name="limit">The maximum number of results to return. Defaults to 20.</param>
     /// <param name="where">An optional array of additional filtering conditions in string format. If null, no additional filters are
     /// applied.</param>
+    /// <param name="page">Helpers field to store the page number.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="PagingResultsList{TResult}"/> containing the paginated results, the total count of matching
     /// entities, and a cursor for retrieving the next page of results.</returns>
@@ -44,6 +45,7 @@ public static class RepositoryExtensions
         , string? after = null
         , int limit = 20
         , string[]? where = null
+        , int? page = null
         , CancellationToken cancellationToken = default
         )
         where T : IEntity<TKey>
@@ -104,7 +106,7 @@ public static class RepositoryExtensions
             }
 
             var afterCursorValue = PagingCursor<TKey>.Create(key1, orderByValue).ToString();
-            return new PagingResultsList<TResult>(results, resultCount, limit, afterCursorValue);
+            return new PagingResultsList<TResult>(results, resultCount, limit, afterCursorValue, page);
         }
 
         return PagingResultsList<TResult>.Empty();
@@ -130,6 +132,7 @@ public static class RepositoryExtensions
     /// returned.</param>
     /// <param name="limit">The maximum number of entities to retrieve. Defaults to 20.</param>
     /// <param name="where">An optional array of additional filter conditions to apply to the query.</param>
+    /// <param name="page">Helpers field to store the page number.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
     /// <returns>A <see cref="PagingResultsList{T}"/> containing the retrieved entities, the total count of matching entities,
     /// and a cursor for retrieving the next page of results.</returns>
@@ -141,6 +144,7 @@ public static class RepositoryExtensions
         , string? after = null
         , int limit = 20
         , string[]? where = null
+        , int? page = null
         , CancellationToken cancellationToken = default
         )
         where T : IEntity<TKey>
@@ -206,7 +210,7 @@ public static class RepositoryExtensions
             }
 
             var afterCursorValue = PagingCursor<TKey>.Create(key1, orderByValue).ToString();
-            return new PagingResultsList<T>(results, resultCount, limit, afterCursorValue);
+            return new PagingResultsList<T>(results, resultCount, limit, afterCursorValue, page);
         }
 
         return PagingResultsList<T>.Empty();

@@ -12,15 +12,24 @@ namespace Arcturus.Repository.Pagination;
 public sealed class PagingCursor<TKey>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="PagingCursor"/> class.
+    /// Initializes a new instance of the <see cref="PagingCursor{TKey}"/> class.
     /// </summary>
-    /// <remarks>This constructor creates a default instance of the <see cref="PagingCursor"/> class. Use this
+    /// <remarks>This constructor creates a default instance of the <see cref="PagingCursor{TKey}" /> class. Use this
     /// class to manage pagination state when working with paged data.</remarks>
     public PagingCursor() { }
 
+    /// <summary>
+    /// Gets the default key value to use when no explicit value is provided.
+    /// </summary>
     [JsonPropertyName("k")]
     public required TKey DefaultValue { get; init; }
-
+    
+    /// <summary>
+    /// Gets the value used to determine the ordering of the item in a sorted collection.
+    /// </summary>
+    /// <remarks>The value can be of any type that supports comparison. When sorting, items are ordered
+    /// according to this value. If the value is null, the item may be treated as having the lowest or highest order,
+    /// depending on the sorting implementation.</remarks>
     [JsonPropertyName("v")]
     public object? OrderByValue { get; init; }
 

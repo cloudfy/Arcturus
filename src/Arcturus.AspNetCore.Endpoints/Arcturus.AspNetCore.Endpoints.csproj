@@ -5,6 +5,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>api,endpoints,mvc,aspnetcore,arcturus</PackageTags>
 		<PackageIcon>nuget.png</PackageIcon>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Description>Lightweight utilities for building, grouping, and configuring ASP.NET Core API endpoints with minimal boilerplate. Works with MVC and minimal APIs, promoting clear routing, DI-friendly handlers, and discoverable endpoint registration.</Description>
 	</PropertyGroup>
 
@@ -12,6 +13,14 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml"
+				  Pack="true"
+				  PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
+	
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
 		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />

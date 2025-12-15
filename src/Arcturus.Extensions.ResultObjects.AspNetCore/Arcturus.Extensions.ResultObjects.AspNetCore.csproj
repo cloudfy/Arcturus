@@ -11,10 +11,14 @@
 		</Description>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
-	
-	<PropertyGroup>
-		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-	</PropertyGroup>
+
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml"
+				  Pack="true"
+				  PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />

@@ -23,6 +23,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
-  </ItemGroup>
+		<ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
+	</ItemGroup>
 </Project>

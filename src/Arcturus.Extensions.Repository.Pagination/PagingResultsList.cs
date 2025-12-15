@@ -17,10 +17,12 @@ public sealed class PagingResultsList<TResult>
         TResult[] results
         , long totalCount
         , int limit
-        , string? after)
+        , string? after
+        , int? page)
     {
         _limit = limit;
         TotalCount = totalCount;
+        Page = page;
 
         if (results.Length < totalCount && totalCount > 0 && results.Length > limit)
         {
@@ -33,6 +35,7 @@ public sealed class PagingResultsList<TResult>
             Results = results;
         }
     }
+
     /// <summary>
     /// Gets the total count of the full data set.
     /// </summary>
@@ -45,6 +48,10 @@ public sealed class PagingResultsList<TResult>
     /// Gets the total number of pages based on the total count of items and the limit per page.
     /// </summary>
     public long Pages => TotalCount == 0 ? 0 : 1 + TotalCount / _limit;
+    /// <summary>
+    /// Gets the current page number for the paginated result set. Helpers field only.
+    /// </summary>
+    public int? Page { get; private set; } = null;
     /// <summary>
     /// // Gets a value indicating whether there are more results available beyond the current page.
     /// </summary>
@@ -73,6 +80,6 @@ public sealed class PagingResultsList<TResult>
     /// additional metadata.</returns>
     public static PagingResultsList<TResult> Empty()
     {
-        return new([], 0, 0, null);
+        return new([], 0, 0, null, null);
     }
 }
