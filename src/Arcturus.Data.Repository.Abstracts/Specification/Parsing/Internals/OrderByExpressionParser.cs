@@ -35,7 +35,7 @@ internal static class OrderByExpressionParser
             body = Expression.Property(body, prop);
         }
 
-        if (body.Type.IsValueType)
+        if (body.Type != typeof(object))
             body = Expression.Convert(body, typeof(object));
 
         return Expression.Lambda<Func<T, object?>>(body, parameter);
