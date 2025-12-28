@@ -5,6 +5,7 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus,azure,servicebus,queue</PackageTags>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageIcon>nuget.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,6 +20,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">

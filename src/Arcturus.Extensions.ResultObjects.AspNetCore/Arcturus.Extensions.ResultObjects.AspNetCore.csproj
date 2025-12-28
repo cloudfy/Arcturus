@@ -6,6 +6,7 @@
 		<PackageTags>result,resultobject,aspnetcore,arcturus</PackageTags>
 		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<PackageIcon>nuget.png</PackageIcon>
 		<Description>
 			Arcturus.Extensions.ResultObjects.AspNetCore adds first-class ASP.NET Core support for Arcturus.ResultObjects. It provides lightweight extensions for MVC and Minimal APIs to convert Result/Result{T} into IActionResult/IResult, apply consistent HTTP status code conventions, and generate ProblemDetails-based error responses. Designed for clean, centralized result handling in ASP.NET Core apps on .NET 8/9.
 		</Description>
@@ -30,6 +31,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

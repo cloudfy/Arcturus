@@ -10,6 +10,7 @@
 			Provides extension methods and utilities for implementing efficient data pagination in repository patterns. Designed for .NET applications to simplify paged data access and improve repository layer maintainability.
 		</Description>
 		<NoWarn>IDE0130</NoWarn>
+		<PackageIcon>nuget.png</PackageIcon>
 	</PropertyGroup>
 
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
@@ -20,6 +21,7 @@
 	
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>

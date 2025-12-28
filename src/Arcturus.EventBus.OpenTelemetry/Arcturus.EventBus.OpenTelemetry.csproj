@@ -4,6 +4,7 @@
 		<PackageId>Arcturus.EventBus.OpenTelemetry</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus,opentelemetry</PackageTags>
+		<PackageIcon>nuget.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -16,6 +17,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
 </Project>

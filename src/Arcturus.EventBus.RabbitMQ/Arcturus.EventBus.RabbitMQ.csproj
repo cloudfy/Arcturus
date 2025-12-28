@@ -4,6 +4,7 @@
 		<PackageId>Arcturus.EventBus.RabbitMQ</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>eventbus,events,arcturus,rabbitmq</PackageTags>
+		<PackageIcon>nuget.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,6 +20,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

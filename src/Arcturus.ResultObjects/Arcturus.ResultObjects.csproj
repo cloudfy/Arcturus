@@ -6,6 +6,7 @@
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <PackageIcon>nuget.png</PackageIcon>
 	  <Description>
 Arcturus.ResultObjects is a lightweight, dependency-free .NET library for explicit, exception-free error handling. It provides Result and Result&lt;T&gt; types to model success/failure with rich error details, plus Maybe&lt;T&gt; for optional values. Includes functional helpers (Map, Bind, Match, Tap, Ensure), validation and error aggregation, async-friendly APIs, deconstruction support, and XML docs.
 	  </Description>
@@ -21,6 +22,7 @@ Arcturus.ResultObjects is a lightweight, dependency-free .NET library for explic
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
 </Project>

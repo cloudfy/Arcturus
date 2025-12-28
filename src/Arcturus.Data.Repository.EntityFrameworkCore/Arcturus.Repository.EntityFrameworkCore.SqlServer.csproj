@@ -6,6 +6,7 @@
 		<PackageTags>repository,data,arcturus</PackageTags>
 		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageIcon>nuget.png</PackageIcon>
 		<Description>Entity Framework Core (SQL Server) implementation of the Arcturus repository abstractions.</Description>
 	</PropertyGroup>
 
@@ -24,6 +25,7 @@
 	
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
