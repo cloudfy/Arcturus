@@ -24,6 +24,9 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 * [Arcturus.Repository.EntityFrameworkCore.PostgresSql](https://github.com/cloudfy/Arcturus/wiki/Repository): Repository implementation using Entity Framework Core using Postgres SQL.
 * [Arcturus.Extensions.Repository.Pagination](https://github.com/cloudfy/Arcturus/wiki/Repository#pagination): Extensions supporting pagination response using [Arcturus.ResultObjects](https://github.com/cloudfy/Arcturus/wiki/ResultObjects).
 
+### Mediation
+* [Arcturus.Mediation](https://github.com/cloudfy/Arcturus/wiki/Mediation): Enable meditation.
+
 ### Patchable
 * [Arcturus.Patchable](https://github.com/cloudfy/Arcturus/wiki/Patchable): Enable Patch endpoints to partial updates.
 * [Arcturus.Extensions.Patchable.AspNetCore](https://github.com/cloudfy/Arcturus/wiki/Patchable): ASP.NET adoptation of patch endpoints.
