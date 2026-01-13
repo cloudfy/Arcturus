@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks></TargetFrameworks>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+
+		<IsPackable>true</IsPackable>
+		<DevelopmentDependency>true</DevelopmentDependency>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<!-- Package metadata -->
+		<PackageId>Arcturus.CodeAnalysis.CSharp</PackageId>
+		<PackageVersion>1.0.0</PackageVersion>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>code analysis,arcturus</PackageTags>
+		<PackageIcon>nuget.png</PackageIcon>
+		<Authors>Arcturus</Authors>
+		<Description>Roslyn analyzers for safe development practices</Description>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+
+		<!-- Suppress expected analyzer package warning -->
+		<NoWarn>$(NoWarn);NU5128;RS1041</NoWarn>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<!-- Use these analyzer-specific packages -->
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+		<AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Include the analyzer DLL in the NuGet package -->
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+
+		<!-- Include README in the package -->
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+</Project>
