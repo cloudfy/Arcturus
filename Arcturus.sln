@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11222.15 d18.0
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcturus.ResultObjects", "src\Arcturus.ResultObjects\Arcturus.ResultObjects.csproj", "{D6CC2DCE-65AF-457D-9736-04D939660A08}"
 EndProject
@@ -68,6 +68,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Xunit", "src\Arcturus.Xunit\Arcturus.Xunit.csproj", "{3C4F1409-9E0A-4326-A167-9B9913B31840}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Repository.EntityFrameworkCore.PostgresSql", "src\Arcturus.Repository.EntityFrameworkCore.PostgresSql\Arcturus.Repository.EntityFrameworkCore.PostgresSql.csproj", "{952CAA7C-72F7-42AA-970F-A9DE6552D84D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.CodeAnalysis.CSharp", "src\Arcturus.CodeAnalysis.CSharp\Arcturus.CodeAnalysis.CSharp.csproj", "{877CF877-70D7-44D7-BCE6-F3DE62824C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -175,6 +177,10 @@ Global
 		{952CAA7C-72F7-42AA-970F-A9DE6552D84D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{952CAA7C-72F7-42AA-970F-A9DE6552D84D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{952CAA7C-72F7-42AA-970F-A9DE6552D84D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{877CF877-70D7-44D7-BCE6-F3DE62824C3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{877CF877-70D7-44D7-BCE6-F3DE62824C3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{877CF877-70D7-44D7-BCE6-F3DE62824C3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{877CF877-70D7-44D7-BCE6-F3DE62824C3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
