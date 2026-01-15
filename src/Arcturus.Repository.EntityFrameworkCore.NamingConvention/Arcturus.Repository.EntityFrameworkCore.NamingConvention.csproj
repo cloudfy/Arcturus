@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Arcturus.Repository.EntityFrameworkCore.NamingConvention</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>repository,entityframework,naming,data,arcturus</PackageTags>
+		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageIcon>nuget.png</PackageIcon>
+		<Description>Entity Framework Core naming-conventions.</Description>
+	</PropertyGroup>
+
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup Condition=" '$(TargetFramework)' != 'net10.0' ">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.12" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.2" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+	</ItemGroup>
+</Project>

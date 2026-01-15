@@ -5,7 +5,7 @@ namespace Arcturus.ResultObjects;
 
 public static class AspNetCoreResultExtensions
 {
-    private static HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
+    private static readonly HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
 
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="Microsoft.AspNetCore.Http.IResult"/> object.

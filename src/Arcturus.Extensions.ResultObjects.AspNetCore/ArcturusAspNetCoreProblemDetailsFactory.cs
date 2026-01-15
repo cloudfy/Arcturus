@@ -8,18 +8,12 @@ using Microsoft.Extensions.Options;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore;
 
-public sealed class ArcturusAspNetCoreProblemDetailsFactory : ProblemDetailsFactory
+public sealed class ArcturusAspNetCoreProblemDetailsFactory(
+    IOptions<ApiBehaviorOptions> options,
+    IHostEnvironment environment) : ProblemDetailsFactory
 {
-    private readonly ApiBehaviorOptions _options;
-    private readonly IHostEnvironment _environment;
-
-    public ArcturusAspNetCoreProblemDetailsFactory(
-        IOptions<ApiBehaviorOptions> options,
-        IHostEnvironment environment)
-    {
-        _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
-        _environment = environment ?? throw new ArgumentNullException(nameof(environment));
-    }
+    private readonly ApiBehaviorOptions _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+    private readonly IHostEnvironment _environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
     public override ProblemDetails CreateProblemDetails(
         HttpContext httpContext,
