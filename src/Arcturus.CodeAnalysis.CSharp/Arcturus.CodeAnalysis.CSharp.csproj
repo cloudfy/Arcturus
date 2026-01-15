@@ -13,7 +13,6 @@
 
 		<!-- Package metadata -->
 		<PackageId>Arcturus.CodeAnalysis.CSharp</PackageId>
-		<PackageVersion>1.0.0</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>code analysis,arcturus</PackageTags>
 		<PackageIcon>nuget.png</PackageIcon>
