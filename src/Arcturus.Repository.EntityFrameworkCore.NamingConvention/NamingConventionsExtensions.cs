@@ -7,7 +7,19 @@ namespace Arcturus.Repository.EntityFrameworkCore.NamingConvention;
 
 public static class NamingConventionsExtensions
 {
-    public static DbContextOptionsBuilder UseNamingConvension(
+    /// <summary>
+    /// Configures the model to use the specified naming convention for database identifiers such as table and column
+    /// names.
+    /// </summary>
+    /// <remarks>This method enables consistent naming of database objects according to the specified
+    /// convention, which can help ensure compatibility with existing database schemas or organizational
+    /// standards.</remarks>
+    /// <param name="optionsBuilder">The options builder to configure. Must not be null.</param>
+    /// <param name="convention">The naming convention to apply to database identifiers.</param>
+    /// <param name="culture">The culture to use for case conversions, or null to use the current culture.</param>
+    /// <returns>The same <see cref="DbContextOptionsBuilder"/> instance so that additional configuration calls can be chained.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="convention"/> is not a valid value of the <see cref="NamingConvention"/> enumeration.</exception>
+    public static DbContextOptionsBuilder UseNamingConvention(
         this DbContextOptionsBuilder optionsBuilder
         , NamingConvention convention
         , CultureInfo? culture = null)
