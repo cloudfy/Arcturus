@@ -4,7 +4,8 @@ using System.Net;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore.Results;
 
-public sealed class ObjectResult<TValue> : IResult, IStatusCodeHttpResult, IValueHttpResult, IValueHttpResult<TValue>
+public sealed class ObjectResult<TValue> 
+    : IResult, IStatusCodeHttpResult, IValueHttpResult, IValueHttpResult<TValue>
 {
     internal ObjectResult(TValue? value, HttpStatusCode httpStatusCode)
     {
