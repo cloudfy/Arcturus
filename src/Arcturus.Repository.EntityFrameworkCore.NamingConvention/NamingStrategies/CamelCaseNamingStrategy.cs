@@ -9,5 +9,10 @@ public class CamelCaseNamingStrategy : INamingStrategy
 
     internal CamelCaseNamingStrategy(CultureInfo culture) => _culture = culture;
 
-    public string ApplyNaming(string name) => string.IsNullOrEmpty(name) ? name : char.ToLower(name[0], _culture) + name.Substring(1);
+    public string ApplyNaming(string name) =>
+        string.IsNullOrEmpty(name)
+            ? name
+            : name.Length == 1
+                ? char.ToLower(name[0], _culture).ToString()
+                : char.ToLower(name[0], _culture) + name.Substring(1);
 }
