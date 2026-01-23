@@ -21,6 +21,7 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 ### Data & Repository
 * [Arcturus.Repository.Abstracts](https://github.com/cloudfy/Arcturus/wiki/Repository): Provide abstract data models for using the repository implementations.
 * [Arcturus.Repository.EntityFrameworkCore](https://github.com/cloudfy/Arcturus/wiki/Repository): Repository implementation using Entity Framework Core using SQL server.
+* [Arcturus.Repository.EntityFrameworkCore.NamingConvention](https://github.com/cloudfy/Arcturus/wiki/Repository): Change naming convension for the database layer (Postgres SQL).
 * [Arcturus.Repository.EntityFrameworkCore.PostgresSql](https://github.com/cloudfy/Arcturus/wiki/Repository): Repository implementation using Entity Framework Core using Postgres SQL.
 * [Arcturus.Extensions.Repository.Pagination](https://github.com/cloudfy/Arcturus/wiki/Repository#pagination): Extensions supporting pagination response using [Arcturus.ResultObjects](https://github.com/cloudfy/Arcturus/wiki/ResultObjects).
 
@@ -45,7 +46,10 @@ Arcturus consist of multiple independant packages. Some are extensions of other 
 * [Arcturus.Extensions.CommandLine](): An extension to [System.CommandLine](https://learn.microsoft.com/en-us/dotnet/standard/commandline/) which enables dependency injection and command handler implementation.
 
 ### Configuration
-* [Arcturus.Extensions.Configuration.AzureStorageBlob](); Enable storing configuration options in Azure Blob Storage.
+* [Arcturus.Extensions.Configuration.AzureStorageBlob](https://github.com/cloudfy/Arcturus/wiki/Configuration); Enable storing configuration options in Azure Blob Storage.
+
+### Code analysis
+* [Arcturus.CodeAnalysis.CSharp](https://github.com/cloudfy/Arcturus/wiki/Code-analysis): HttpClient code analysis and more.
 
 ## Read the Wiki
 As Arcturus consist of multiple packages, we are keeping documentation in the [Wiki](https://github.com/cloudfy/Arcturus/wiki).
