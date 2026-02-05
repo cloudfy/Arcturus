@@ -14,7 +14,7 @@ public static class ObjectConversion
     /// <param name="value">When this method returns, contains the value if the result represents success; otherwise, the default value for
     /// the type.</param>
     /// <returns>true if the result represents success and the value was retrieved; otherwise, false.</returns>
-    public static bool TryGetSuccessValue<T>(this Result<T> result, [NotNull] out T? value)
+    public static bool TryGetSuccessValue<T>(this Result<T> result, [NotNullWhen(true)] out T? value)
     {
         if (result.IsSuccess)
         {
