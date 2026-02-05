@@ -8,11 +8,15 @@
 		<PackageIcon>nuget.png</PackageIcon>
 	</PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' != 'net10.0' ">
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.1" />
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.1" />
 	</ItemGroup>
-
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Arcturus.EventBus\Arcturus.EventBus.csproj" />
 	</ItemGroup>
