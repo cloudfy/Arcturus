@@ -62,8 +62,11 @@ public static class ResultExtensions
     public static T WithBag<T>(this T result, string key, object? value)
         where T : Result
     {
-        result.Metadata ??= [];
-        result.Metadata.Add(key, value);
+        lock (result)
+        {
+            result.Metadata ??= [];
+            result.Metadata.Add(key, value);
+        }
         return result;
     }
 }
