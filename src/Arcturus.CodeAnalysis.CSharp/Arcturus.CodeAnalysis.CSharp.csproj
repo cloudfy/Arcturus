@@ -9,7 +9,6 @@
 
 		<IsPackable>true</IsPackable>
 		<DevelopmentDependency>true</DevelopmentDependency>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
 		<!-- Package metadata -->
 		<PackageId>Arcturus.CodeAnalysis.CSharp</PackageId>
@@ -18,7 +17,6 @@
 		<PackageIcon>nuget.png</PackageIcon>
 		<Authors>Arcturus</Authors>
 		<Description>Roslyn analyzers for safe development practices</Description>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 
 		<!-- Suppress expected analyzer package warning -->
 		<NoWarn>$(NoWarn);NU5128;RS1041</NoWarn>

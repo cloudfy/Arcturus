@@ -4,7 +4,8 @@
     <PackageId>Arcturus.Patchable</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>patch,json,api,arcturus</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <PackageIcon>nuget.png</PackageIcon>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<Description>
 Arcturus.Patchable is a lightweight .NET library for modeling and applying partial updates (patches) to objects in Web APIs. It provides strongly-typed patch contracts, opt-in patchable members, and helpers to validate, map, and merge changes before persistence—ideal for JSON-driven APIs where clients send only the fields they want to change.
 	</Description>
@@ -16,5 +17,7 @@ Arcturus.Patchable is a lightweight .NET library for modeling and applying parti
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\"/>
+	  <None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
   </ItemGroup>
+	
 </Project>
