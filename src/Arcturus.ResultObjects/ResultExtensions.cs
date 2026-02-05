@@ -10,75 +10,60 @@ public static class ResultExtensions
     /// <b>Result object will be marked as failure.</b>
     /// </para>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="value">Required.</param>
-    /// <param name="exception"></param>
-    /// <returns><see cref="Result{T}"/></returns>
-    public static Result<T> WithException<T>(this Result<T> value, Exception exception)
-    {
-        value.Exception = exception;
-        value.IsSuccess = false;
-        return value;
-    }
-    /// <summary>
-    /// Assigns the <paramref name="exception"/> to the result.
-    /// <para>
-    /// <b>Result object will be marked as failure.</b>
-    /// </para>
-    /// </summary>
-    /// <param name="value">Required.</param>
+    /// <typeparam name="T">The type of the result object. Must inherit from Result.</typeparam>
+    /// <param name="result">Required.</param>
     /// <param name="exception"></param>
     /// <returns><see cref="Result"/></returns>
-    public static Result WithException(this Result value, Exception exception)
+    public static T WithException<T>(this T result, Exception exception)
+        where T : Result
     {
-        value.Exception = exception;
-        value.IsSuccess = false;
-        return value;
+        result.Exception = exception;
+        result.IsSuccess = false;
+        return result;
     }
     /// <summary>
     /// Assigns the <paramref name="httpStatusCode"/> to the result.
     /// </summary>
-    /// <typeparam name="T">Type of result object.</typeparam>
-    /// <param name="value">Required.</param>
-    /// <param name="httpStatusCode"><see cref="HttpStatusCode"/> to assign.</param>
-    /// <returns><see cref="Result{T}"/></returns>
-    public static Result<T> WithHttpStatusCode<T>(this Result<T> value, HttpStatusCode httpStatusCode)
-    {
-        value.HttpStatusCode = httpStatusCode;
-        return value;
-    }
-    /// <summary>
-    /// Assigns the <paramref name="httpStatusCode"/> to the result.
-    /// </summary>
-    /// <param name="value">Required.</param>
+    /// <typeparam name="T">The type of the result object. Must inherit from Result.</typeparam>
+    /// <param name="result">Required.</param>
     /// <param name="httpStatusCode"><see cref="HttpStatusCode"/> to assign.</param>
     /// <returns><see cref="Result"/></returns>
-    public static Result WithHttpStatusCode(this Result value, HttpStatusCode httpStatusCode)
+    public static T WithHttpStatusCode<T>(this T result, HttpStatusCode httpStatusCode)
+         where T : Result
     {
-        value.HttpStatusCode = httpStatusCode;
-        return value;
+        result.HttpStatusCode = httpStatusCode;
+        return result;
     }
+
     /// <summary>
     /// Assigns a helplink to the result.
     /// </summary>
-    /// <typeparam name="T">Type of result object.</typeparam>
+    /// <typeparam name="T">The type of the result object. Must inherit from Result.</typeparam>
     /// <param name="result">Required.</param>
     /// <param name="uri">Url of the help link.</param>
-    /// <returns><see cref="Result{T}"/></returns>
-    public static Result<T> WithHelpLink<T>(this Result<T> result, string uri)
+    /// <returns><see cref="Result"/></returns>
+    public static T WithHelpLink<T>(this T result, string uri)
+        where T : Result
     {
         result.HelpLink = uri;
         return result;
     }
     /// <summary>
-    /// Assigns a helplink to the result.
+    /// Adds a metadata entry with the specified key and value to the result's metadata bag and returns the result
+    /// instance.
     /// </summary>
-    /// <param name="result">Required.</param>
-    /// <param name="uri">Url of the help link.</param>
-    /// <returns><see cref="Result"/></returns>
-    public static Result WithHelpLink(this Result result, string uri)
+    /// <remarks>If the metadata bag is not initialized, this method creates it before adding the entry. This
+    /// method enables fluent chaining when building or modifying result objects.</remarks>
+    /// <typeparam name="T">The type of the result object. Must inherit from Result.</typeparam>
+    /// <param name="result">The result instance to which the metadata entry will be added. Cannot be null.</param>
+    /// <param name="key">The key for the metadata entry to add. Cannot be null.</param>
+    /// <param name="value">The value to associate with the specified key. Can be null.</param>
+    /// <returns>The same result instance with the new metadata entry added.</returns>
+    public static T WithBag<T>(this T result, string key, object? value)
+        where T : Result
     {
-        result.HelpLink = uri;
+        result.Metadata ??= [];
+        result.Metadata.Add(key, value);
         return result;
     }
 }

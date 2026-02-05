@@ -8,6 +8,8 @@ namespace Arcturus.ResultObjects;
 /// </summary>
 public class Result
 {
+    internal Dictionary<string, object?>? Metadata { get; set; }
+
     /// <summary>
     /// Creates a new instance of <see cref="Result"/> with a <paramref name="fault"/> and <paramref name="isSuccess"/>.
     /// </summary>
@@ -65,7 +67,7 @@ public class Result
     /// </summary>
     public bool IsFailure => !IsSuccess;
     /// <summary>
-    /// Gets an exception if assigned. Use <see cref="ResultExtensions.WithException{T}(Result{T}, Exception)"/>.
+    /// Gets an exception if assigned. Use <see cref="ResultExtensions.WithException{T}(T, Exception)"/>.
     /// </summary>
     public Exception? Exception { get; internal set; }
     /// <summary>
@@ -73,11 +75,15 @@ public class Result
     /// </summary>
     public Fault? Fault { get; }
     /// <summary>
-    /// Gets an HttpStatusCode if assigned. Use <see cref="ResultExtensions.WithHttpStatusCode{T}(Result{T}, HttpStatusCode)"/>.
+    /// Gets an HttpStatusCode if assigned. Use <see cref="ResultExtensions.WithHttpStatusCode{T}(T, System.Net.HttpStatusCode)"/>.
     /// </summary>
     public HttpStatusCode? HttpStatusCode { get; internal set; }
     /// <summary>
     /// Gets a url of a help documentation.
     /// </summary>
     public string? HelpLink { get; internal set; }
+    /// <summary>
+    /// Gets additional metadata items. Use <see cref="ResultExtensions.WithBag{T}(T, string, object?)"/>.
+    /// </summary>
+    public IReadOnlyDictionary<string, object?>? BagItems => Metadata;
 }
