@@ -55,7 +55,7 @@ public static class ResultExtensions
     /// <remarks>If the metadata bag is not initialized, this method creates it before adding the entry. This
     /// method enables fluent chaining when building or modifying result objects.</remarks>
     /// <typeparam name="T">The type of the result object. Must inherit from Result.</typeparam>
-    /// <param name="result">The result instance to which the metadata entry will be added. Cannot be null.</param>
+    /// <param name="result">Required.</param>
     /// <param name="key">The key for the metadata entry to add. Cannot be null.</param>
     /// <param name="value">The value to associate with the specified key. Can be null.</param>
     /// <returns>The same result instance with the new metadata entry added.</returns>
