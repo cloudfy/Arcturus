@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Arcturus.ResultObjects;
+﻿namespace Arcturus.ResultObjects;
 
 /// <summary>
 /// Represents a result of an operation - success or failure.

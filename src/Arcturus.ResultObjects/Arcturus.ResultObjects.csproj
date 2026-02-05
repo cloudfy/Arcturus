@@ -14,14 +14,12 @@ Arcturus.ResultObjects is a lightweight, dependency-free .NET library for explic
 
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
-			<None Include="$(OutputPath)$(AssemblyName).xml"
-				  Pack="true"
-				  PackagePath="lib\$(TargetFramework)" />
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
 		</ItemGroup>
 	</Target>
 
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
