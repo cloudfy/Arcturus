@@ -1,0 +1,1 @@
+Arcturus.DevHost.Sdk to be referenced by Arcturus.DevHost projects.

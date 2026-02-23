@@ -1,0 +1,33 @@
+<Project>
+	<Target Name="GenerateProjectReferencesList" BeforeTargets="BeforeCompile">
+		<ItemGroup>
+			<ProjectMetadata Include="@(ProjectReference)">
+				<TypeName Condition="'%(ProjectReference.ProjectMetadataTypeName)' != ''">%(ProjectReference.ProjectMetadataTypeName)</TypeName>
+				<TypeName Condition="'%(ProjectReference.ProjectMetadataTypeName)' == ''">%(FileName)</TypeName>
+				<ProjectPath>%(FullPath)</ProjectPath>
+			</ProjectMetadata>
+		</ItemGroup>
+		<WriteLinesToFile File="$(IntermediateOutputPath)ProjectReferences.txt"
+						  Lines="@(ProjectMetadata->'%(Identity)	%(TypeName)	%(ProjectPath)')"
+						  Overwrite="true"
+						  WriteOnlyWhenDifferent="true" />
+		<ItemGroup>
+			<AdditionalFiles Include="$(IntermediateOutputPath)ProjectReferences.txt" />
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<Using Include="Microsoft.Extensions.Logging" />
+		<Using Include="System.Threading.Tasks" />
+		<!-- Add more as needed -->
+	</ItemGroup>
+	
+	<ItemGroup>
+		<ProjectCapability Include="DynamicFileNesting" />
+		<ProjectCapability Include="DynamicFileNestingEnabled" />
+		<ProjectCapability Include="ArcturusOrchestration" />
+	</ItemGroup>
+
+	<Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
+
+</Project>
