@@ -59,7 +59,7 @@ public sealed class OrchestratorHost
                     Arguments = er.Arguments,
                     WorkingDirectory = er.WorkingDirectory ?? Environment.CurrentDirectory,
                     UseShellExecute = useShellExecute  // For npm etc.
-                    // redirect plus environment variables can be added here if needed
+                    // Configure I/O redirection here if needed; environment variables are set below.
                 };
                 //var userPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User) ?? "";
                 //var machinePath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine) ?? "";
