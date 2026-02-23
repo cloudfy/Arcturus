@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		
+		<IsPackable>true</IsPackable>
+		<PackageType>MSBuildSdk</PackageType>
+		<PackageTags>MSBuildSdk, arcturus, devhost</PackageTags>
+		
+		<NoBuild>true</NoBuild>
+
+		<PackageId>Arcturus.DevHost.Sdk</PackageId>
+		<PackageType>DotnetPlatform</PackageType>
+		
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<BuildOutputTargetFolder></BuildOutputTargetFolder>
+		<IncludeSymbols>false</IncludeSymbols>
+		<IncludeSource>false</IncludeSource>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<!-- Ensure SDK props/targets land in the correct folder layout -->
+		<SuppressDependenciesWhenPackingAcknowledged>true</SuppressDependenciesWhenPackingAcknowledged>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+	</PropertyGroup>
+	
+	<!-- Add this target here -->
+	<Target Name="GenerateSdkPropsWithVersion" BeforeTargets="Pack">
+	  <PropertyGroup>
+		<SdkPropsSource>Sdk\Sdk.source.props</SdkPropsSource>
+		<SdkPropsTarget>Sdk\Sdk.props</SdkPropsTarget>
+	  </PropertyGroup>
+  
+	  <!-- Copy source to target -->
+	  <Copy SourceFiles="$(SdkPropsSource)" DestinationFiles="$(SdkPropsTarget)" />
+  
+	  <!-- Replace $version$ in the copied file -->
+	  <ReadLinesFromFile File="$(SdkPropsTarget)">
+		<Output TaskParameter="Lines" ItemName="SdkPropsLines"/>
+	  </ReadLinesFromFile>
+	  <WriteLinesToFile 
+		File="$(SdkPropsTarget)" 
+		Lines="@(SdkPropsLines->Replace('$version$', '$(Version)'))" 
+		Overwrite="true" />
+	</Target>
+
+	<!-- edit the Sdk.source.props NOT the auto-generated Sdk.props -->
+	<ItemGroup>
+	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
+	  <None Update="Sdk\Sdk.props" Pack="true" PackagePath="Sdk\Sdk.props" />
+	  <None Update="Sdk\Sdk.targets" Pack="true" PackagePath="Sdk\Sdk.targets" />
+	</ItemGroup>
+
+</Project>
