@@ -69,7 +69,12 @@ public sealed class OrchestratorHost
                 { 
                     foreach (System.Collections.DictionaryEntry envVar in Environment.GetEnvironmentVariables())
                     {
-                        psi.EnvironmentVariables[(string)envVar.Key] = (string?)envVar.Value;
+                        var key = envVar.Key as string;
+                        var value = envVar.Value as string;
+                        if (key is not null && value is not null)
+                        {
+                            psi.EnvironmentVariables[key] = value;
+                        }
                     }
                 }
 
