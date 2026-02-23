@@ -6,7 +6,7 @@
 		<PackageId>Arcturus.DevHost.SourceGenerator</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>devhost,arcturus</PackageTags>
-		<Description></Description>
+		<Description>Roslyn source generator that provides DevHost scaffolding and utilities for Arcturus-based .NET projects.</Description>
 		<PackageIcon>nuget.png</PackageIcon>
 		
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
