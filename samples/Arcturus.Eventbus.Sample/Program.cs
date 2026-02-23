@@ -49,7 +49,7 @@ processor.OnProcessAsync += async (eventMessage, cancellationToken) =>
     }
     await Task.CompletedTask; // Simulate async processing
 };
-Task.Run(() => processor.WaitForEvents(cts.Token));
+_ = Task.Run(() => processor.WaitForEvents(cts.Token));
 Console.WriteLine("Running");
 
 while (!cts.IsCancellationRequested)

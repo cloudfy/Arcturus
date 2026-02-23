@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		
+		<TargetFrameworks></TargetFrameworks>
+
 		<IsPackable>true</IsPackable>
 		<PackageType>MSBuildSdk</PackageType>
 		<PackageTags>MSBuildSdk, arcturus, devhost</PackageTags>

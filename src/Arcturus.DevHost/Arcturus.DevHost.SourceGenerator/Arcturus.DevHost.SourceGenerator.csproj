@@ -2,7 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		
+		<TargetFrameworks></TargetFrameworks>
+
 		<PackageId>Arcturus.DevHost.SourceGenerator</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>devhost,arcturus</PackageTags>
