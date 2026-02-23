@@ -42,7 +42,7 @@
 		Overwrite="true" />
 	</Target>
 
-	<!-- edit the Sdk.source.props NOT the -->
+	<!-- edit the Sdk.source.props NOT the auto-generated Sdk.props -->
 	<ItemGroup>
 	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
 	  <None Update="Sdk\Sdk.props" Pack="true" PackagePath="Sdk\Sdk.props" />
