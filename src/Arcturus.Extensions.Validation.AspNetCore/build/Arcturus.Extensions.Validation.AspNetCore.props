@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable source generators in consuming projects -->
+    <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+</Project>
