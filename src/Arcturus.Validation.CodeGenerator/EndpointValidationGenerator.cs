@@ -173,24 +173,50 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
     private static void Execute(Compilation compilation, ImmutableArray<EndpointParameterInfo> endpoints, SourceProductionContext context)
     {
         if (endpoints.IsDefaultOrEmpty)
+        {
+            // Generate a diagnostic comment file to help debug
+            context.AddSource("ValidationDiagnostics.g.cs", 
+                "// No endpoints with validation found. Make sure you're using .ValidateParameters() or .AddEndpointFilter<ValidateParametersFilter>()");
             return;
+        }
 
         // Group all unique parameter types that need validation
         var typesToValidate = new HashSet<INamedTypeSymbol>(SymbolEqualityComparer.Default);
+        var diagnosticInfo = new StringBuilder();
+        diagnosticInfo.AppendLine("// Validation Generator Diagnostics:");
+        diagnosticInfo.AppendLine($"// Found {endpoints.Length} endpoint(s) with validation");
 
         foreach (var endpoint in endpoints)
         {
+            diagnosticInfo.AppendLine($"// Endpoint with {endpoint.Parameters.Count} parameter(s):");
             foreach (var param in endpoint.Parameters)
             {
-                if (!IsPrimitiveOrFrameworkType(param.TypeSymbol))
+                var isPrimitive = IsPrimitiveOrFrameworkType(param.TypeSymbol);
+                var hasValidationAttributes = HasValidationAttributes(param.TypeSymbol);
+
+                diagnosticInfo.AppendLine($"//   - {param.Name}: {param.TypeName}");
+                diagnosticInfo.AppendLine($"//     IsPrimitive: {isPrimitive}, HasValidation: {hasValidationAttributes}, AsParameters: {param.HasAsParameters}");
+
+                // Include types that either have validation attributes OR are complex types (not primitives/framework types)
+                if (!isPrimitive)
                 {
                     typesToValidate.Add(param.TypeSymbol);
+                    diagnosticInfo.AppendLine($"//     ✓ Added to validation list");
+                }
+                else
+                {
+                    diagnosticInfo.AppendLine($"//     ✗ Skipped (primitive/framework type)");
                 }
             }
         }
 
+        diagnosticInfo.AppendLine($"// Total types to validate: {typesToValidate.Count}");
+
         if (typesToValidate.Count == 0)
+        {
+            context.AddSource("ValidationDiagnostics.g.cs", diagnosticInfo.ToString());
             return;
+        }
 
         // Generate validation extension class
         var sourceBuilder = new StringBuilder();
@@ -208,6 +234,8 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
         sourceBuilder.AppendLine();
         sourceBuilder.AppendLine($"namespace {rootNamespace};");
         sourceBuilder.AppendLine();
+        sourceBuilder.Append(diagnosticInfo);
+        sourceBuilder.AppendLine();
         sourceBuilder.AppendLine("internal static partial class ValidationExtensions");
         sourceBuilder.AppendLine("{");
 
@@ -223,6 +251,35 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
 
         // Generate the partial ValidateParametersFilter implementation
         GenerateValidateParametersFilter(compilation, typesToValidate, context);
+    }
+
+    private static bool HasValidationAttributes(ITypeSymbol typeSymbol)
+    {
+        // Check if the type or any of its properties have validation attributes
+        if (typeSymbol is not INamedTypeSymbol namedType)
+            return false;
+
+        foreach (var member in namedType.GetMembers())
+        {
+            if (member is IPropertySymbol property)
+            {
+                if (property.IsRequired)
+                    return true;
+
+                foreach (var attribute in property.GetAttributes())
+                {
+                    var attrName = attribute.AttributeClass?.Name;
+                    if (attrName != null && (
+                        attrName.EndsWith("Attribute") && 
+                        attribute.AttributeClass?.ContainingNamespace?.ToDisplayString() == "System.ComponentModel.DataAnnotations"))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     private static void GenerateValidateParametersFilter(Compilation compilation, HashSet<INamedTypeSymbol> typesToValidate, SourceProductionContext context)
