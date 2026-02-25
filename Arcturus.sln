@@ -83,6 +83,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.DevHost.SourceGene
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.DevHost.Hosting", "src\Arcturus.DevHost\Arcturus.DevHost.Hosting\Arcturus.DevHost.Hosting.csproj", "{95F3742C-BA79-D659-BE1E-F30CDFDA0B83}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Arcturus.Validation", "Arcturus.Validation", "{946C71F4-47E4-4B84-AE22-D6EB2CC6857C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Extensions.Validation.AspNetCore", "src\Arcturus.Extensions.Validation.AspNetCore\Arcturus.Extensions.Validation.AspNetCore.csproj", "{CE8CCE99-5106-430F-B1A2-9702DC38A3F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Validation.CodeGenerator", "src\Arcturus.Validation.CodeGenerator\Arcturus.Validation.CodeGenerator.csproj", "{7CAA7E80-0C48-40DB-B04C-A6AD8CB747AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -209,6 +215,14 @@ Global
 		{95F3742C-BA79-D659-BE1E-F30CDFDA0B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95F3742C-BA79-D659-BE1E-F30CDFDA0B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95F3742C-BA79-D659-BE1E-F30CDFDA0B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8CCE99-5106-430F-B1A2-9702DC38A3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8CCE99-5106-430F-B1A2-9702DC38A3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8CCE99-5106-430F-B1A2-9702DC38A3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8CCE99-5106-430F-B1A2-9702DC38A3F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CAA7E80-0C48-40DB-B04C-A6AD8CB747AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CAA7E80-0C48-40DB-B04C-A6AD8CB747AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CAA7E80-0C48-40DB-B04C-A6AD8CB747AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CAA7E80-0C48-40DB-B04C-A6AD8CB747AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +253,8 @@ Global
 		{8CFB3493-4EC0-0E6C-9EF4-E1726FF125C1} = {12799F9C-08BB-4F8D-B823-BC950A055864}
 		{493F7FDE-ED7D-E18C-D657-889B45837AF0} = {12799F9C-08BB-4F8D-B823-BC950A055864}
 		{95F3742C-BA79-D659-BE1E-F30CDFDA0B83} = {12799F9C-08BB-4F8D-B823-BC950A055864}
+		{CE8CCE99-5106-430F-B1A2-9702DC38A3F6} = {946C71F4-47E4-4B84-AE22-D6EB2CC6857C}
+		{7CAA7E80-0C48-40DB-B04C-A6AD8CB747AE} = {946C71F4-47E4-4B84-AE22-D6EB2CC6857C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {892EBAB5-9416-41D4-8195-C1A7E9BE754F}
