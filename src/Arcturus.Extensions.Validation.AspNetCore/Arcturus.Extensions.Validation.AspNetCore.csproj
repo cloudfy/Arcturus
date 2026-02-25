@@ -15,9 +15,7 @@
 
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
 		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
-			<None Include="$(OutputPath)$(AssemblyName).xml"
-				  Pack="true"
-				  PackagePath="lib\$(TargetFramework)" />
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
 		</ItemGroup>
 	</Target>
 	
@@ -25,17 +23,22 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	
+  <PropertyGroup>
+	<!-- Enable including analyzers in the package -->
+	<IncludeBuildOutput>true</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <!-- Package the source generator as an analyzer in the NuGet package -->
   <ItemGroup>
-    <ProjectReference Include="..\Arcturus.Validation.CodeGenerator\Arcturus.Validation.CodeGenerator.csproj"
-					  OutputItemType="Analyzer" 
-					  ReferenceOutputAssembly="false"
-	/>
+	<!-- Package the generator DLL as an analyzer -->
+	<None Include="..\Arcturus.Validation.CodeGenerator\bin\$(Configuration)\netstandard2.0\Arcturus.Validation.CodeGenerator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 
 
 	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath="\"/>
+		<None Include="README.md" Pack="true" PackagePath="\" />
 		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
+		<None Include="build\Arcturus.Extensions.Validation.AspNetCore.props" Pack="true" PackagePath="build\" />
 	</ItemGroup>
 
 </Project>

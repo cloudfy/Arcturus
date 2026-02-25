@@ -8,7 +8,9 @@ internal static partial class ValidationHelper
 {
     // Function delegate that will be set by the generated code
     // If null, no validation will occur (no generated code available)
+#pragma warning disable CS0649 // Field is assigned by generated code
     private static Func<IList<object?>, object?>? _validateFunc;
+#pragma warning restore CS0649
 
     // This method is called by ValidateParametersFilter
     internal static object? ValidateArguments(IList<object?> arguments)
