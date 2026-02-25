@@ -15,7 +15,8 @@ public static class RouteHandlerBuilderExtensions
     /// <returns>The route handler builder instance with parameter validation enabled.</returns>
     public static RouteHandlerBuilder ValidateParameters(this RouteHandlerBuilder builder)         
     {
-        builder.AddEndpointFilter<ValidateParametersFilter>();
+        // Use the factory to get the generated filter implementation
+        builder.AddEndpointFilter(ValidateParametersFilterFactory.Create());
         return builder;
     }
 }

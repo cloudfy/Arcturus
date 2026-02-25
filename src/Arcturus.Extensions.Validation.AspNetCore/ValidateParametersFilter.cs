@@ -4,21 +4,15 @@ using System.Collections.Generic;
 
 namespace Arcturus.Validation;
 
+// This is a marker class - the actual implementation is generated in the consuming project
+// The source generator will create a complete implementation with the actual validation logic
 public class ValidateParametersFilter : IEndpointFilter
 {
-    public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
+    // This will be overridden by the generated class in the consuming project
+    public virtual async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        if (context.HttpContext.Response.StatusCode != StatusCodes.Status400BadRequest)
-        {
-            // Validate all arguments in the endpoint using generated validation method
-            // The GeneratedValidationHelper class is generated in the consuming project
-            var validationResult = GeneratedValidationHelper.ValidateArguments(context.Arguments);
-            if (validationResult is not null)
-            {
-                return validationResult;
-            }
-        }
-
+        // Default implementation - no validation
+        // The generated class will override this
         return await next(context);
     }
 }
