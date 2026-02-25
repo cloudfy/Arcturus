@@ -109,7 +109,52 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
 
     private static SyntaxNode? FindEndpointRegistration(InvocationExpressionSyntax validationInvocation)
     {
-        // Walk up the tree to find MapGet, MapPost, etc.
+        // For .AddEndpointFilter<ValidateParametersFilter>() or .ValidateParameters()
+        // The pattern is: app.MapGet(...).AddEndpointFilter<...>()
+        // We need to find the MapGet/MapPost/etc. invocation
+
+        // Check if this is a chained call (member access)
+        if (validationInvocation.Expression is MemberAccessExpressionSyntax memberAccess)
+        {
+            // The expression part should be the previous call in the chain
+            var previousExpression = memberAccess.Expression;
+
+            // Keep traversing the chain to find the Map* method
+            while (previousExpression != null)
+            {
+                if (previousExpression is InvocationExpressionSyntax invoc)
+                {
+                    var methodName = GetMethodName(invoc);
+                    if (methodName?.StartsWith("Map") == true)
+                    {
+                        // Found MapGet, MapPost, etc. - get the handler argument
+                        if (invoc.ArgumentList.Arguments.Count >= 2)
+                        {
+                            var handlerArg = invoc.ArgumentList.Arguments[1].Expression;
+                            return handlerArg;
+                        }
+                    }
+
+                    // Check if this invocation is also a chain
+                    if (invoc.Expression is MemberAccessExpressionSyntax nextMember)
+                    {
+                        previousExpression = nextMember.Expression;
+                        continue;
+                    }
+                }
+
+                // Try member access
+                if (previousExpression is MemberAccessExpressionSyntax ma)
+                {
+                    previousExpression = ma.Expression;
+                    continue;
+                }
+
+                break;
+            }
+        }
+
+        // Fallback: Walk up the tree to find MapGet, MapPost, etc.
         var current = validationInvocation.Parent;
         while (current is not null)
         {
@@ -128,6 +173,7 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
             }
             current = current.Parent;
         }
+
         return null;
     }
 
