@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore;
-
 public static class ServiceExtensions
 {
     [Obsolete("Deprecated. Use AddResultObjects instead.")]
@@ -21,12 +20,20 @@ public static class ServiceExtensions
     /// </remarks>
     /// <param name="services">Required.</param>
     /// <param name="configureProblemDetailsOptions">Optional. Configure options for <see cref="Microsoft.AspNetCore.Http.ProblemDetailsOptions"/>.</param>
+    /// <param name="configureOptions">Optional. Configure options for <see cref="ResultObjectOptions"/>.</param>
     /// <returns><see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddResultObjects(
         this IServiceCollection services
-        , Action<Microsoft.AspNetCore.Http.ProblemDetailsOptions>? configureProblemDetailsOptions = null)
+        , Action<Microsoft.AspNetCore.Http.ProblemDetailsOptions>? configureProblemDetailsOptions = null
+        , Action<ResultObjectOptions>? configureOptions = null)
     {
-        services.TryAddSingleton<ProblemDetailsFactory, ArcturusAspNetCoreProblemDetailsFactory>();
+        var resultOptions = new ResultObjectOptions();
+        configureOptions?.Invoke(resultOptions);
+
+        if (resultOptions.RegisterProblemDetailsFactory)
+        {
+            services.TryAddSingleton<ProblemDetailsFactory, ArcturusAspNetCoreProblemDetailsFactory>();
+        }
 
         services.Configure<ApiBehaviorOptions>(options =>
         {
@@ -48,6 +55,9 @@ public static class ServiceExtensions
                 [503] = ("Service Unavailable", "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.4"),
                 [504] = ("Gateway Timeout", "https://datatracker.ietf.org/doc/html/rfc7231#section-6.6.5")
             };
+
+            resultOptions.ValidateClientMappings?.Invoke(mappings);
+
             foreach (var (statusCode, data) in mappings)
             {
                 options.ClientErrorMapping[statusCode] = new ClientErrorData
