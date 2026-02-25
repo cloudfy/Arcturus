@@ -231,7 +231,6 @@ The source generator runs automatically during build - no additional configurati
 
 ### Validation not working?
 
-- Verify the `StatusCode` check in `ValidateParametersFilter.InvokeAsync` is correct
 - Check that your model properties have validation attributes
 - Ensure the model is a parameter in the endpoint handler
 
