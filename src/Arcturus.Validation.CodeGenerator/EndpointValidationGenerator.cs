@@ -29,12 +29,54 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
 
     private static bool IsValidationFilterInvocation(SyntaxNode node)
     {
-        // Check for AddEndpointFilter<ValidateParametersFilter>() or ValidateParameters()
+        // Check for AddEndpointFilter<ValidateParametersFilter>() or ValidateParameters() on an endpoint
         if (node is not InvocationExpressionSyntax invocation)
             return false;
 
         var methodName = GetMethodName(invocation);
-        return methodName is "AddEndpointFilter" or "ValidateParameters";
+        if (methodName is null)
+            return false;
+
+        // Match AddEndpointFilter<ValidateParametersFilter>()
+        if (methodName == "AddEndpointFilter")
+        {
+            // The expression can be a generic invocation directly or via a member access, e.g. endpoints.AddEndpointFilter<...>()
+            GenericNameSyntax? genericName = invocation.Expression as GenericNameSyntax;
+
+            if (genericName is null &&
+                invocation.Expression is MemberAccessExpressionSyntax memberAccess &&
+                memberAccess.Name is GenericNameSyntax memberGeneric)
+            {
+                genericName = memberGeneric;
+            }
+
+            if (genericName is null)
+                return false;
+
+            var typeArguments = genericName.TypeArgumentList.Arguments;
+            if (typeArguments.Count != 1)
+                return false;
+
+            if (typeArguments[0] is IdentifierNameSyntax typeIdentifier &&
+                typeIdentifier.Identifier.Text == "ValidateParametersFilter")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // Match ValidateParameters() chained on minimal API endpoint registrations,
+        // e.g., app.MapGet(...).ValidateParameters();
+        if (methodName == "ValidateParameters" &&
+            invocation.Expression is MemberAccessExpressionSyntax validateMember &&
+            validateMember.Expression is InvocationExpressionSyntax endpointInvocation)
+        {
+            var endpointMethodName = GetMethodName(endpointInvocation);
+            return endpointMethodName is "MapGet" or "MapPost" or "MapPut" or "MapDelete" or "MapMethods";
+        }
+
+        return false;
     }
 
     private static string? GetMethodName(InvocationExpressionSyntax invocation)
