@@ -341,14 +341,11 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
         sourceBuilder.AppendLine();
         sourceBuilder.AppendLine("namespace Arcturus.Validation;");
         sourceBuilder.AppendLine();
-        sourceBuilder.AppendLine("internal static partial class ValidationHelper");
+        sourceBuilder.AppendLine("// Generated validation implementation");
+        sourceBuilder.AppendLine("internal static partial class GeneratedValidationHelper");
         sourceBuilder.AppendLine("{");
-        sourceBuilder.AppendLine("    static partial void InitializeValidation()");
-        sourceBuilder.AppendLine("    {");
-        sourceBuilder.AppendLine("        _validateFunc = ValidateArgumentsImpl;");
-        sourceBuilder.AppendLine("    }");
-        sourceBuilder.AppendLine();
-        sourceBuilder.AppendLine("    private static object? ValidateArgumentsImpl(IList<object?> arguments)");
+        sourceBuilder.AppendLine("    // This method overrides the library's default implementation");
+        sourceBuilder.AppendLine("    internal new static object? ValidateArguments(IList<object?> arguments)");
         sourceBuilder.AppendLine("    {");
         sourceBuilder.AppendLine("        foreach (var argument in arguments)");
         sourceBuilder.AppendLine("        {");
@@ -380,7 +377,7 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
         sourceBuilder.AppendLine("    }");
         sourceBuilder.AppendLine("}");
 
-        context.AddSource("ValidationHelper.g.cs", sourceBuilder.ToString());
+        context.AddSource("GeneratedValidationHelper.g.cs", sourceBuilder.ToString());
     }
 
     private static bool IsPrimitiveOrFrameworkType(ITypeSymbol typeSymbol)

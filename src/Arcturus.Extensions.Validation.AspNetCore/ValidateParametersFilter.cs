@@ -8,10 +8,11 @@ public class ValidateParametersFilter : IEndpointFilter
 {
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)
     {
-        if (context.HttpContext.Response.StatusCode == StatusCodes.Status400BadRequest)
+        if (context.HttpContext.Response.StatusCode != StatusCodes.Status400BadRequest)
         {
             // Validate all arguments in the endpoint using generated validation method
-            var validationResult = ValidationHelper.ValidateArguments(context.Arguments);
+            // The GeneratedValidationHelper class is generated in the consuming project
+            var validationResult = GeneratedValidationHelper.ValidateArguments(context.Arguments);
             if (validationResult is not null)
             {
                 return validationResult;
