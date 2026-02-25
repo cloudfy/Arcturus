@@ -66,15 +66,28 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
+
     /// <summary>
     /// Maps all endpoint modules to the endpoint route builder.
     /// <para>
-    /// Call <see cref="AddEndpointModules(IServiceCollection)"/> before calling this method."/>
+    /// Call <see cref="AddEndpointModules(IServiceCollection, Action{EndpointModuleConfiguration}?)" /> before calling this method.
     /// </para>
     /// </summary>
     /// <param name="builder">Required.</param>
     /// <returns><see cref="IEndpointRouteBuilder"/></returns>
+    [Obsolete("Use UseEndpointModules instead. This method is just an alias for UseEndpointModules and will be removed in future versions.")]
     public static IEndpointRouteBuilder MapEndpointModules(this IEndpointRouteBuilder builder)
+        => UseEndpointModules(builder);
+
+    /// <summary>
+    /// Maps all endpoint modules to the endpoint route builder.
+    /// <para>
+    /// Call <see cref="AddEndpointModules(IServiceCollection, Action{EndpointModuleConfiguration}?)" /> before calling this method.
+    /// </para>
+    /// </summary>
+    /// <param name="builder">Required.</param>
+    /// <returns><see cref="IEndpointRouteBuilder"/></returns>
+    public static IEndpointRouteBuilder UseEndpointModules(this IEndpointRouteBuilder builder)
     {
         var config = builder.ServiceProvider.GetRequiredService<EndpointModuleConfiguration>();
         var logger = builder.ServiceProvider.GetService<ILogger<IEndpointRouteBuilder>>();
