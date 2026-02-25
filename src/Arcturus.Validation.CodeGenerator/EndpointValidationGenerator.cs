@@ -350,7 +350,8 @@ public sealed class EndpointValidationGenerator : IIncrementalGenerator
         sourceBuilder.AppendLine("{");
         sourceBuilder.AppendLine("    public override async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)");
         sourceBuilder.AppendLine("    {");
-        sourceBuilder.AppendLine("        if (context.HttpContext.Response.StatusCode != StatusCodes.Status400BadRequest)");
+        sourceBuilder.AppendLine("        // only capture bad request responses ");
+        sourceBuilder.AppendLine("        if (context.HttpContext.Response.StatusCode == StatusCodes.Status400BadRequest)");
         sourceBuilder.AppendLine("        {");
         sourceBuilder.AppendLine("            // Validate arguments");
         sourceBuilder.AppendLine("            foreach (var argument in context.Arguments)");

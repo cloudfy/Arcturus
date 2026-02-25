@@ -10,7 +10,12 @@ public static class ValidateParametersFilterFactory
 {
     private static Func<ValidateParametersFilter>? _factory;
 
-    internal static void SetFactory(Func<ValidateParametersFilter> factory)
+    /// <summary>
+    /// Sets the factory function used to create ValidateParametersFilter instances.
+    /// This is called by the generated code during module initialization.
+    /// </summary>
+    /// <param name="factory">The factory function to use.</param>
+    public static void SetFactory(Func<ValidateParametersFilter> factory)
     {
         _factory = factory;
     }
