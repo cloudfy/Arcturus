@@ -23,7 +23,7 @@ Install-Package Arcturus.Extensions.ResultObjects.AspNetCore
 
 ## Prerequisites
 
-- .NET SDK 8 or later
+- .NET SDK 9 or later
 
 ## Features
 

@@ -1,13 +1,12 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Arcturus.Extensions.ResultObjects.AspNetCore.ActionResults;
+using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 
 namespace Arcturus.ResultObjects;
 
-public static class AspNetCoreActionResultExtensions
+public static class ActionResultExtensions
 {
-    private static readonly HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
-
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="IActionResult"/> object.
     /// </summary>
@@ -27,7 +26,7 @@ public static class AspNetCoreActionResultExtensions
 
         //return new Microsoft.AspNetCore.Mvc.ObjectResult(null) { StatusCode = 500 };
         return new ProblemDetailsActionResult(
-            result.WithHttpStatusCode(_defaultStatusCode));
+            result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Result"/> object to an <see cref="IActionResult"/> object.
@@ -47,7 +46,7 @@ public static class AspNetCoreActionResultExtensions
 
         // return new Microsoft.AspNetCore.Mvc.ObjectResult(null) { StatusCode = 500 };
         return new ProblemDetailsActionResult(
-            result.WithHttpStatusCode(_defaultStatusCode));
+            result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
 
     }
     /// <summary>
