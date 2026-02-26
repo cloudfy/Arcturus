@@ -1,12 +1,11 @@
-﻿using System.Net;
+﻿using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 using Arcturus.Extensions.ResultObjects.AspNetCore.Results;
+using System.Net;
 
 namespace Arcturus.ResultObjects;
 
-public static class AspNetCoreResultExtensions
+public static class ResultExtensions
 {
-    private static readonly HttpStatusCode _defaultStatusCode = HttpStatusCode.BadRequest;
-
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="Microsoft.AspNetCore.Http.IResult"/> object.
     /// </summary>
@@ -33,14 +32,12 @@ public static class AspNetCoreResultExtensions
             return Microsoft.AspNetCore.Http.Results.Ok(result.Value);
 
         if (result.IsSuccess && result.HttpStatusCode is not null)
-            return new ObjectResult<T>(result.Value, result.HttpStatusCode.Value);
+            return Microsoft.AspNetCore.Http.Results.Json(result.Value, statusCode: (int)result.HttpStatusCode); 
 
         if (result.HttpStatusCode is not null)
             return new ProblemDetailsResult(result);
 
-        //return Microsoft.AspNetCore.Http.Results.Problem();
-        return new ProblemDetailsResult(
-            result.WithHttpStatusCode(_defaultStatusCode));
+        return new ProblemDetailsResult(result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="Microsoft.AspNetCore.Http.IResult"/> object.
@@ -60,7 +57,7 @@ public static class AspNetCoreResultExtensions
     /// <list type="bullet"> <item><description>If <paramref name="result"/> is successful and has no HTTP status code,
     /// returns an <see cref="Microsoft.AspNetCore.Http.Results.Ok"/> result.</description></item> <item><description>If
     /// <paramref name="result"/> is successful and has an HTTP status code, returns an <see
-    /// cref="Extensions.ResultObjects.AspNetCore.Results.ObjectResult"/> with the specified status
+    /// cref="Microsoft.AspNetCore.Http.IResult"/> with the specified status
     /// code.</description></item> <item><description>If <paramref name="result"/> is unsuccessful and has an HTTP
     /// status code, returns a <see cref="ProblemDetailsResult"/> with the specified status code.</description></item>
     /// <item><description>If <paramref name="result"/> is unsuccessful and has no HTTP status code, returns a <see
@@ -82,13 +79,14 @@ public static class AspNetCoreResultExtensions
             return Microsoft.AspNetCore.Http.Results.Ok(value);
 
         if (result.IsSuccess && result.HttpStatusCode is not null)
-            return new Extensions.ResultObjects.AspNetCore.Results.ObjectResult(value, result.HttpStatusCode.Value);
+            Microsoft.AspNetCore.Http.Results.Json(value, statusCode: (int)result.HttpStatusCode);
+        //return new Extensions.ResultObjects.AspNetCore.Results.ObjectResult(value, result.HttpStatusCode.Value);
 
         if (result.HttpStatusCode is not null)
             return new ProblemDetailsResult(result);
 
         return new ProblemDetailsResult(
-            result.WithHttpStatusCode(_defaultStatusCode));
+            result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Task{TResult}"/> of type <see cref="Result"/> into an <see cref="Microsoft.AspNetCore.Http.IResult"/>.

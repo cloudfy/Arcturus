@@ -1,13 +1,11 @@
 ﻿using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 using Arcturus.ResultObjects;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore.Results;
 
-public sealed class ProblemDetailsResult : IResult
+internal sealed class ProblemDetailsResult : IResult
 {
     private readonly Result _result;
 
@@ -15,22 +13,23 @@ public sealed class ProblemDetailsResult : IResult
 
     public Task ExecuteAsync(HttpContext httpContext)
     {
-        HttpStatusCode defaultStatusCode = _result.HttpStatusCode ?? HttpStatusCode.BadRequest;
+        var problemDetails = Internals.ProblemDetailsFactory.Create(_result, httpContext);
+        ProblemDetailDefaults.ApplyDefaults(problemDetails, _result, httpContext);
 
-        var factory = httpContext.RequestServices.GetService<ProblemDetailsFactory>();
-        if (factory is null)
-            throw new ArgumentNullException("ProblemDetailsFactory is not registered in the service collection.");
-
-        var problemDetails = factory!.CreateProblemDetails(httpContext, (int)defaultStatusCode);
-
-        problemDetails.Title ??= _result.Fault?.Code;
-        problemDetails.Detail = _result.Fault?.Message;
-        problemDetails.Type ??= "https://schemas/2022/fault/#" + defaultStatusCode.ToString().ToLower();
-        problemDetails.Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}";
-
-        httpContext.Response.StatusCode = (int)defaultStatusCode;
-        return HttpResultsHelper.WriteResultAsJsonAsync(
-            httpContext
-            , problemDetails);
+        var problemDetailService = httpContext.RequestServices.GetService<IProblemDetailsService>();
+        if (problemDetailService is null)
+        {
+            return FallbackProblemDetailsWriter.Write(problemDetails, httpContext);
+        }
+        else
+        {
+            var task = problemDetailService.WriteAsync(new ProblemDetailsContext()
+            {
+                HttpContext = httpContext
+                , ProblemDetails = problemDetails
+                , Exception = _result.Exception
+            });
+            return task.AsTask();
+        }
     }
 }
