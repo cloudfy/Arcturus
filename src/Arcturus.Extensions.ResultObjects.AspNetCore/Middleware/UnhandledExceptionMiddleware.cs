@@ -54,7 +54,7 @@ internal sealed class UnhandledExceptionMiddleware(
         {
             Status = 500
             , Title = "An unhandled exception occurred."
-            , Detail = "An unhandled error occured. Staff have been notified. Please use the traceId for reference."
+            , Detail = "An unhandled error occurred. Staff have been notified. Please use the traceId for reference."
             , Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
         };
         ProblemDetailDefaults.ApplyDefaults(problemDetails, null, httpContext);
