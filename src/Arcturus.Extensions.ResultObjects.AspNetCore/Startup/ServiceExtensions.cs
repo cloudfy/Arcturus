@@ -46,6 +46,13 @@ public static class ServiceExtensions
                         new ProblemDetailsHonorJsonResolver(new DefaultJsonTypeInfoResolver())
                         , options.SerializerOptions.TypeInfoResolver);
                 });
+            services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(
+                options =>
+                {
+                    options.JsonSerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
+                        new ProblemDetailsHonorJsonResolver(new DefaultJsonTypeInfoResolver())
+                        , options.JsonSerializerOptions.TypeInfoResolver);
+                });
         }
 
         return services;
