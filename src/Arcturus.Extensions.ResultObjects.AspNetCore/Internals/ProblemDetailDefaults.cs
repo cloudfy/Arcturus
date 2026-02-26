@@ -36,7 +36,7 @@ internal static class ProblemDetailDefaults
             problemDetails.Extensions[correlationIdKey] = traceId;
         }
         if (!problemDetails.Extensions.ContainsKey(traceIdKey) &&
-            traceId != null)
+            !string.IsNullOrEmpty(traceId))
         {
             problemDetails.Extensions[traceIdKey] = traceId;
         }
