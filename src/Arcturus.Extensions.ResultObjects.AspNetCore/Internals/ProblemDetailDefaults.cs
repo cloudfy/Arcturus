@@ -10,13 +10,13 @@ namespace Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 
 internal static class ProblemDetailDefaults
 {
-    private static JsonNamingPolicy? _cachedNamingPolicy { get; set; }
+    private static JsonNamingPolicy? _cachedNamingPolicy;
 
     internal const HttpStatusCode DefaultStatusCode = HttpStatusCode.BadRequest;
 
     internal static void ApplyDefaults(ProblemDetails problemDetails, Result? result, HttpContext httpContext)
     {
-        var namingPolicy = _cachedNamingPolicy ?? ResolveNamingPolicy(httpContext);
+        var namingPolicy = _cachedNamingPolicy ??= ResolveNamingPolicy(httpContext);
 
         var correlationIdKey = namingPolicy != null ? namingPolicy.ConvertName("CorrelationId") : "correlationId";
         var traceIdKey = namingPolicy != null ? namingPolicy.ConvertName("TraceId") : "traceId";
