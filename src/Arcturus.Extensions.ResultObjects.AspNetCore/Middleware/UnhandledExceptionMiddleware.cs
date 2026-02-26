@@ -44,7 +44,7 @@ internal sealed class UnhandledExceptionMiddleware(
         // We can't do anything if the response has already started, just abort.
         if (httpContext.Response.HasStarted)
         {
-            _logger?.LogWarning("The response has already started, the error details will not be written to the response body.");
+            _logger.LogWarning("The response has already started, the error details will not be written to the response body.");
             return;
         }
 
