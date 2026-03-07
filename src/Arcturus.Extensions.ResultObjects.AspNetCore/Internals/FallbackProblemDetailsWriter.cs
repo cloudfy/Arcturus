@@ -12,6 +12,8 @@ internal class FallbackProblemDetailsWriter
 
         // json options are not used here because the default json options are configured by the framework
         // when writing WriteAsJsonAsync, and we want to be consistent with that.
+        httpContext.Response.ContentType = "application/problem+json; charset=utf-8";
+        httpContext.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
         return httpContext.Response.WriteAsJsonAsync<ProblemDetails>(problemDetails);
     }
 }

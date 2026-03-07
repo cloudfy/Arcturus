@@ -15,8 +15,8 @@ public static class HostBuilderExtensions
         _configureCommandLineBuilder(commandLineBuilder);
     }
 
-    public static IHostBuilder ConfigureCommandLineBuilder(
-        this IHostBuilder builder
+    public static IHostApplicationBuilder ConfigureCommandLineBuilder(
+        this IHostApplicationBuilder builder
         , Action<CommandLineBuilder> configureAction)
     {
         _configureCommandLineBuilder = configureAction;
