@@ -7,6 +7,8 @@
 
 Arcturus.Extensions.CommandLine is a .NET library that simplifies the creation and parsing of command-line interfaces for .NET applications. It provides a flexible API for defining commands, options, and arguments, enabling robust and user-friendly CLI tools.
 
+The package use - https://learn.microsoft.com/en-us/dotnet/standard/commandline/how-to-customize-help
+
 ## Installation
 
 Install the package via NuGet Package Manager or the .NET CLI:

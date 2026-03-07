@@ -5,6 +5,15 @@ public class OptionAttribute(
     string name
     , string? description) : Attribute
 {
+    public OptionAttribute(
+        string name
+        , string? description
+        , bool required) 
+        : this(name, description)
+    {
+        Required = required;
+    }
     public string Name => name;
     public string? Description => description;
+    public bool? Required { get; }
 }

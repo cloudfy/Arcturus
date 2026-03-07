@@ -1,10 +1,22 @@
 ﻿using Arcturus.CommandLine.Abstractions;
+using Arcturus.Extensions.CommandLine.Internals;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Arcturus.CommandLine;
 
 public static class ServiceCollectionExtensions
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddCommandLine(this IServiceCollection services)
+    {
+        services.AddSingleton<CommandLineBuilderConfiguration>();
+        AutoRegisterCommandHandlers(services);
+        return services;
+    }
     /// <summary>
     /// Registers all command handlers in the executing assembly.
     /// <para>
@@ -14,7 +26,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">Required.</param>
     /// <param name="serviceLifetime">Specifies the <see cref="ServiceLifetime"/> of each command handler.</param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AutoRegisterCommandHandlers(
+    private static IServiceCollection AutoRegisterCommandHandlers(
         this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
     {
         var handlerTypes = AppDomain.CurrentDomain.GetAssemblies()

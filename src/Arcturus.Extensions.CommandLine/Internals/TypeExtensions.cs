@@ -22,4 +22,22 @@ internal static class TypeExtensions
     {
         return type.IsEnum ? type : Nullable.GetUnderlyingType(type)!;
     }
+    internal static bool IsRequired(this PropertyInfo property)
+    {
+        return property.GetCustomAttribute<System.Runtime.CompilerServices.RequiredMemberAttribute>() is not null;
+    }
+
+    internal static bool IsNullableReferenceType(this PropertyInfo property)
+    {
+        var context = new NullabilityInfoContext();
+        var nullability = context.Create(property);
+        return nullability.WriteState == NullabilityState.Nullable;
+    }
+
+    internal static bool IsNullableReferenceType(this ParameterInfo parameter)
+    {
+        var context = new NullabilityInfoContext();
+        var nullability = context.Create(parameter);
+        return nullability.WriteState == NullabilityState.Nullable;
+    }
 }
