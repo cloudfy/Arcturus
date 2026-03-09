@@ -10,10 +10,11 @@ using System.Text;
 
 namespace Arcturus.EventBus.RabbitMQ;
 
-public sealed class RabbitMQPublisher : IPublisher
+public sealed class RabbitMQPublisher : IPublisher, IDisposable
 {
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
+    private IChannel? _channel;
     private readonly ILogger<RabbitMQPublisher> _logger;
 
     internal RabbitMQPublisher(
@@ -41,14 +42,18 @@ public sealed class RabbitMQPublisher : IPublisher
             .Or<IOException>()
             .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan) =>
             {
+                _channel?.Dispose();
+                _channel = null;
+
                 //_logger.LogWarning(exception, "Could not publish event #{EventId} after {Timeout} seconds: {ExceptionMessage}.", @event, $"{timeSpan.TotalSeconds:n1}", exception.Message);
             });
 
         await policy.Execute(async () =>
         {
             await _connection.EnsureConnected(cancellationToken);
+            _channel ??= await _connection.CreateChannelAsync(cancellationToken);
 
-            await _connection.Channel.QueueDeclareAsync(
+            await _channel.QueueDeclareAsync(
                 queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
             var message = DefaultEventSerializer.Serialize(@event);
@@ -68,7 +73,7 @@ public sealed class RabbitMQPublisher : IPublisher
                 , MessageId = Guid.NewGuid().ToString()
             };
 
-            await _connection.Channel.BasicPublishAsync(
+            await _channel.BasicPublishAsync(
                 exchange: string.Empty, routingKey: _queueName, mandatory: true, basicProperties: properties, body: body);
         });
     }
@@ -85,5 +90,11 @@ public sealed class RabbitMQPublisher : IPublisher
             return messageAttribute.Name;
 
         return @event.GetType().Name;
+    }
+
+    public void Dispose()
+    {
+        _channel?.Dispose();
+        _connection.Dispose();
     }
 }
