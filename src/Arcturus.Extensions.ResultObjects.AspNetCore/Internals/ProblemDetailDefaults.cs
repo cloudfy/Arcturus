@@ -44,7 +44,9 @@ internal static class ProblemDetailDefaults
         problemDetails.Instance ??= $"{httpContext.Request.Method} {httpContext.Request.Path}";
         problemDetails.Type ??= $"https://schemas/2022/fault/#{result?.HttpStatusCode?.ToString() ?? "400"}";
         problemDetails.Title ??= result?.Fault?.Code;
-        problemDetails.Detail = result?.Fault?.Message;        
+        problemDetails.Detail = result?.Fault?.Message;
+
+        httpContext.Response.StatusCode = (int)(result?.HttpStatusCode ?? DefaultStatusCode);
     }
 
     private static JsonNamingPolicy? ResolveNamingPolicy(HttpContext httpContext)

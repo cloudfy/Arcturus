@@ -8,11 +8,13 @@ namespace Arcturus.Extensions.ResultObjects.AspNetCore.Middleware;
 internal sealed class UnhandledExceptionMiddleware(
     RequestDelegate next
     , ILoggerFactory loggerFactory
-    , IProblemDetailsService? problemDetailsService = null)
+    , IProblemDetailsService? problemDetailsService = null
+    , Func<HttpContext, Exception, bool>? onExceptionEvent = null)
 {
     private readonly IProblemDetailsService? _problemDetailsService = problemDetailsService;
     private readonly ILogger<UnhandledExceptionMiddleware> _logger = loggerFactory.CreateLogger<UnhandledExceptionMiddleware>();
     private readonly RequestDelegate _next = next;
+    private readonly Func<HttpContext, Exception, bool>? _onExceptionEvent = onExceptionEvent;
 
     public async Task Invoke(HttpContext context)
     {
@@ -46,6 +48,13 @@ internal sealed class UnhandledExceptionMiddleware(
         {
             _logger.LogWarning("The response has already started, the error details will not be written to the response body.");
             return;
+        }
+
+        // call the event and if true then exit
+        if (_onExceptionEvent is not null)
+        {
+            var handled = _onExceptionEvent?.Invoke(httpContext, exception);
+            if (handled!.Value == true) return;
         }
 
         // Build a generic problem details response for unhandled exceptions.
