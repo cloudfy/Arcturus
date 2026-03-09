@@ -7,6 +7,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Channels;
 
 namespace Arcturus.EventBus.RabbitMQ;
 
@@ -14,6 +15,7 @@ public sealed class RabbitMQPublisher : IPublisher
 {
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
+    private IChannel? _channel;
     private readonly ILogger<RabbitMQPublisher> _logger;
 
     internal RabbitMQPublisher(
@@ -47,8 +49,9 @@ public sealed class RabbitMQPublisher : IPublisher
         await policy.Execute(async () =>
         {
             await _connection.EnsureConnected(cancellationToken);
+            _channel ??= await _connection.CreateChannelAsync(cancellationToken);
 
-            await _connection.Channel.QueueDeclareAsync(
+            await _channel.QueueDeclareAsync(
                 queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
             var message = DefaultEventSerializer.Serialize(@event);
@@ -68,7 +71,7 @@ public sealed class RabbitMQPublisher : IPublisher
                 , MessageId = Guid.NewGuid().ToString()
             };
 
-            await _connection.Channel.BasicPublishAsync(
+            await _channel.BasicPublishAsync(
                 exchange: string.Empty, routingKey: _queueName, mandatory: true, basicProperties: properties, body: body);
         });
     }
