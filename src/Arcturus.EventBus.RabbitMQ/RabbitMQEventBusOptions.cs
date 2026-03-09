@@ -17,7 +17,12 @@ public sealed class RabbitMQEventBusOptions
     /// <summary>
     /// Gets or sets a host name. Defaults to localhost.
     /// </summary>
+    [Obsolete("HostName is deprecated. Use ConnectionString instead.")]
     public string? HostName { get; set; }
+    /// <summary>
+    /// Gets or sets the amqps:// connection string. If provided, it will override the HostName property.
+    /// </summary>
+    public string? ConnectionString { get; set; }
     /// <summary>
     /// If true, events will be processed by the <see cref="Arcturus.EventBus.EventHandlersProcessor"/> or fallback to the <see cref="Arcturus.EventBus.Abstracts.IProcessor.OnProcessAsync"/> event.
     /// </summary>
