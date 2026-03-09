@@ -48,6 +48,7 @@ public sealed class RabbitMQConnection : IConnection
         {
             if (_connection is null || !_isConnected)
             {
+                _connection?.Dispose();
                 _connection = await factory.CreateConnectionAsync(_clientName, cancellationToken);
                 _connection.ConnectionShutdownAsync += (sender, args) =>
                 {
