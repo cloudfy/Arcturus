@@ -23,13 +23,24 @@ public sealed class RabbitMQConnection : IConnection
     {
         _applicationId = options.ApplicationId;
         _clientName = options.ClientName ?? Environment.MachineName;
-        _connectionHostName = options.HostName ?? "localhost";
+        _connectionHostName = options.ConnectionString ?? "localhost";
     }
 
     internal async Task Connect(CancellationToken cancellationToken = default)
     {
-        var factory = new RMQ.ConnectionFactory { HostName = _connectionHostName };
+        var factory = new RMQ.ConnectionFactory();
 
+        // Check if HostName is a URI
+        if (Uri.TryCreate(_connectionHostName, UriKind.Absolute, out var uri))
+        {
+            factory.Uri = uri;
+        }
+        else
+        {
+            factory.HostName = _connectionHostName;
+        }
+
+        factory.ClientProvidedName = _clientName;
         using (await _asyncLock.LockAsync(cancellationToken))
         {
             _connection = await factory.CreateConnectionAsync(_clientName, cancellationToken);
