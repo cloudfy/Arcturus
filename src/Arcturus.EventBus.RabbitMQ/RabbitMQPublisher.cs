@@ -7,11 +7,10 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Channels;
 
 namespace Arcturus.EventBus.RabbitMQ;
 
-public sealed class RabbitMQPublisher : IPublisher
+public sealed class RabbitMQPublisher : IPublisher, IDisposable
 {
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
@@ -43,6 +42,9 @@ public sealed class RabbitMQPublisher : IPublisher
             .Or<IOException>()
             .WaitAndRetry(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan) =>
             {
+                _channel?.Dispose();
+                _channel = null;
+
                 //_logger.LogWarning(exception, "Could not publish event #{EventId} after {Timeout} seconds: {ExceptionMessage}.", @event, $"{timeSpan.TotalSeconds:n1}", exception.Message);
             });
 
@@ -88,5 +90,11 @@ public sealed class RabbitMQPublisher : IPublisher
             return messageAttribute.Name;
 
         return @event.GetType().Name;
+    }
+
+    public void Dispose()
+    {
+        _channel?.Dispose();
+        _connection.Dispose();
     }
 }

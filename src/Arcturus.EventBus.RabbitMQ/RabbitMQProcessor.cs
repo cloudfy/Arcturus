@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Arcturus.EventBus.RabbitMQ;
 
-public sealed class RabbitMQProcessor : IProcessor
+public sealed class RabbitMQProcessor : IProcessor, IDisposable
 {
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
     private readonly RabbitMQConnection _connection;
@@ -27,12 +27,10 @@ public sealed class RabbitMQProcessor : IProcessor
 
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
     {
-        await _connection.EnsureConnected(cancellationToken);
-        
         // Create dedicated channel for this consumer
         _channel = await _connection.CreateChannelAsync(cancellationToken);
 
-        _logger.LogInformation($"[RabbitMQ] Starting consumer for queue: {_queueName}");
+        _logger.LogInformation("[RabbitMQ] Starting consumer for queue: {QueueName}", _queueName);
 
         await _channel.QueueDeclareAsync(
             queue: _queueName
@@ -79,5 +77,11 @@ public sealed class RabbitMQProcessor : IProcessor
         {
             await Task.Delay(100, cancellationToken);
         }
+    }
+
+    public void Dispose()
+    {
+        _channel?.Dispose();
+        _connection.Dispose();
     }
 }
