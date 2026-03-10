@@ -36,24 +36,6 @@ public sealed class EventHandlersProcessor : IProcessor
     {
         var eventType = @event.GetType();
         var eventHandlerType = typeof(IEventMessageHandler<>).MakeGenericType(eventType);
-        var handlerType = ReflectionCache.GetOrCreate(
-            eventHandlerType
-            , (t) =>
-            {
-                return AppDomain.CurrentDomain
-                    .GetAssemblies()
-                    .SelectMany(a => a.GetTypes())
-                    .FirstOrDefault(t => eventHandlerType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
-            });
-
-        if (handlerType is null)
-        {
-            _logger.LogTrace("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", eventType.Name);
-
-            if (OnProcessAsync is not null)
-                await OnProcessAsync!.Invoke(@event, e);
-            return;
-        }
 
         // initiate a scope for the pipeline
         // - the scopes service provider is passed onto the eventhandler
@@ -61,12 +43,38 @@ public sealed class EventHandlersProcessor : IProcessor
         await using var scope = _serviceProvider.CreateAsyncScope();
         try
         {
-            // resolve the handler from the scope, if no handler is found, log and return
-            var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerType);
-            if (handler == null)
+            // Try DI resolution first (handlers registered via builder)
+            var handler = scope.ServiceProvider.GetService(eventHandlerType);
+
+            if (handler is null)
             {
-                _logger.LogTrace("There are no handlers for the following event: {EventName}", eventType.Name);
-                return;
+                // Fallback to reflection cache for handlers not registered in builder
+                var handlerType = ReflectionCache.GetOrCreate(
+                    eventHandlerType
+                    , (t) =>
+                    {
+                        return AppDomain.CurrentDomain
+                            .GetAssemblies()
+                            .SelectMany(a => a.GetTypes())
+                            .FirstOrDefault(t => eventHandlerType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
+                    });
+
+                if (handlerType is null)
+                {
+                    _logger.LogTrace("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", eventType.Name);
+
+                    if (OnProcessAsync is not null)
+                        await OnProcessAsync!.Invoke(@event, e);
+                    return;
+                }
+
+                // resolve the handler from the scope, if no handler is found, log and return
+                handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerType);
+                if (handler == null)
+                {
+                    _logger.LogTrace("There are no handlers for the following event: {EventName}", eventType.Name);
+                    return;
+                }
             }
 
             var pipeline = HostExtensions.BuildByRequestDelegate(

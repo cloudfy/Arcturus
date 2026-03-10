@@ -12,6 +12,7 @@ internal sealed class DefaultEventMessageTypeResolver
 
     /// <summary>
     /// Resolves <paramref name="typeName"/> to a <see cref="Type"/>.
+    /// First checks EventTypeRegistry, then falls back to assembly scanning.
     /// </summary>
     /// <param name="typeName">Required. Name of type to resolve.</param>
     /// <returns><see cref="Type"/> or null.</returns>
@@ -20,9 +21,19 @@ internal sealed class DefaultEventMessageTypeResolver
     {
         ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
 
-        if (_reflectionCache.TryGetValue(typeName, out var type))
-            return type;
+        // Check cache first
+        if (_reflectionCache.TryGetValue(typeName, out var cachedType))
+            return cachedType;
 
+        // Try EventTypeRegistry (fast path for registered events)
+        var registeredType = EventTypeRegistry.GetTypeByName(typeName);
+        if (registeredType is not null)
+        {
+            _reflectionCache.TryAdd(typeName, registeredType);
+            return registeredType;
+        }
+
+        // Fallback: scan assemblies for backward compatibility
         // TODO: reduce the footprint by configuration (see https://github.com/cloudfy/Arcturus/issues/102)
         var matchingTypes = AppDomain.CurrentDomain
             .GetAssemblies()
@@ -31,10 +42,10 @@ internal sealed class DefaultEventMessageTypeResolver
                 && !t.IsInterface
                 && !t.IsAbstract
                 && typeof(IEventMessage).IsAssignableFrom(t)
-                && t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName)
+                && (t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName || t.FullName == typeName))
             .ToArray();
 
-        type = matchingTypes.Length switch
+        var type = matchingTypes.Length switch
         {
             0 => null,
             1 => matchingTypes[0],
@@ -47,9 +58,10 @@ internal sealed class DefaultEventMessageTypeResolver
         // - https://github.com/cloudfy/Arcturus/issues/102
         if (type is not null)
         {
-            _reflectionCache.Add(typeName, type);
+            _reflectionCache.TryAdd(typeName, type);
             return type;
         }
+
         return null;
     }
 }

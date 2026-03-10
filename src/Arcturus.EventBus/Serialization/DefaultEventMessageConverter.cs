@@ -1,4 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Internals;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -64,11 +65,18 @@ public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
 
     /// <summary>
     /// Gets the name of the event, either from the EventMessageAttribute or the class name.
+    /// Uses EventTypeRegistry for consistent naming.
     /// </summary>
-    /// <param name="event">Event.</param>
+    /// <param name="type">Event type.</param>
     /// <returns>Name of event.</returns>
     private static string GetEventName(Type type)
     {
+        // Try to get from registry first
+        var registeredName = EventTypeRegistry.GetNameByType(type);
+        if (registeredName is not null)
+            return registeredName;
+
+        // Fallback to attribute or full name for unregistered types
         var messageAttribute = type.GetCustomAttribute<EventMessageAttribute>();
         if (messageAttribute is not null)
             return messageAttribute.Name;
