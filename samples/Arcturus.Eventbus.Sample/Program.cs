@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Arcturus.EventBus.Abstracts;
 using Arcturus.EventBus.Middleware;
+using Arcturus.EventBus;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -15,9 +16,12 @@ builder.Logging.AddConsole();
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Register mediation services
-builder.Services.AddSqliteEventBus(o =>
-{
-    o.ConnectionString = "Data Source=EventbusSqlite;Mode=Memory;Cache=Shared;";
+builder.Services.AddEventBus(builder => {
+    builder.ClientName = "sqllite-sample";
+
+    builder.AddSqliteEventBus(o => {
+        o.ConnectionString = "Data Source=EventbusSqlite;Mode=Memory;Cache=Shared;";
+    });
 });
 
 var app = builder.Build();

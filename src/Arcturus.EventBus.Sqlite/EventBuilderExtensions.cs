@@ -4,16 +4,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus.Sqlite;
 
-public static class ServiceExtensions
+public static class EventBuilderExtensions
 {
     /// <summary>
     /// Adds the SQLite event bus to the service collection.
     /// </summary>
-    /// <param name="services"></param>
+    /// <param name="builder"></param>
     /// <param name="options">Optional. Default options of the SQLite event bus such as connection string.</param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddSqliteEventBus(
-        this IServiceCollection services
+    public static EventBusBuilder AddSqliteEventBus(
+        this EventBusBuilder builder
         , Action<SqliteEventBusOptions>? options = null)
     {
         var currentOptions = new SqliteEventBusOptions();
@@ -22,16 +22,16 @@ public static class ServiceExtensions
             options(currentOptions);
         }
 
-        services.AddSingleton<IConnection, SqliteConnection>(
+        builder.Services.AddSingleton<IConnection, SqliteConnection>(
             (sp) =>
             {
                 return new SqliteConnection(
                     currentOptions
                     , sp.GetRequiredService<ILoggerFactory>().CreateLogger<SqliteConnection>());
             });
-        services.AddSingleton<IEventBusFactory, SqliteEventBusFactory>();
-        services.AddSingleton<SqliteEventBusOptions>(currentOptions);
+        builder.Services.AddSingleton<IEventBusFactory, SqliteEventBusFactory>();
+        builder.Services.AddSingleton<SqliteEventBusOptions>(currentOptions);
 
-        return services;
+        return builder;
     }
 }
