@@ -28,7 +28,7 @@ public sealed class StorageQueuePublisher : IPublisher
         _logger.LogTrace("Publishing event {EventName} to queue {QueueName}", @event.GetType().Name, _queue);
 
         await queueClient.SendMessageAsync(
-            DefaultEventSerializer.Serialize(@event)
+            DefaultEventMessageSerializer.Serialize(@event)
             , null
             , null
             , cancellationToken);

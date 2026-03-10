@@ -1,4 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Arcturus.EventBus.RabbitMQ;
@@ -20,6 +21,9 @@ public static class ServicesExtensions
         {
             options(currentOptions);
         }
+        
+        services.AddSingleton<IDefaultEventMessageSerializer, DefaultEventMessageSerializer>(
+            (sp) => new DefaultEventMessageSerializer([.. currentOptions.HandlerAssemblies]));
 
         services.AddSingleton<IConnection, RabbitMQConnection>(
             (sp) => { return new RabbitMQConnection(currentOptions); });

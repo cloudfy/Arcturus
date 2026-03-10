@@ -9,7 +9,8 @@ public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
     private const string _discriminatorPropertyName = "$eventType";
     private readonly DefaultEventMessageTypeResolver _typeResolver;
 
-    public DefaultEventMessageConverter() => _typeResolver = new DefaultEventMessageTypeResolver();
+    public DefaultEventMessageConverter(Assembly[] handlerAssemblies) 
+        => _typeResolver = new DefaultEventMessageTypeResolver(handlerAssemblies);
 
     public override IEventMessage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

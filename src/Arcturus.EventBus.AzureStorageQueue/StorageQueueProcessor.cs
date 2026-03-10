@@ -36,7 +36,7 @@ public sealed class StorageQueueProcessor : IProcessor
                 foreach (var receiveMessage in receiveMessages.Value)
                 {
                     var messageBody = receiveMessage.Body.ToString();
-                    var @event = DefaultEventSerializer.Deserialize(messageBody);
+                    var @event = DefaultEventMessageSerializer.Deserialize(messageBody);
 
                     if (OnProcessAsync is not null)
                     {

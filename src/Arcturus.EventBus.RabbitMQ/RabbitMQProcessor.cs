@@ -10,17 +10,25 @@ namespace Arcturus.EventBus.RabbitMQ;
 public sealed class RabbitMQProcessor : IProcessor, IDisposable
 {
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
+
+    private IChannel? _channel;
+
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
-    private IChannel? _channel;
     private readonly ILogger<RabbitMQProcessor> _logger;   
+    private readonly IDefaultEventMessageSerializer _defaultEventMessageSerializer;
 
-    internal RabbitMQProcessor(Abstracts.IConnection connection, ILoggerFactory loggerFactory, string? queueName = null)
+    internal RabbitMQProcessor(
+        Abstracts.IConnection connection
+        , ILoggerFactory loggerFactory
+        , IDefaultEventMessageSerializer defaultEventMessageSerializer
+        , string? queueName = null)
     {
         if (connection is not RabbitMQConnection)
             throw new NotImplementedException();
 
         _connection = (RabbitMQConnection)connection;
+        _defaultEventMessageSerializer = defaultEventMessageSerializer;
         _queueName = queueName ?? "default_queue";
         _logger = loggerFactory.CreateLogger<RabbitMQProcessor>();
     }
@@ -51,8 +59,9 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
                 byte[] body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                var @event = DefaultEventSerializer.Deserialize(message);
+                var @event = _defaultEventMessageSerializer.Deserialize(message);
 
+                // raise the original event
                 if (OnProcessAsync is not null)
                     await OnProcessAsync.Invoke(
                         @event

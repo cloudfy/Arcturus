@@ -56,7 +56,7 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
             await _channel.QueueDeclareAsync(
                 queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
-            var message = DefaultEventSerializer.Serialize(@event);
+            var message = DefaultEventMessageSerializer.Serialize(@event);
             var body = Encoding.UTF8.GetBytes(message);
 
             using Activity? sendActivity = EventBusActivitySource.PublisherHasListeners

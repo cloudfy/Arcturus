@@ -1,4 +1,6 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus.RabbitMQ;
@@ -19,12 +21,17 @@ public sealed class RabbitMQEventBusFactory(
     }
     public IProcessor CreateProcessor(string? queue = null)
     {
+        var eventMessageSerializer = _serviceProvider.GetRequiredService<IDefaultEventMessageSerializer>();
+
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
         if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
             return new EventHandlersProcessor(
-                new RabbitMQProcessor(_connection, loggerFactory, queue ?? _eventBusOptions.DefaultQueueName), _serviceProvider, loggerFactory);
+                new RabbitMQProcessor(_connection, loggerFactory, eventMessageSerializer, queue ?? _eventBusOptions.DefaultQueueName)
+                , _serviceProvider
+                , loggerFactory);
 
-        return new RabbitMQProcessor(_connection, loggerFactory, queue ?? _eventBusOptions.DefaultQueueName);
+        // otherwise, return the processor directly
+        return new RabbitMQProcessor(_connection, loggerFactory, eventMessageSerializer, queue ?? _eventBusOptions.DefaultQueueName);
     }
 }

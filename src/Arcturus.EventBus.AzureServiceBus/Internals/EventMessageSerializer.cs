@@ -8,10 +8,8 @@ internal static class EventMessageSerializer
     private static readonly JsonSerializerOptions _options = new()
     {
         DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        ,
-        WriteIndented = false
-         ,
-        Converters = { new Serialization.DefaultEventMessageConverter() }
+        , WriteIndented = false
+        , Converters = { new Serialization.DefaultEventMessageConverter() }
     };
 
     internal static string Serialize(IEventMessage @event)

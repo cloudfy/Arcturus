@@ -1,14 +1,16 @@
 ﻿using Arcturus.EventBus.Abstracts;
 using Arcturus.EventBus.Internals;
+using System.Reflection.Metadata;
 
 namespace Arcturus.EventBus.Serialization;
 
 /// <summary>
 /// Default type resolver using the AppDomain.
 /// </summary>
-internal sealed class DefaultEventMessageTypeResolver
+internal sealed class DefaultEventMessageTypeResolver(Assembly[] handlerAssemblies)
 {
     private readonly Dictionary<string, Type?> _reflectionCache = [];
+    private readonly Assembly[] _handlerAssemblies = handlerAssemblies;
 
     /// <summary>
     /// Resolves <paramref name="typeName"/> to a <see cref="Type"/>.
@@ -23,6 +25,9 @@ internal sealed class DefaultEventMessageTypeResolver
         if (_reflectionCache.TryGetValue(typeName, out var type))
             return type;
 
+        // Ensure all assemblies in the application directory are loaded
+        // LoadApplicationAssemblies();
+
         // TODO: reduce the footprint by configuration (see https://github.com/cloudfy/Arcturus/issues/102)
         var matchingTypes = AppDomain.CurrentDomain
             .GetAssemblies()
@@ -32,12 +37,16 @@ internal sealed class DefaultEventMessageTypeResolver
                 && !t.IsAbstract
                 && typeof(IEventMessage).IsAssignableFrom(t)
                 && t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName)
-            .ToArray();
+            .ToList();
 
-        type = matchingTypes.Length switch
+        ApplyHandlerRegistration(matchingTypes, typeName);
+
+        var matchingTypeArray = matchingTypes.ToArray();
+
+        type = matchingTypeArray.Length switch
         {
             0 => null,
-            1 => matchingTypes[0],
+            1 => matchingTypeArray[0],
             _ => throw new UnprocessableEventException(
                 $"Event named '{typeName}' is duplicated. Only one named event using EventMessageAttribute is allowed.")
         };
@@ -51,5 +60,43 @@ internal sealed class DefaultEventMessageTypeResolver
             return type;
         }
         return null;
+    }
+
+    private void ApplyHandlerRegistration(List<Type> matchingTypes, string typeName)
+    {
+        var other = _handlerAssemblies
+            .SelectMany(a => a.GetTypesSafe()) // Use extension method for safe type retrieval
+            .Where(t => t != null
+                && !t.IsInterface
+                && !t.IsAbstract
+                && typeof(IEventMessage).IsAssignableFrom(t)
+                && t.GetCustomAttribute<EventMessageAttribute>()?.Name == typeName)
+            .ToList();
+        matchingTypes.AddRange(other);
+    }
+
+    private static void LoadApplicationAssemblies()
+    {
+        var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToHashSet();
+        var baseDirectory = AppContext.BaseDirectory;
+
+        foreach (var assemblyFile in Directory.GetFiles(baseDirectory, "*.dll"))
+        {
+            try
+            {
+                var assemblyName = AssemblyName.GetAssemblyName(assemblyFile);
+
+                // Skip if already loaded
+                if (loadedAssemblies.Any(a => AssemblyName.ReferenceMatchesDefinition(a.GetName(), assemblyName)))
+                    continue;
+
+                // Load the assembly into the current AppDomain
+                Assembly.Load(assemblyName);
+            }
+            catch
+            {
+                // Ignore assemblies that fail to load (native assemblies, incompatible versions, etc.)
+            }
+        }
     }
 }

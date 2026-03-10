@@ -26,4 +26,8 @@
 		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Examples\" />
+	</ItemGroup>
+
 </Project>

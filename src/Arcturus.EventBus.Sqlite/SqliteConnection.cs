@@ -35,7 +35,7 @@ public sealed class SqliteConnection : IConnection
     {
         await ReadyDatabase(cancellationToken);
 
-        var eventData = DefaultEventSerializer.Serialize(data);
+        var eventData = DefaultEventMessageSerializer.Serialize(data);
 
         var sql = @$"INSERT INTO [Events] (EventId, EventData, QueueName, ClientName) VALUES ('{Guid.NewGuid()}', '{eventData}', '{queueName}', '{_clientName}');";
         using var connection = new MDS.SqliteConnection(_connectionString);
@@ -76,7 +76,7 @@ public sealed class SqliteConnection : IConnection
             {
                 var eventId = reader.GetString(0);
                 var eventData = reader.GetString(1);
-                var @event = DefaultEventSerializer.Deserialize(eventData);
+                var @event = DefaultEventMessageSerializer.Deserialize(eventData);
                 events.Add(new EventItem(@event, eventId));
             }
             await transaction.CommitAsync(cancellationToken);

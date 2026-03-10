@@ -33,12 +33,9 @@ public sealed class ServiceBusProcessor : IProcessor
             , new Azure.Messaging.ServiceBus.ServiceBusProcessorOptions
             {
                 ReceiveMode = Azure.Messaging.ServiceBus.ServiceBusReceiveMode.PeekLock //.PeekLock
-                ,
-                Identifier = _options.ClientId
-                ,
-                MaxConcurrentCalls = 1
-                ,
-                AutoCompleteMessages = false // true
+                , Identifier = _options.ClientId
+                , MaxConcurrentCalls = 1
+                , AutoCompleteMessages = false // true
             });
 
         processorClient.ProcessMessageAsync += async args =>

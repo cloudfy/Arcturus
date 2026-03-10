@@ -1,17 +1,11 @@
 ﻿namespace Arcturus.EventBus.AzureStorageQueue;
 
-public class StorageQueueOptions
+public class StorageQueueOptions : EventBusOptions
 {
-    public string? ApplicationId { get; set; }
     /// <summary>
     /// Gets or sets the Azure Storage Queue connection string.
     /// </summary>
     public string ConnectionString { get; set; } = null!;
-    /// <summary>
-    /// Gets or sets the default queue name.
-    /// </summary>
-    public string? DefaultQueueName { get; set; }
-    public bool? UseEventHandlersProcessor { get; set; }
     public MessageProcessing MessageProcessing { get; set; } = new();
 }
 public class MessageProcessing

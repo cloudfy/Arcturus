@@ -6,9 +6,9 @@ namespace Arcturus.EventBus.RabbitMQ;
 
 public sealed class RabbitMQConnection : IConnection
 {
-    private string? _applicationId { get; }
-    private string _clientName { get; }
-    private string _connectionHostName { get; }
+    private readonly string? _applicationId;
+    private readonly string _clientName;
+    private readonly string _connectionHostName;
     private RMQ.IConnection? _connection;
     private bool _isConnected = false;
     public string? ApplicationId => _applicationId;
