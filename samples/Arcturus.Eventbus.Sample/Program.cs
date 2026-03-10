@@ -4,9 +4,9 @@ using Arcturus.EventBus.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Arcturus.EventBus.Abstracts;
 using Arcturus.EventBus.Middleware;
 using Arcturus.EventBus;
+using Arcturus.EventBus.Sample;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -22,6 +22,8 @@ builder.Services.AddEventBus(builder => {
     builder.AddSqliteEventBus(o => {
         o.ConnectionString = "Data Source=EventbusSqlite;Mode=Memory;Cache=Shared;";
     });
+
+    builder.RegisterHandlersFromAssemblyOfType<Program>();
 });
 
 var app = builder.Build();

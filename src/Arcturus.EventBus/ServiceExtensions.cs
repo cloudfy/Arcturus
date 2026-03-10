@@ -37,5 +37,16 @@ public static class ServiceExtensions
         {
             services.TryAddSingleton<EventHandlersProcessor>();
         }
+
+        // registry
+        services.TryAddSingleton<EventTypeRegistry>((sp) => new EventTypeRegistry(
+            builder.ScanAllAssemblies 
+                ? Internals.AssemblyExtensions.LoadAllAssemblies()
+                : builder.AssembliesToScan));
+
+        // serialization
+        services.TryAddSingleton<Serialization.DefaultEventMessageTypeResolver>();
+        services.TryAddSingleton<Serialization.IEventMessageSerializer, Serialization.DefaultEventMessageSerializer>();
+
     }
 }

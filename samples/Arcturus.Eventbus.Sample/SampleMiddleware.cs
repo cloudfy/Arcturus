@@ -1,6 +1,6 @@
 ﻿using Arcturus.EventBus.Middleware;
 
-namespace Arcturus.Eventbus.Sample;
+namespace Arcturus.EventBus.Sample;
 
 public class SampleMiddleware(EventRequestDelegate next)
 {

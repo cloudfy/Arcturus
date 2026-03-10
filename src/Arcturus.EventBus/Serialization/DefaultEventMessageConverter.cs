@@ -4,13 +4,14 @@ using System.Text.Json.Serialization;
 
 namespace Arcturus.EventBus.Serialization;
 
-public sealed class DefaultEventMessageConverter : JsonConverter<IEventMessage>
+// not DI
+public sealed class DefaultEventMessageConverter(
+    DefaultEventMessageTypeResolver resolver) 
+    : JsonConverter<IEventMessage>
 {
     private const string _discriminatorPropertyName = "$eventType";
-    private readonly DefaultEventMessageTypeResolver _typeResolver;
-
-    public DefaultEventMessageConverter() => _typeResolver = new DefaultEventMessageTypeResolver();
-
+    private readonly DefaultEventMessageTypeResolver _typeResolver = resolver;
+ 
     public override IEventMessage Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var document = JsonDocument.ParseValue(ref reader);

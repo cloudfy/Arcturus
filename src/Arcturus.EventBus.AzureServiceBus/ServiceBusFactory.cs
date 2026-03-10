@@ -1,4 +1,6 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 
@@ -18,6 +20,8 @@ public sealed class ServiceBusFactory(
 
     public IProcessor CreateProcessor(string? queueName = null)
     {
+        var eventMessageSerializer = _serviceProvider.GetRequiredService<IEventMessageSerializer>();
+        
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
         if (_options.UseEventHandlersProcessor.GetValueOrDefault(true))
@@ -25,18 +29,25 @@ public sealed class ServiceBusFactory(
                 new ServiceBusProcessor(
                     _connection
                     , _options
-                    , GetQueueOrDefaults(queueName), _loggerFactory)
-                , _serviceProvider, _loggerFactory);
+                    , GetQueueOrDefaults(queueName)
+                    , _loggerFactory
+                    , eventMessageSerializer)
+                , _serviceProvider
+                , _loggerFactory);
 
-        return new ServiceBusProcessor(_connection, _options, GetQueueOrDefaults(queueName), _loggerFactory);
+        return new ServiceBusProcessor(
+            _connection, _options, GetQueueOrDefaults(queueName), _loggerFactory, eventMessageSerializer);
     }
 
     public IPublisher CreatePublisher(string? queueName = null)
     {
+        var eventMessageSerializer = _serviceProvider.GetRequiredService<IEventMessageSerializer>();
+        
         // cache each publisher per queue
         return _cachedPublishers.GetOrAdd(
             GetQueueOrDefaults(queueName)
-            , new ServiceBusPublisher(_connection, GetQueueOrDefaults(queueName), _options, _loggerFactory));
+            , new ServiceBusPublisher(
+                _connection, GetQueueOrDefaults(queueName), _options, _loggerFactory, eventMessageSerializer));
     }
 
     public async ValueTask DisposeAsync()

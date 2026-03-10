@@ -1,5 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
-using Arcturus.EventBus.AzureServiceBus.Internals;
+using Arcturus.EventBus.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus.AzureServiceBus;
@@ -10,14 +10,20 @@ public sealed class ServiceBusProcessor : IProcessor
     private readonly string _queueName;
     private readonly ServiceBusOptions _options;
     private readonly ILogger<ServiceBusProcessor> _logger;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
 
     internal ServiceBusProcessor(
-        IConnection connection, ServiceBusOptions options, string? queueName, ILoggerFactory loggerFactory)
+        IConnection connection
+        , ServiceBusOptions options
+        , string? queueName
+        , ILoggerFactory loggerFactory
+        , IEventMessageSerializer eventMessageSerializer)
     {
         _connection = (ServiceBusConnection)connection;
         _queueName = queueName ?? "default_queue";
         _options = options;
         _logger = loggerFactory.CreateLogger<ServiceBusProcessor>();
+        _eventMessageSerializer = eventMessageSerializer;
     }
 
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
@@ -33,12 +39,9 @@ public sealed class ServiceBusProcessor : IProcessor
             , new Azure.Messaging.ServiceBus.ServiceBusProcessorOptions
             {
                 ReceiveMode = Azure.Messaging.ServiceBus.ServiceBusReceiveMode.PeekLock //.PeekLock
-                ,
-                Identifier = _options.ClientId
-                ,
-                MaxConcurrentCalls = 1
-                ,
-                AutoCompleteMessages = false // true
+                , Identifier = _options.ClientId
+                , MaxConcurrentCalls = 1
+                , AutoCompleteMessages = false // true
             });
 
         processorClient.ProcessMessageAsync += async args =>
@@ -48,7 +51,7 @@ public sealed class ServiceBusProcessor : IProcessor
                 _logger.LogTrace("Processing message {MessageId}", args.Message.MessageId);
 
                 var messageBody = args.Message.Body.ToString();
-                var @event = EventMessageSerializer.Deserialize(messageBody);
+                var @event = _eventMessageSerializer.Deserialize(messageBody);
 
                 if (OnProcessAsync is not null)
                 {

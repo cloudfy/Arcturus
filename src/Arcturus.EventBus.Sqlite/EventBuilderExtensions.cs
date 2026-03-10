@@ -1,4 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -25,9 +26,13 @@ public static class EventBuilderExtensions
         builder.Services.AddSingleton<IConnection, SqliteConnection>(
             (sp) =>
             {
+                var eventMessageSerializer = sp.GetRequiredService<IEventMessageSerializer>();
+                var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+
                 return new SqliteConnection(
                     currentOptions
-                    , sp.GetRequiredService<ILoggerFactory>().CreateLogger<SqliteConnection>());
+                    , loggerFactory.CreateLogger<SqliteConnection>()
+                    , eventMessageSerializer);
             });
         builder.Services.AddSingleton<IEventBusFactory, SqliteEventBusFactory>();
         builder.Services.AddSingleton<SqliteEventBusOptions>(currentOptions);

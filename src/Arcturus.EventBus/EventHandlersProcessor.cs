@@ -34,6 +34,7 @@ public sealed class EventHandlersProcessor : IProcessor
 
     private async Task InternalOnProcessAsync(IEventMessage @event, OnProcessEventArgs? e)
     {
+        // TODO: add a cache from the preload()
         var eventType = @event.GetType();
         var eventHandlerType = typeof(IEventMessageHandler<>).MakeGenericType(eventType);
         var handlerType = ReflectionCache.GetOrCreate(

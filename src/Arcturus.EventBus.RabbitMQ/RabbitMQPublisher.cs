@@ -14,12 +14,14 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
 {
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
     private IChannel? _channel;
     private readonly ILogger<RabbitMQPublisher> _logger;
 
     internal RabbitMQPublisher(
         Abstracts.IConnection connection
         , ILoggerFactory loggerFactory
+        , IEventMessageSerializer eventMessageSerializer
         , string? queueName = null)
     {
         if (connection is not RabbitMQConnection)
@@ -27,7 +29,7 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
 
         _connection = (RabbitMQConnection)connection;
         _queueName = queueName ?? "default_queue";
-
+        _eventMessageSerializer = eventMessageSerializer;
         _logger = loggerFactory.CreateLogger<RabbitMQPublisher>();
     }
 
@@ -56,7 +58,7 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
             await _channel.QueueDeclareAsync(
                 queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
-            var message = DefaultEventSerializer.Serialize(@event);
+            var message = _eventMessageSerializer.Serialize(@event);
             var body = Encoding.UTF8.GetBytes(message);
 
             using Activity? sendActivity = EventBusActivitySource.PublisherHasListeners

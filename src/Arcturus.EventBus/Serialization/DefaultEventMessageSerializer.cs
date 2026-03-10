@@ -7,15 +7,16 @@ namespace Arcturus.EventBus.Serialization;
 /// Provides static methods for serializing and deserializing <see cref="IEventMessage"/> instances
 /// using System.Text.Json with custom options and converters.
 /// </summary>
-public static class DefaultEventSerializer
+public sealed class DefaultEventMessageSerializer(
+    DefaultEventMessageTypeResolver resolver)  // di injected
+    : IEventMessageSerializer
 {
-    private static readonly JsonSerializerOptions _options = new()
+    private readonly JsonSerializerOptions _options = new()
     {
         WriteIndented = false
         , DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        , Converters = { new DefaultEventMessageConverter() }
+        , Converters = { new DefaultEventMessageConverter(resolver) }
     };
-
 
     /// <summary>
     /// Serializes the specified <see cref="IEventMessage"/> instance to a JSON string using custom options and converters.
@@ -23,7 +24,7 @@ public static class DefaultEventSerializer
     /// <param name="event">The event message to serialize. Must not be null.</param>
     /// <returns>A JSON string representation of the event message.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="event"/> is null.</exception>
-    public static string Serialize(IEventMessage @event)
+    public string Serialize(IEventMessage @event)
     {
         if (@event == null)
             throw new ArgumentNullException(nameof(@event), "Event cannot be null.");
@@ -36,7 +37,7 @@ public static class DefaultEventSerializer
     /// <returns>The deserialized <see cref="IEventMessage"/> instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="data"/> is null or empty.</exception>
     /// <exception cref="InvalidOperationException">Thrown if deserialization returns null.</exception>
-    public static IEventMessage Deserialize(string data)
+    public IEventMessage Deserialize(string data)
     {
         if (string.IsNullOrEmpty(data))
             throw new ArgumentNullException(nameof(data), "Data cannot be null or empty.");

@@ -13,9 +13,14 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
     private IChannel? _channel;
-    private readonly ILogger<RabbitMQProcessor> _logger;   
+    private readonly ILogger<RabbitMQProcessor> _logger;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
 
-    internal RabbitMQProcessor(Abstracts.IConnection connection, ILoggerFactory loggerFactory, string? queueName = null)
+    internal RabbitMQProcessor(
+        Abstracts.IConnection connection
+        , ILoggerFactory loggerFactory
+        , IEventMessageSerializer eventMessageSerializer
+        , string? queueName = null)
     {
         if (connection is not RabbitMQConnection)
             throw new NotImplementedException();
@@ -23,6 +28,7 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
         _connection = (RabbitMQConnection)connection;
         _queueName = queueName ?? "default_queue";
         _logger = loggerFactory.CreateLogger<RabbitMQProcessor>();
+        _eventMessageSerializer = eventMessageSerializer;
     }
 
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
@@ -51,7 +57,7 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
                 byte[] body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
 
-                var @event = DefaultEventSerializer.Deserialize(message);
+                var @event = _eventMessageSerializer.Deserialize(message);
 
                 if (OnProcessAsync is not null)
                     await OnProcessAsync.Invoke(
