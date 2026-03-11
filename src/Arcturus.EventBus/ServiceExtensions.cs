@@ -34,7 +34,8 @@ public static class ServiceExtensions
 
         // registry
         services.TryAddSingleton<EventTypeRegistry>((sp) => new EventTypeRegistry(
-            builder.ScanAllAssemblies 
+            sp.GetRequiredService<Microsoft.Extensions.Logging.ILoggerFactory>()
+            , builder.ScanAllAssemblies 
                 ? Internals.AssemblyExtensions.LoadAllAssemblies()
                 : builder.AssembliesToScan));
 
