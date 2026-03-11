@@ -32,12 +32,6 @@ public static class ServiceExtensions
         var options = builder.BuildOptions();
         services.TryAddSingleton(options);
 
-        // Register EventHandlersProcessor if enabled
-        if (builder.UseEventHandlersProcessor)
-        {
-            services.TryAddSingleton<EventHandlersProcessor>();
-        }
-
         // registry
         services.TryAddSingleton<EventTypeRegistry>((sp) => new EventTypeRegistry(
             builder.ScanAllAssemblies 

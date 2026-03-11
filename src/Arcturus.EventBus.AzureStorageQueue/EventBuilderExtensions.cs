@@ -11,7 +11,7 @@ public static class EventBuilderExtensions
     /// <param name="builder">The event bus builder to which the Azure Storage Queue services will be added.</param>
     /// <param name="options">An optional delegate to configure the storage queue options for the event bus.</param>
     /// <returns>The event bus builder instance with Azure Storage Queue services registered.</returns>
-    public static EventBusBuilder AddSqliteEventBus(
+    public static EventBusBuilder AddAzureStorageQueueEventBus(
         this EventBusBuilder builder
         , Action<StorageQueueOptions>? options = null)
     {

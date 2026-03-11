@@ -3,7 +3,7 @@
 /// <summary>
 /// Default type resolver using the AppDomain.
 /// </summary>
-public class DefaultEventMessageTypeResolver(EventTypeRegistry eventTypeRegistry) // di inecjetd
+public class DefaultEventMessageTypeResolver(EventTypeRegistry eventTypeRegistry) // di injected
 {
     /// <summary>
     /// Resolves a type by its name using the event type registry.

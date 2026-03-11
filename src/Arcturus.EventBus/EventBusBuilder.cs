@@ -21,7 +21,7 @@ public sealed class EventBusBuilder
     /// </summary>
     public string? ClientName { get; set; }
     /// <summary>
-    /// Gets or sets a default exchange name. Defaults to "events".
+    /// Gets or sets a default queue name. Defaults to "events".
     /// </summary>
     public string? DefaultQueueName { get; set; }
     /// <summary>
