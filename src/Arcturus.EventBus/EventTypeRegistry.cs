@@ -1,4 +1,6 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Microsoft.Extensions.Logging;
+
 namespace Arcturus.EventBus;
 
 /// <summary>
@@ -8,24 +10,14 @@ internal sealed record EventHandlerEntry(Type HandlerType, Type EventHandlerInte
 
 public sealed class EventTypeRegistry // singleton
 {
-    private readonly Lazy<EventTypeEntry[]> _eventMessageRegistry;
+    private readonly ILogger<EventTypeRegistry>? _logger;
+    private readonly Lazy<Dictionary<string, Type>> _typesByName;
+    private readonly Lazy<Dictionary<Type, string>> _namesByType;
     private readonly Lazy<Dictionary<Type, EventHandlerEntry>> _handlerMap;
 
-    internal EventTypeRegistry(IReadOnlyCollection<Assembly> assemblies)
+    internal EventTypeRegistry(ILoggerFactory? loggerFactory, IReadOnlyCollection<Assembly> assemblies)
     {
-        _eventMessageRegistry = new Lazy<EventTypeEntry[]>(() => {
-            List<EventTypeEntry> _list = [];
-
-            foreach (var assembly in assemblies.Distinct())
-            {
-                foreach (var eventMessageType in Internals.AssemblyExtensions.GetEventMessageTypesFromAssembly(assembly))
-                {
-                    _list.Add(new EventTypeEntry(eventMessageType.Item1, eventMessageType.Item2));
-                }
-            }
-
-            return [.. _list.DistinctBy(_ => _.Name)];
-        });
+        _logger = loggerFactory?.CreateLogger<EventTypeRegistry>();
 
         // Built once at startup: event type → pre-computed handler entry (no runtime reflection).
         _handlerMap = new Lazy<Dictionary<Type, EventHandlerEntry>>(() =>
@@ -43,6 +35,9 @@ public sealed class EventTypeRegistry // singleton
                     var eventType = handlerInterface.GenericTypeArguments[0];
                     var handleMethod = handlerInterface.GetMethod(nameof(IEventMessageHandler<IEventMessage>.Handle))!;
 
+                    _logger?.LogDebug(
+                        "Registering handler {FullName} for event type {EventTypeFullName}"
+                        , handlerType.FullName, eventType.FullName);
                     // First registration wins when multiple handlers target the same event type.
                     map.TryAdd(eventType, new EventHandlerEntry(handlerType, handlerInterface, handleMethod));
                 }
@@ -50,31 +45,47 @@ public sealed class EventTypeRegistry // singleton
 
             return map;
         });
+
+        // Single initialisation shared between _typesByName and _namesByType; avoids scanning
+        // assemblies twice and re-resolving handler interfaces already computed by _handlerMap.
+        var sharedEntries = new Lazy<(Dictionary<string, Type> ByName, Dictionary<Type, string> ByType)>(() =>
+        {
+            var byName = new Dictionary<string, Type>();
+            var byType = new Dictionary<Type, string>();
+
+            foreach (var assembly in assemblies.Distinct())
+            {
+                foreach (var (name, type) in Internals.AssemblyExtensions.GetEventMessageTypesFromAssembly(assembly))
+                {
+                    _logger?.LogDebug("Registering event message {Name} with type {TypeFullName}", name, type.FullName);
+                    byName.TryAdd(name, type);
+                    byType.TryAdd(type, name);
+                }
+            }
+
+            // Supplement with event types sourced from the handler map; covers cross-assembly
+            // scenarios where the event type lives in an assembly that was not explicitly registered.
+            foreach (var eventType in _handlerMap.Value.Keys)
+            {
+                var attr = eventType.GetCustomAttribute<EventMessageAttribute>(true);
+                var name = attr?.Name ?? eventType.FullName!;
+                byName.TryAdd(name, eventType);
+                byType.TryAdd(eventType, name);
+            }
+
+            return (byName, byType);
+        });
+
+        _typesByName = new Lazy<Dictionary<string, Type>>(() => sharedEntries.Value.ByName);
+        _namesByType = new Lazy<Dictionary<Type, string>>(() => sharedEntries.Value.ByType);
     }
 
-    /// <summary>
-    /// O(1) lookup — no reflection at runtime.
-    /// </summary>
     internal EventHandlerEntry? GetHandlerEntryByEventType(IEventMessage eventMessage)
         => _handlerMap.Value.TryGetValue(eventMessage.GetType(), out var entry) ? entry : null;
 
     internal Type? GetTypeByName(string name)
-    {
-        if (_eventMessageRegistry.Value.FirstOrDefault(_ => _.Name == name) is EventTypeEntry entry)
-        {
-            return entry.Type;
-        }
-        return null;
-    }
+        => _typesByName.Value.TryGetValue(name, out var type) ? type : null;
 
     internal string? GetNameByType(Type type)
-    {
-        if (_eventMessageRegistry.Value.FirstOrDefault(_ => _.Type == type) is EventTypeEntry entry)
-        {
-            return entry.Name;
-        }
-        return null;
-    }
-
-    private record EventTypeEntry(string Name, Type Type);
+        => _namesByType.Value.TryGetValue(type, out var name) ? name : null;
 }
