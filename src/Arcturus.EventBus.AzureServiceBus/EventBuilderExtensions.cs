@@ -6,14 +6,16 @@ namespace Arcturus.EventBus.AzureServiceBus;
 public static class EventBuilderExtensions
 {
     /// <summary>
-    /// Configures the event bus to use SQLite as the underlying message transport.
+    /// Configures the event bus to use Azure Service Bus as the underlying message transport.
     /// </summary>
-    /// <remarks>This method registers the necessary services for using SQLite with the event bus, including
-    /// the connection and factory implementations.</remarks>
+    /// <remarks>
+    /// This method registers the necessary services for using Azure Service Bus with the event bus,
+    /// including the connection and factory implementations.
+    /// </remarks>
     /// <param name="builder">The EventBusBuilder instance used to configure event bus services.</param>
     /// <param name="options">An optional delegate to configure the ServiceBusOptions for the event bus.</param>
     /// <returns>The updated EventBusBuilder instance for further configuration.</returns>
-    public static EventBusBuilder AddSqliteEventBus(
+    public static EventBusBuilder AddAzureServiceBusEventBus(
         this EventBusBuilder builder
         , Action<ServiceBusOptions>? options = null)
     {
