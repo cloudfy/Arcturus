@@ -12,6 +12,7 @@ namespace Arcturus.EventBus;
 public sealed class EventHandlersProcessor : IProcessor
 {
     private readonly IProcessor _processor;
+    private readonly EventTypeRegistry _eventTypeRegistry;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventHandlersProcessor> _logger;
 
@@ -20,11 +21,12 @@ public sealed class EventHandlersProcessor : IProcessor
     {
         _processor = processor;
         _processor.OnProcessAsync += InternalOnProcessAsync;
-
+        _eventTypeRegistry = serviceProvider.GetRequiredService<EventTypeRegistry>();
         _serviceProvider = serviceProvider;
 
         _logger = loggerFactory.CreateLogger<EventHandlersProcessor>();
     }
+
     /// <inheritdoc />
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
 
@@ -34,51 +36,33 @@ public sealed class EventHandlersProcessor : IProcessor
 
     private async Task InternalOnProcessAsync(IEventMessage @event, OnProcessEventArgs? e)
     {
-        // TODO: add a cache from the preload()
-        var eventType = @event.GetType();
-        var eventHandlerType = typeof(IEventMessageHandler<>).MakeGenericType(eventType);
-        var handlerType = ReflectionCache.GetOrCreate(
-            eventHandlerType
-            , (t) =>
-            {
-                return AppDomain.CurrentDomain
-                    .GetAssemblies()
-                    .SelectMany(a => a.GetTypes())
-                    .FirstOrDefault(t => eventHandlerType.IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface);
-            });
+        // O(1) dictionary lookup — MakeGenericType, GetMethod, and IsAssignableFrom are all pre-computed at startup.
+        var handlerEntry = _eventTypeRegistry.GetHandlerEntryByEventType(@event);
 
-        if (handlerType is null)
+        if (handlerEntry is null)
         {
-            _logger.LogTrace("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", eventType.Name);
+            _logger.LogTrace("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", @event.GetType().Name);
 
             if (OnProcessAsync is not null)
                 await OnProcessAsync!.Invoke(@event, e);
-            
+
             return;
         }
 
-        // initiate a scope for the pipeline
-        // - the scopes service provider is passed onto the eventhandler
-#pragma warning disable IDE0063 // Use simple 'using' statement
         await using var scope = _serviceProvider.CreateAsyncScope();
         try
         {
-            // resolve the handler from the scope, if no handler is found, log and return
-            var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerType);
+            var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerEntry.HandlerType);
             if (handler == null)
             {
-                _logger.LogTrace("There are no handlers for the following event: {EventName}", eventType.Name);
+                _logger.LogTrace("There are no handlers for the following event: {EventName}", @event.GetType().Name);
                 return;
             }
 
             var pipeline = HostExtensions.BuildByRequestDelegate(
                 async () =>
                 {
-                    //var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, handlerType);
-
-                    //NO - var handler = scope.ServiceProvider.GetService(eventHandlerType); // Requires that they are registered using DI
-                    await (Task)eventHandlerType.GetMethod(
-                        nameof(IEventMessageHandler<IEventMessage>.Handle))!.Invoke(handler, [@event!, e?.CancellationToken])!;
+                    await (Task)handlerEntry.HandleMethod.Invoke(handler, [@event!, e?.CancellationToken])!;
                 });
 
             await pipeline(new EventContext(@event, nameof(@event), scope.ServiceProvider));
@@ -87,6 +71,5 @@ public sealed class EventHandlersProcessor : IProcessor
         {
             throw;
         }
-#pragma warning restore IDE0063 // Use simple 'using' statement
     }
 }
