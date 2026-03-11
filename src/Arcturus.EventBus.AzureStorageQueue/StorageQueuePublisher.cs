@@ -9,15 +9,18 @@ public sealed class StorageQueuePublisher : IPublisher
     private readonly string _queue;
     private readonly StorageQueueConnection _connection;
     private readonly ILogger<StorageQueuePublisher> _logger;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
 
     internal StorageQueuePublisher(
         IConnection connection
         , string? queue
-        , ILoggerFactory loggerFactory)
+        , ILoggerFactory loggerFactory
+        , IEventMessageSerializer eventMessageSerializer)
     {
         _queue = queue ?? "default_queue";
         _connection = (connection as StorageQueueConnection)!;
         _logger = loggerFactory.CreateLogger<StorageQueuePublisher>();
+        _eventMessageSerializer = eventMessageSerializer;
     }
 
     public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default)
@@ -28,7 +31,7 @@ public sealed class StorageQueuePublisher : IPublisher
         _logger.LogTrace("Publishing event {EventName} to queue {QueueName}", @event.GetType().Name, _queue);
 
         await queueClient.SendMessageAsync(
-            DefaultEventSerializer.Serialize(@event)
+            _eventMessageSerializer.Serialize(@event)
             , null
             , null
             , cancellationToken);

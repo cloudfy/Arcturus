@@ -16,17 +16,20 @@ public sealed class SqliteConnection : IConnection
     private readonly string _clientName;
     private readonly string? _applicationId;
     private readonly ILogger<SqliteConnection> _logger;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
     private readonly string _connectionString;
 
     private bool _isConnected = false;
 
-    internal SqliteConnection(SqliteEventBusOptions options, ILogger<SqliteConnection> logger)
+    internal SqliteConnection(SqliteEventBusOptions options
+        , ILogger<SqliteConnection> logger
+        , IEventMessageSerializer eventMessageSerializer)
     {
         _currentOptions = options;
         _clientName = options.ClientName ?? Environment.MachineName;
         _applicationId = options.ApplicationId;
         _logger = logger;
-
+        _eventMessageSerializer = eventMessageSerializer;
         _connectionString = SqliteConnection.CreateConnectionString(options.ConnectionString, options.DatabasePath);
     }
 
@@ -35,7 +38,7 @@ public sealed class SqliteConnection : IConnection
     {
         await ReadyDatabase(cancellationToken);
 
-        var eventData = DefaultEventSerializer.Serialize(data);
+        var eventData = _eventMessageSerializer.Serialize(data);
 
         var sql = @$"INSERT INTO [Events] (EventId, EventData, QueueName, ClientName) VALUES ('{Guid.NewGuid()}', '{eventData}', '{queueName}', '{_clientName}');";
         using var connection = new MDS.SqliteConnection(_connectionString);
@@ -76,7 +79,7 @@ public sealed class SqliteConnection : IConnection
             {
                 var eventId = reader.GetString(0);
                 var eventData = reader.GetString(1);
-                var @event = DefaultEventSerializer.Deserialize(eventData);
+                var @event = _eventMessageSerializer.Deserialize(eventData);
                 events.Add(new EventItem(@event, eventId));
             }
             await transaction.CommitAsync(cancellationToken);

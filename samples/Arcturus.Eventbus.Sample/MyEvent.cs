@@ -1,6 +1,8 @@
 ﻿// Create and configure the host
 using Arcturus.EventBus.Abstracts;
 
+namespace Arcturus.EventBus.Sample;
+
 public class MyEvent : IEventMessage
 {
     public string Name { get; set; } = "My Event";

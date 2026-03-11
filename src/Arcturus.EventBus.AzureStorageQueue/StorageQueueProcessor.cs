@@ -8,14 +8,20 @@ public sealed class StorageQueueProcessor : IProcessor
     private readonly StorageQueueConnection _connection;
     private readonly string _queueName;
     private readonly StorageQueueOptions _options;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
 
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
 
-    internal StorageQueueProcessor(IConnection connection, StorageQueueOptions storageQueueOptions, string? queueName = null)
+    internal StorageQueueProcessor(
+        IConnection connection
+        , StorageQueueOptions storageQueueOptions
+        , IEventMessageSerializer eventMessageSerializer
+        , string? queueName = null)
     {
         _connection = (StorageQueueConnection)connection;
         _queueName = queueName ?? "default_queue";
         _options = storageQueueOptions;
+        _eventMessageSerializer = eventMessageSerializer;
     }
 
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
@@ -36,7 +42,7 @@ public sealed class StorageQueueProcessor : IProcessor
                 foreach (var receiveMessage in receiveMessages.Value)
                 {
                     var messageBody = receiveMessage.Body.ToString();
-                    var @event = DefaultEventSerializer.Deserialize(messageBody);
+                    var @event = _eventMessageSerializer.Deserialize(messageBody);
 
                     if (OnProcessAsync is not null)
                     {

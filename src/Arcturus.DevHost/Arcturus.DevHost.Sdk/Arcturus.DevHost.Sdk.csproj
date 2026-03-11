@@ -35,12 +35,9 @@
   
 	  <!-- Replace $version$ in the copied file -->
 	  <ReadLinesFromFile File="$(SdkPropsTarget)">
-		<Output TaskParameter="Lines" ItemName="SdkPropsLines"/>
+		<Output TaskParameter="Lines" ItemName="SdkPropsLines" />
 	  </ReadLinesFromFile>
-	  <WriteLinesToFile 
-		File="$(SdkPropsTarget)" 
-		Lines="@(SdkPropsLines->Replace('$version$', '$(Version)'))" 
-		Overwrite="true" />
+	  <WriteLinesToFile File="$(SdkPropsTarget)" Lines="@(SdkPropsLines-&gt;Replace('$version$', '$(Version)'))" Overwrite="true" />
 	</Target>
 
 	<!-- edit the Sdk.source.props NOT the auto-generated Sdk.props -->
@@ -48,6 +45,9 @@
 	  <None Include="docs\README.md" Pack="true" PackagePath="\" />
 	  <None Update="Sdk\Sdk.props" Pack="true" PackagePath="Sdk\Sdk.props" />
 	  <None Update="Sdk\Sdk.targets" Pack="true" PackagePath="Sdk\Sdk.targets" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.103" />
 	</ItemGroup>
 
 </Project>

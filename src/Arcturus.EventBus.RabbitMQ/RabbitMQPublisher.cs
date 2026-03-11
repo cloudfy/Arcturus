@@ -14,12 +14,14 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
 {
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
     private IChannel? _channel;
     private readonly ILogger<RabbitMQPublisher> _logger;
 
     internal RabbitMQPublisher(
         Abstracts.IConnection connection
         , ILoggerFactory loggerFactory
+        , IEventMessageSerializer eventMessageSerializer
         , string? queueName = null)
     {
         if (connection is not RabbitMQConnection)
@@ -27,7 +29,7 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
 
         _connection = (RabbitMQConnection)connection;
         _queueName = queueName ?? "default_queue";
-
+        _eventMessageSerializer = eventMessageSerializer;
         _logger = loggerFactory.CreateLogger<RabbitMQPublisher>();
     }
 
@@ -45,7 +47,7 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
                 _channel?.Dispose();
                 _channel = null;
 
-                //_logger.LogWarning(exception, "Could not publish event #{EventId} after {Timeout} seconds: {ExceptionMessage}.", @event, $"{timeSpan.TotalSeconds:n1}", exception.Message);
+                _logger.LogDebug(exception, "Could not publish event #{EventId} after {Timeout} seconds: {ExceptionMessage}.", @event, $"{timeSpan.TotalSeconds:n1}", exception.Message);
             });
 
         await policy.Execute(async () =>
@@ -56,11 +58,11 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
             await _channel.QueueDeclareAsync(
                 queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null, cancellationToken: cancellationToken);
 
-            var message = DefaultEventSerializer.Serialize(@event);
+            var message = _eventMessageSerializer.Serialize(@event);
             var body = Encoding.UTF8.GetBytes(message);
 
             using Activity? sendActivity = EventBusActivitySource.PublisherHasListeners
-                ? EventBusActivitySource.Publish(GetEventName(@event))
+                ? EventBusActivitySource.Publish(@event.GetEventName())
                 : default;
             //sendActivity?.SetTag("eventbus.message.name", GetEventName(@event));
 
@@ -76,20 +78,6 @@ public sealed class RabbitMQPublisher : IPublisher, IDisposable
             await _channel.BasicPublishAsync(
                 exchange: string.Empty, routingKey: _queueName, mandatory: true, basicProperties: properties, body: body);
         });
-    }
-
-    /// <summary>
-    /// Gets the name of the event, either from the EventMessageAttribute or the class name.
-    /// </summary>
-    /// <param name="event">Event.</param>
-    /// <returns>Name of event.</returns>
-    private static string GetEventName(IEventMessage @event)
-    {
-        var messageAttribute = @event.GetType().GetCustomAttribute<EventMessageAttribute>();
-        if (messageAttribute is not null)
-            return messageAttribute.Name;
-
-        return @event.GetType().Name;
     }
 
     public void Dispose()

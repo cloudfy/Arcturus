@@ -1,5 +1,5 @@
 ﻿using Arcturus.EventBus.Abstracts;
-using Arcturus.EventBus.AzureServiceBus.Internals;
+using Arcturus.EventBus.Serialization;
 using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Logging;
 
@@ -11,18 +11,21 @@ public sealed class ServiceBusPublisher : IPublisher, IAsyncDisposable
     private readonly string _queueName;
     private readonly ILogger<ServiceBusPublisher> _logger;
     private readonly ServiceBusOptions _options;
+    private readonly IEventMessageSerializer _eventMessageSerializer;
     private ServiceBusSender? _sender;
 
     internal ServiceBusPublisher(
         IConnection connection
         , string queueName
         , ServiceBusOptions options
-        , ILoggerFactory loggerFactory)
+        , ILoggerFactory loggerFactory
+        , IEventMessageSerializer eventMessageSerializer)
     {
         _connection = (ServiceBusConnection)connection;
         _queueName = queueName;
         _logger = loggerFactory.CreateLogger<ServiceBusPublisher>();
         _options = options;
+        _eventMessageSerializer = eventMessageSerializer;
     }
 
     private async ValueTask<ServiceBusSender> GetOrCacheSender()
@@ -44,7 +47,7 @@ public sealed class ServiceBusPublisher : IPublisher, IAsyncDisposable
     {
         var sender = await GetOrCacheSender();
 
-        var serviceBusMessage = new ServiceBusMessage(EventMessageSerializer.Serialize(@event))
+        var serviceBusMessage = new ServiceBusMessage(_eventMessageSerializer.Serialize(@event))
         {
             MessageId = Guid.NewGuid().ToString("N")
         };

@@ -1,4 +1,6 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Serialization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus.AzureStorageQueue;
@@ -15,6 +17,8 @@ public class StorageQueueFactory(
 
     public IProcessor CreateProcessor(string? queue = null)
     {
+        var eventMessageSerializer = _serviceProvider.GetRequiredService<IEventMessageSerializer>();
+
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
         if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
@@ -22,13 +26,18 @@ public class StorageQueueFactory(
                 new StorageQueueProcessor(
                     _connection
                     , _eventBusOptions
+                    , eventMessageSerializer
                     , queue ?? _eventBusOptions.DefaultQueueName), _serviceProvider, loggerFactory);
 
-        return new StorageQueueProcessor(_connection, _eventBusOptions, queue ?? _eventBusOptions.DefaultQueueName);
+        return new StorageQueueProcessor(
+            _connection, _eventBusOptions, eventMessageSerializer, queue ?? _eventBusOptions.DefaultQueueName);
     }
 
     public IPublisher CreatePublisher(string? queue = null)
     {
-        return new StorageQueuePublisher(_connection, queue ?? _eventBusOptions.DefaultQueueName, loggerFactory);
+        var eventMessageSerializer = _serviceProvider.GetRequiredService<IEventMessageSerializer>();
+        
+        return new StorageQueuePublisher(
+            _connection, queue ?? _eventBusOptions.DefaultQueueName, loggerFactory, eventMessageSerializer);
     }
 }
