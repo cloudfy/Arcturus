@@ -10,14 +10,14 @@ internal sealed record EventHandlerEntry(Type HandlerType, Type EventHandlerInte
 
 public sealed class EventTypeRegistry // singleton
 {
-    private readonly ILogger<EventTypeRegistry> _logger;
+    private readonly ILogger<EventTypeRegistry>? _logger;
     private readonly Lazy<Dictionary<string, Type>> _typesByName;
     private readonly Lazy<Dictionary<Type, string>> _namesByType;
     private readonly Lazy<Dictionary<Type, EventHandlerEntry>> _handlerMap;
 
-    internal EventTypeRegistry(ILoggerFactory loggerFactory, IReadOnlyCollection<Assembly> assemblies)
+    internal EventTypeRegistry(ILoggerFactory? loggerFactory, IReadOnlyCollection<Assembly> assemblies)
     {
-        _logger = loggerFactory.CreateLogger<EventTypeRegistry>();
+        _logger = loggerFactory?.CreateLogger<EventTypeRegistry>();
 
         // Built once at startup: event type → pre-computed handler entry (no runtime reflection).
         _handlerMap = new Lazy<Dictionary<Type, EventHandlerEntry>>(() =>
@@ -35,7 +35,9 @@ public sealed class EventTypeRegistry // singleton
                     var eventType = handlerInterface.GenericTypeArguments[0];
                     var handleMethod = handlerInterface.GetMethod(nameof(IEventMessageHandler<IEventMessage>.Handle))!;
 
-                    _logger.LogDebug($"Registering handler {handlerType.FullName} for event type {eventType.FullName}");
+                    _logger?.LogDebug(
+                        "Registering handler {FullName} for event type {EventTypeFullName}"
+                        , handlerType.FullName, eventType.FullName);
                     // First registration wins when multiple handlers target the same event type.
                     map.TryAdd(eventType, new EventHandlerEntry(handlerType, handlerInterface, handleMethod));
                 }
@@ -55,7 +57,7 @@ public sealed class EventTypeRegistry // singleton
             {
                 foreach (var (name, type) in Internals.AssemblyExtensions.GetEventMessageTypesFromAssembly(assembly))
                 {
-                    _logger.LogDebug($"Registering event message {name} with type {type.FullName}");
+                    _logger?.LogDebug("Registering event message {Name} with type {TypeFullName}", name, type.FullName);
                     byName.TryAdd(name, type);
                     byType.TryAdd(type, name);
                 }
