@@ -25,6 +25,10 @@ public static class EventBuilderExtensions
             options(currentOptions);
         }
 
+        currentOptions.UseEventHandlersProcessor = builder.UseEventHandlersProcessor;
+        currentOptions.ApplicationId = builder.ApplicationId;
+        currentOptions.ClientId = builder.ClientName;
+
         builder.Services.AddSingleton<IConnection, ServiceBusConnection>(
             (sp) => { return new ServiceBusConnection(currentOptions); });
         builder.Services.AddSingleton<IEventBusFactory, ServiceBusFactory>();

@@ -27,7 +27,7 @@ public sealed class RabbitMQEventBusFactory(
 
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
-        if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
+        if (_eventBusOptions.UseEventHandlersProcessor)
             return new EventHandlersProcessor(
                 new RabbitMQProcessor(_connection, loggerFactory, eventMessageSerializer, queue ?? _eventBusOptions.DefaultQueueName), _serviceProvider, loggerFactory);
 

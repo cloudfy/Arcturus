@@ -22,6 +22,11 @@ public static class EventBuilderExtensions
         {
             options(currentOptions);
         }
+
+        currentOptions.UseEventHandlersProcessor = builder.UseEventHandlersProcessor;
+        currentOptions.ApplicationId = builder.ApplicationId;
+        currentOptions.ClientName = builder.ClientName;
+
         builder.Services.AddSingleton<IConnection, RabbitMQConnection>(
             (sp) => { return new RabbitMQConnection(currentOptions); });
         builder.Services.AddSingleton<IEventBusFactory, RabbitMQEventBusFactory>();

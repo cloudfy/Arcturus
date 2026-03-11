@@ -24,7 +24,7 @@ public sealed class ServiceBusFactory(
         
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
-        if (_options.UseEventHandlersProcessor.GetValueOrDefault(true))
+        if (_options.UseEventHandlersProcessor)
             return new EventHandlersProcessor(
                 new ServiceBusProcessor(
                     _connection

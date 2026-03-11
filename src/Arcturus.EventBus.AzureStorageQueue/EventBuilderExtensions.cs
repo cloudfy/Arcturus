@@ -21,6 +21,9 @@ public static class EventBuilderExtensions
             options(currentOptions);
         }
 
+        currentOptions.ApplicationId = builder.ApplicationId;
+        currentOptions.UseEventHandlersProcessor = builder.UseEventHandlersProcessor;
+
         // add services
         builder.Services.AddSingleton<IConnection, StorageQueueConnection>(
             (sp) => { return new StorageQueueConnection(currentOptions); });

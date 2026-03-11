@@ -17,7 +17,7 @@ public sealed class SqliteEventBusFactory(
     {
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
-        if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
+        if (_eventBusOptions.UseEventHandlersProcessor)
             return new EventHandlersProcessor(
                 new SqliteProcessor(_connection, queue ?? _eventBusOptions.DefaultQueueName, _eventBusOptions.ProcessInterval.GetValueOrDefault(100))
                 , _serviceProvider

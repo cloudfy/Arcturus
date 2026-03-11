@@ -21,7 +21,7 @@ public class StorageQueueFactory(
 
         // returns a wrapper processor that will handle the event handlers
         // and fallback to the processor if no handlers are found
-        if (_eventBusOptions.UseEventHandlersProcessor.GetValueOrDefault(true))
+        if (_eventBusOptions.UseEventHandlersProcessor)
             return new EventHandlersProcessor(
                 new StorageQueueProcessor(
                     _connection

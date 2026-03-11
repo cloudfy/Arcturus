@@ -23,6 +23,10 @@ public static class EventBuilderExtensions
             options(currentOptions);
         }
 
+        currentOptions.ApplicationId = builder.ApplicationId;
+        currentOptions.ClientName = builder.ClientName;
+        currentOptions.UseEventHandlersProcessor = builder.UseEventHandlersProcessor;
+
         builder.Services.AddSingleton<IConnection, SqliteConnection>(
             (sp) =>
             {
