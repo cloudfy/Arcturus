@@ -53,6 +53,7 @@ public sealed class EventHandlersProcessor : IProcessor
 
             if (OnProcessAsync is not null)
                 await OnProcessAsync!.Invoke(@event, e);
+            
             return;
         }
 

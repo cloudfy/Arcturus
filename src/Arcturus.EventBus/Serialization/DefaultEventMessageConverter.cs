@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Arcturus.EventBus.Serialization;
 
 // not DI
-public sealed class DefaultEventMessageConverter(
+internal sealed class DefaultEventMessageConverter(
     DefaultEventMessageTypeResolver resolver) 
     : JsonConverter<IEventMessage>
 {
@@ -23,8 +23,12 @@ public sealed class DefaultEventMessageConverter(
             throw new JsonException($"Missing discriminator property '{_discriminatorPropertyName}'.");
         }
 
-        var typeName = typeProperty.GetString() ?? throw new JsonException("Discriminator property value is null.");
-        var type = _typeResolver.ResolveType(typeName) ?? throw new JsonException($"Cannot resolve type '{typeName}'.");
+        // read type from discriminator and resolve
+        // - requires that one of the .Registerxxx methods is called.
+        var typeName = typeProperty.GetString() 
+            ?? throw new JsonException("Discriminator property value is null.");
+        var type = _typeResolver.ResolveType(typeName) 
+            ?? throw new UnprocessableEventException($"Cannot resolve type '{typeName}'. Ensure to call .RegisterHandlersFromAssembly() or similar on builder at startup.");
         var json = root.GetRawText();
         return (IEventMessage)JsonSerializer.Deserialize(json, type, options)!;
     }
@@ -40,7 +44,7 @@ public sealed class DefaultEventMessageConverter(
         writer.WriteStartObject();
 
         // Write the discriminator (type)
-        writer.WriteString(_discriminatorPropertyName, GetEventName(type));
+        writer.WriteString(_discriminatorPropertyName, value.GetEventName());
 
         // Serialize the object properties
         var properties = type.GetProperties();
@@ -61,19 +65,5 @@ public sealed class DefaultEventMessageConverter(
         }
 
         writer.WriteEndObject();
-    }
-
-    /// <summary>
-    /// Gets the name of the event, either from the EventMessageAttribute or the class name.
-    /// </summary>
-    /// <param name="event">Event.</param>
-    /// <returns>Name of event.</returns>
-    private static string GetEventName(Type type)
-    {
-        var messageAttribute = type.GetCustomAttribute<EventMessageAttribute>();
-        if (messageAttribute is not null)
-            return messageAttribute.Name;
-
-        return type.FullName!;
     }
 }

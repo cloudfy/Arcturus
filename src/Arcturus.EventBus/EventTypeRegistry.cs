@@ -1,7 +1,6 @@
 ﻿namespace Arcturus.EventBus;
 
-// singleton
-public sealed class EventTypeRegistry
+public sealed class EventTypeRegistry // singleton
 {
     private readonly Lazy<EventTypeEntry[]> _registryList;
 
@@ -22,15 +21,15 @@ public sealed class EventTypeRegistry
         });
     }
 
-    public Type? GetTypeByName(string Name)
+    internal Type? GetTypeByName(string name)
     {
-        if (_registryList.Value.FirstOrDefault(_ => _.Name == Name) is EventTypeEntry entry)
+        if (_registryList.Value.FirstOrDefault(_ => _.Name == name) is EventTypeEntry entry)
         {
             return entry.Type;
         }
         return null;
     }
-    public string? GetNameByType(Type type)
+    internal string? GetNameByType(Type type)
     {
         if (_registryList.Value.FirstOrDefault(_ => _.Type == type) is EventTypeEntry entry)
         {

@@ -2,6 +2,7 @@
 
 namespace Arcturus.EventBus.Internals;
 
+[Obsolete("Replace with EventTypeRegister")]
 internal static class ReflectionCache
 {
     private static readonly ConcurrentDictionary<Type, Type> _cache = [];
