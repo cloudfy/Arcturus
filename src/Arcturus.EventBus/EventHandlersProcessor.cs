@@ -62,7 +62,7 @@ public sealed class EventHandlersProcessor : IProcessor
             var pipeline = HostExtensions.BuildByRequestDelegate(
                 async () =>
                 {
-                    await (Task)handlerEntry.HandleMethod.Invoke(handler, [@event!, e?.CancellationToken])!;
+                    await (Task)handlerEntry.HandleMethod.Invoke(handler, [@event!, e?.CancellationToken ?? default])!;
                 });
 
             await pipeline(new EventContext(@event, nameof(@event), scope.ServiceProvider));
