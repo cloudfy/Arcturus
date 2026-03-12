@@ -1,9 +1,11 @@
 ﻿namespace Arcturus.CommandLine.Abstractions;
 
+
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class OptionAttribute(
     string name
-    , string? description) : Attribute
+    , string? description
+    , string[]? alias = null) : Attribute
 {
     public OptionAttribute(
         string name
@@ -16,4 +18,5 @@ public class OptionAttribute(
     public string Name => name;
     public string? Description => description;
     public bool? Required { get; }
+    public string[]? Aliases => alias;
 }

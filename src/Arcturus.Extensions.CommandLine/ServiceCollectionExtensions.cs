@@ -1,5 +1,4 @@
 ﻿using Arcturus.CommandLine.Abstractions;
-using Arcturus.Extensions.CommandLine.Internals;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Arcturus.CommandLine;
@@ -7,27 +6,30 @@ namespace Arcturus.CommandLine;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// 
+    /// Adds command-line configuration and command handler registration to the specified service collection.
     /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
-    public static IServiceCollection AddCommandLine(this IServiceCollection services)
+    /// <remarks>This method registers the command-line configuration as a singleton and automatically
+    /// registers command handlers based on the specified handler lifetime. Call this method during application startup
+    /// to enable command-line processing.</remarks>
+    /// <param name="services">The service collection to which the command-line configuration and handlers will be added. Cannot be null.</param>
+    /// <param name="builder">An optional delegate to configure the command-line options before registration. If null, default configuration
+    /// is used.</param>
+    /// <returns>The same instance of the service collection for chaining further registrations.</returns>
+    public static IServiceCollection AddCommandLine(
+        this IServiceCollection services
+        , Action<CommandLineConfiguration>? builder = null)
     {
-        services.AddSingleton<CommandLineBuilderConfiguration>();
-        AutoRegisterCommandHandlers(services);
+        var configuration = new CommandLineConfiguration();
+        builder?.Invoke(configuration);
+
+        services.AddSingleton<CommandLineConfiguration>();
+
+        AutoRegisterCommandHandlers(services, configuration.HandlerLifeTime);
         return services;
     }
-    /// <summary>
-    /// Registers all command handlers in the executing assembly.
-    /// <para>
-    /// Alternative is to register each command handler individually using AddTransient().
-    /// </para>
-    /// </summary>
-    /// <param name="services">Required.</param>
-    /// <param name="serviceLifetime">Specifies the <see cref="ServiceLifetime"/> of each command handler.</param>
-    /// <returns><see cref="IServiceCollection"/></returns>
+    
     private static IServiceCollection AutoRegisterCommandHandlers(
-        this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
+        this IServiceCollection services, ServiceLifetime serviceLifetime)
     {
         var handlerTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(a => a.GetTypes())
@@ -40,7 +42,7 @@ public static class ServiceCollectionExtensions
             var commandInterface = handlerType.GetInterfaces()
                 .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICommandHandler<>));
 
-            services.AddTransient(commandInterface, handlerType);
+            services.Add(new ServiceDescriptor(commandInterface, handlerType, serviceLifetime));
         }
 
         return services;
