@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
         var configuration = new CommandLineConfiguration();
         builder?.Invoke(configuration);
 
-        services.AddSingleton<CommandLineConfiguration>();
+        services.AddSingleton(configuration);
 
         AutoRegisterCommandHandlers(services, configuration.HandlerLifeTime);
         return services;
