@@ -4,7 +4,7 @@
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
 public class OptionAttribute(
     string name
-    , string? description
+    , string? description = null
     , string[]? alias = null) : Attribute
 {
     public OptionAttribute(
