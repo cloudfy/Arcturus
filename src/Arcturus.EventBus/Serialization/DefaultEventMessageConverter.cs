@@ -4,9 +4,8 @@ using System.Text.Json.Serialization;
 
 namespace Arcturus.EventBus.Serialization;
 
-// not DI
 internal sealed class DefaultEventMessageConverter(
-    DefaultEventMessageTypeResolver resolver) 
+    DefaultEventMessageTypeResolver resolver) // not DI
     : JsonConverter<IEventMessage>
 {
     private const string _discriminatorPropertyName = "$eventType";

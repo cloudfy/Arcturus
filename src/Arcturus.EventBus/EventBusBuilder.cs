@@ -45,9 +45,9 @@ public sealed class EventBusBuilder
 
     internal IReadOnlyCollection<Assembly> AssembliesToScan => _assembliesToScan;
     internal bool ScanAllAssemblies { get; private set; } = false;
-    
+
     /// <summary>
-    /// Registers all event handler types found in the specified assembly for use with the event bus.
+    /// Registers all all <see cref="Arcturus.EventBus.Abstracts.IEventMessageHandler{TEvent}" /> types types found in the specified assembly for use with the event bus.
     /// </summary>
     /// <remarks>Use this method to add event handler types from an external or dynamically loaded assembly.
     /// The assembly should contain types that implement the required event handler interfaces for them to be discovered
@@ -61,7 +61,7 @@ public sealed class EventBusBuilder
         return this;
     }
     /// <summary>
-    /// Configures the event bus to automatically register event handlers by scanning all loaded assemblies.
+    /// Configures the event bus to automatically register all <see cref="Arcturus.EventBus.Abstracts.IEventMessageHandler{TEvent}" /> types by scanning all loaded assemblies.
     /// </summary>
     /// <remarks>Use this method to simplify event handler registration when handlers are defined across
     /// multiple assemblies. All assemblies loaded in the current application domain will be scanned for compatible
@@ -73,7 +73,7 @@ public sealed class EventBusBuilder
         return this;
     }
     /// <summary>
-    /// Registers all event handler types found in the assembly that contains the specified type parameter.
+    /// Registers all <see cref="Arcturus.EventBus.Abstracts.IEventMessageHandler{TEvent}" /> types found in the assembly that contains the specified type parameter.
     /// </summary>
     /// <remarks>Use this method to automatically discover and register event handlers from a specific
     /// assembly without manually specifying each handler type. This is useful for modular applications where handlers

@@ -1,5 +1,4 @@
 ﻿using Arcturus.EventBus.Abstracts;
-using Arcturus.EventBus.Internals;
 using Arcturus.EventBus.Middleware;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -12,9 +11,9 @@ namespace Arcturus.EventBus;
 public sealed class EventHandlersProcessor : IProcessor
 {
     private readonly IProcessor _processor;
-    private readonly EventTypeRegistry _eventTypeRegistry;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventHandlersProcessor> _logger;
+    private readonly EventTypeRegistry _eventTypeRegistry;
 
     public EventHandlersProcessor(
         IProcessor processor, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
@@ -41,7 +40,7 @@ public sealed class EventHandlersProcessor : IProcessor
 
         if (handlerEntry is null)
         {
-            _logger.LogTrace("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", @event.GetType().Name);
+            _logger.LogWarning("There are no handlers for the following event: {EventName}. Attempting OnProcessAsync delegate.", @event.GetEventName());
 
             if (OnProcessAsync is not null)
                 await OnProcessAsync!.Invoke(@event, e);
@@ -55,7 +54,7 @@ public sealed class EventHandlersProcessor : IProcessor
             var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerEntry.HandlerType);
             if (handler == null)
             {
-                _logger.LogTrace("There are no handlers for the following event: {EventName}", @event.GetType().Name);
+                _logger.LogWarning("There are no handlers for the following event: {EventName}", @event.GetEventName());
                 return;
             }
 

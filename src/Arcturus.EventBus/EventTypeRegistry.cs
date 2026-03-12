@@ -1,12 +1,8 @@
 ﻿using Arcturus.EventBus.Abstracts;
+using Arcturus.EventBus.Internals;
 using Microsoft.Extensions.Logging;
 
 namespace Arcturus.EventBus;
-
-/// <summary>
-/// Pre-computed handler metadata resolved at startup.
-/// </summary>
-internal sealed record EventHandlerEntry(Type HandlerType, Type EventHandlerInterfaceType, MethodInfo HandleMethod);
 
 public sealed class EventTypeRegistry // singleton
 {
@@ -26,6 +22,7 @@ public sealed class EventTypeRegistry // singleton
 
             foreach (var assembly in assemblies.Distinct())
             {
+                _logger?.LogDebug("Scanning assembly {AssemblyFullName} for event handlers", assembly.FullName);
                 // GetEventHandlerTypesFromAssembly already guarantees concrete IEventMessageHandler<> implementors.
                 foreach (var handlerType in Internals.AssemblyExtensions.GetEventHandlerTypesFromAssembly(assembly))
                 {

@@ -46,8 +46,6 @@
 	  <None Update="Sdk\Sdk.props" Pack="true" PackagePath="Sdk\Sdk.props" />
 	  <None Update="Sdk\Sdk.targets" Pack="true" PackagePath="Sdk\Sdk.targets" />
 	</ItemGroup>
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.103" />
-	</ItemGroup>
+
 
 </Project>
