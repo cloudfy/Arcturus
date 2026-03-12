@@ -1,6 +1,6 @@
-using System.CommandLine.Parsing;
+using Arcturus.CommandLine.Abstractions;
 
-namespace Arcturus.CommandLine.Abstractions;
+namespace Arcturus.CommandLine;
 
 /// <summary>
 /// Encapsulates all command-line specific information about an individual execution.
@@ -18,11 +18,6 @@ public class CommandLineContext
     public required string[] Args { get; init; }
 
     /// <summary>
-    /// Gets or sets the <see cref="Parser"/> for parsing command-line input.
-    /// </summary>
-    public required Parser Parser { get; init; }
-
-    /// <summary>
     /// Gets or sets the <see cref="CancellationToken"/> for the execution.
     /// </summary>
     public CancellationToken CancellationToken { get; init; }
@@ -30,7 +25,7 @@ public class CommandLineContext
     /// <summary>
     /// Gets or sets the root command instance.
     /// </summary>
-    public required ICommand RootCommand { get; init; }
+    public required IAbstractCommand RootCommand { get; init; }
 
     /// <summary>
     /// Gets a key/value collection that can be used to share data within the scope of this execution.

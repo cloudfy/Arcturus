@@ -1,208 +1,95 @@
 ﻿using Arcturus.CommandLine.Abstractions;
 using Arcturus.CommandLine.Internals;
-using Arcturus.Extensions.CommandLine.Internals;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
-using System.CommandLine.Builder;
-using System.CommandLine.Parsing;
-using System.Reflection;
+using System.CommandLine.Help;
+using System.CommandLine.Invocation;
 
 namespace Arcturus.CommandLine;
 
 public static class HostExtensions
 {
-    public static IHost UseHelp(
-        this IHost host, Action<System.CommandLine.Help.HelpContext> helpBuilder, int? maxWidth = null)
-    {
-        var config = host.Services.GetRequiredService<CommandLineBuilderConfiguration>();
-        config.AddConfiguration(builder => builder.UseHelp(helpBuilder, maxWidth));
-        return host;
-    }
-
     /// <summary>
-    /// Adds a middleware type to the command-line execution pipeline.
+    /// Parses and executes command-line arguments using the specified command-line root type within the given host
+    /// context.
     /// </summary>
-    /// <typeparam name="TMiddleware">The middleware type.</typeparam>
-    /// <param name="host">The host instance.</param>
-    /// <returns>The host instance for chaining.</returns>
-    public static IHost UseMiddleware<TMiddleware>(this IHost host)
-        where TMiddleware : ICommandLineMiddleware
-    {
-        var config = host.Services.GetRequiredService<CommandLineBuilderConfiguration>();
-        config.AddMiddleware(typeof(TMiddleware));
-        return host;
-    }
-
-    /// <summary>
-    /// Run console using commands. <typeparamref name="T"/> serve as root.
-    /// </summary>
-    /// <typeparam name="T">Type of root command.</typeparam>
-    /// <param name="host">Required.</param>
-    /// <param name="args">Optional. Parameters from the host.</param>
-    /// <returns></returns>
-    public static async Task RunConsoleCommands<T>(this IHost host, string[] args)
-        where T : ICommand
+    /// <remarks>If no arguments are provided, the method displays help information by default. The method
+    /// uses the host's services to construct the command-line root and execute the command. This extension method is
+    /// typically called from the application's entry point to handle command-line processing.</remarks>
+    /// <typeparam name="T">The type of the command-line root. Must inherit from CommandLineRoot.</typeparam>
+    /// <param name="host">The host that provides application services and dependency injection for the command-line execution.</param>
+    /// <param name="args">The array of command-line arguments to parse and execute. If empty, help information is displayed.</param>
+    /// <returns>A task that represents the asynchronous operation of parsing and executing the command-line arguments.</returns>
+    public static async Task RunCommandLine<T>(this IHost host, string[] args)
+        where T : CommandLineRoot
     {
         // our root cancellation token
         CancellationTokenSource cancellationTokenSource = new();
 
-        var command = (T)ActivatorUtilities.CreateInstance(host.Services, typeof(T));
-        var commandDetails = typeof(T).GetCustomAttribute<CommandAttribute>();
+        var config = host.Services.GetRequiredService<CommandLineConfiguration>();
 
-        var commandLineCommand = new RootCommand(commandDetails?.Description ?? "CLI");
+        // create an instance of the command line root using the host's service provider
+        var rootInstance = ActivatorUtilities.CreateInstance<T>(host.Services);
 
-        CommandLineBuilder commandLineBuilder = new(commandLineCommand);
-        commandLineBuilder.UseDefaults();
+        var commandLineBuilder = new CommandLineBuilder<T>(config);
+        var commandLineRoot = commandLineBuilder.Build(host, rootInstance, cancellationTokenSource.Token);
 
-        // Apply any stored configurations
-        var config = host.Services.GetService<CommandLineBuilderConfiguration>();
-        config?.Apply(commandLineBuilder);
+        if (args.Length == 0)
+        {
+            // if no arguments are provided, show help
+            args = ["--help"];
+        }
 
-        HostBuilderExtensions.AssignCommandLineBuilder(commandLineBuilder);
+        // The final handler in the pipeline: parse and invoke the command
+        CommandLineDelegate finalHandler = async context =>
+        {
+            var parseResult = commandLineRoot.Parse(context.Args);
 
-        var parser = commandLineBuilder.Build();
-        AssignCommandsRecrusive(command, commandLineCommand, host.Services, cancellationTokenSource.Token);
+            InvocationConfiguration invocationConfiguration = new();
+            invocationConfiguration.Output = Console.Out;
+            invocationConfiguration.EnableDefaultExceptionHandler = config.EnableDefaultExceptionHandler;
 
-        // Build and execute the middleware pipeline
-        var context = new CommandLineContext
+            await parseResult.InvokeAsync(invocationConfiguration, context.CancellationToken);
+        };
+
+        // Build the middleware pipeline, wrapping the final command handler
+        var pipeline = Pipeline.Build(config.GetMiddlewareTypes(), finalHandler);
+
+        var commandLineContext = new CommandLineContext
         {
             Services = host.Services,
             Args = args,
-            Parser = parser,
             CancellationToken = cancellationTokenSource.Token,
-            RootCommand = command
+            RootCommand = rootInstance
         };
-
-        var pipeline = BuildPipeline(config, async (ctx) =>
-        {
-            await ctx.Parser.InvokeAsync(ctx.Args);
-        });
-
-        await pipeline(context);
+        // execute chain and pipeline
+        await pipeline(commandLineContext);
     }
 
-    private static void AssignCommandsRecrusive(
-        ICommand parentCommand
-        , Command commandLineCommand
-        , IServiceProvider services
-        , CancellationToken cancellationToken)
+    /// <summary>
+    /// Adds the specified middleware type to the command-line processing pipeline for the host.
+    /// </summary>
+    /// <remarks>This method registers the middleware type so that it will be invoked during command-line
+    /// processing. Middleware is executed in the order it is added.</remarks>
+    /// <typeparam name="TMiddleware">The type of middleware to add. Must implement the ICommandLineMiddleware interface.</typeparam>
+    /// <param name="host">The host to which the middleware will be added.</param>
+    /// <returns>The same IHost instance, enabling method chaining.</returns>
+    public static IHost UseMiddleware<TMiddleware>(this IHost host)
+        where TMiddleware : ICommandLineMiddleware
     {
-        var subCommandAttributes = parentCommand.GetType().GetCustomAttributes<SubCommandAttribute>();
-        foreach (var subCommandAttribute in subCommandAttributes)
-        {
-        
-            //var subCommandAttribute = parentCommand.GetType().GetCustomAttribute<SubCommandAttribute>();
-            if (subCommandAttribute is not null && subCommandAttribute.SubCommands?.Length > 0)
-            {
-                foreach (var subCommandType in subCommandAttribute.SubCommands.OrderBy(_ => _.Name))
-                {
-                    var command = (ICommand)Activator.CreateInstance(subCommandType)!;
-                    var commandDetails = subCommandType.GetCustomAttribute<CommandAttribute>();
-                    if (commandDetails is null)
-                        continue;
+        var config = host.Services.GetRequiredService<CommandLineConfiguration>();
 
-                    // create the system commandline command (wrapper)
-                    var wrappedCommand = new Command(commandDetails.Name, commandDetails.Description);
-                    //if (commandDetails.Aliases?.Length > 0)
-                    //{
-                    //    foreach (var alias in commandDetails.Aliases)
-                    //    {
-                    //        wrappedCommand.AddAlias(alias);
-                    //    }
-                    //}
-
-                    foreach (var field in subCommandType
-                        .GetProperties()
-                        .Select(_ => (attr: _.GetCustomAttribute<OptionAttribute>(), pinfo: _!)).Where(_ => _.attr is not null))
-                    {
-                        // we use reflection to instanciate
-                        var option = CreateOptionInstance(
-                            field.pinfo.PropertyType, field.attr!.Name, field.attr?.Description)!;
-                        option.IsRequired = !Internals.TypeExtensions.IsNullable(field.pinfo.PropertyType) || 
-                            Internals.TypeExtensions.IsRequired(field.pinfo);
-
-                        wrappedCommand.AddOption(option);
-                    }
-
-                    // register handler
-                    var handlerType = typeof(ICommandHandler<>).MakeGenericType(subCommandType);
-                    var handler = services.GetService(handlerType);
-                    if (handler is not null && handlerType.TryGetMethod("Handle", out var methodHandler))
-                    {
-                        wrappedCommand.SetHandler(async (context) =>
-                        {
-                            //context.ParseResult.GetValueForOption()
-                            // context.ParseResult.CommandResult.Children
-                            foreach (var o in context.ParseResult.CommandResult.Command.Options)
-                            {
-                                var ov = context.ParseResult.GetValueForOption(o);
-
-                                var property = subCommandType
-                                    .GetProperties()
-                                    .Where(_ => _.GetCustomAttribute<OptionAttribute>()?.Name == "--" + o.Name)
-                                    .FirstOrDefault();
-                                if (property is not null)
-                                {
-                                    if (Arcturus.CommandLine.Internals.TypeExtensions.IsEnumOrNullableEnum(property.PropertyType))
-                                    {
-                                        ov = Enum.Parse(
-                                            Arcturus.CommandLine.Internals.TypeExtensions.GetEnumType(property.PropertyType)
-                                            , ov.ToString(), true);
-                                    }
-                                    property.SetValue(command, ov);
-                                }
-                            }
-                            await (ValueTask)methodHandler!.Invoke(handler, [command!, cancellationToken])!;
-                        });
-                    }
-                    commandLineCommand.AddCommand(wrappedCommand);
-
-                    AssignCommandsRecrusive(command, wrappedCommand, services, cancellationToken);
-                }
-            }
-
-        }
-    }
-    private static Option CreateOptionInstance(Type typeArg, string name, string? description)
-    {
-        // new Option<string>(field.attr.Name, field.attr.Description);
-
-        // Get the generic type definition
-        Type genericType = typeof(Option<>).MakeGenericType(typeArg);
-
-        // Get the constructor that matches (string, string)
-        ConstructorInfo ctor = genericType.GetConstructor([typeof(string), typeof(string)]);
-
-        if (ctor == null)
-            throw new InvalidOperationException("Matching constructor not found.");
-
-        // Create instance using the constructor
-        return (Option)ctor.Invoke([name, description]);
+        config.AddMiddleware(typeof(TMiddleware));
+        return host;
     }
 
-    private static CommandLineDelegate BuildPipeline(
-        CommandLineBuilderConfiguration? config,
-        CommandLineDelegate finalHandler)
+    public static IHost UseCommandLineHelp(
+        this IHost host, Func<HelpAction, Command, SynchronousCommandLineAction?> configureHelp)
     {
-        if (config == null)
-            return finalHandler;
+        var config = host.Services.GetRequiredService<CommandLineConfiguration>();
+        config.ConfigureHelpDelegate = configureHelp;
 
-        var middlewareTypes = config.GetMiddlewareTypes().Reverse().ToList();
-
-        CommandLineDelegate pipeline = finalHandler;
-
-        foreach (var middlewareType in middlewareTypes)
-        {
-            var next = pipeline;
-            pipeline = context =>
-            {
-                var middleware = (ICommandLineMiddleware)ActivatorUtilities.CreateInstance(
-                    context.Services, middlewareType);
-                return middleware.InvokeAsync(context, next);
-            };
-        }
-
-        return pipeline;
+        return host;
     }
 }
