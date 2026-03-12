@@ -8,8 +8,11 @@ using System.Reflection;
 
 namespace Arcturus.CommandLine.Internals;
 
-internal sealed class CommandLineBuilder<T> where T : CommandLineRoot
+internal sealed class CommandLineBuilder<T>
+    (CommandLineConfiguration config) where T : CommandLineRoot
 {
+    private readonly CommandLineConfiguration _config = config;
+
     // Resolved once per AppDomain — shared across all registrations
     private static readonly MethodInfo _parseResultGetValue = typeof(ParseResult)
         .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -30,7 +33,28 @@ internal sealed class CommandLineBuilder<T> where T : CommandLineRoot
 
         AssignCommandsRecrusive(rootInstance, commandLineRoot, host.Services, cancellationToken);
 
+        if (_config.ConfigureHelpDelegate is not null)
+        {
+            AssignHelpRecrusive(commandLineRoot);            
+        }
+
         return commandLineRoot;
+    }
+
+    private void AssignHelpRecrusive(Command commandLineRoot)
+    {
+        foreach (var opt in commandLineRoot.Options)
+        {
+            if (opt is HelpOption helpOption)
+            {
+                helpOption.Action =
+                    _config.ConfigureHelpDelegate((HelpAction)helpOption.Action!, commandLineRoot) ?? helpOption.Action;
+            }
+        }
+        foreach (var subCommand in commandLineRoot.Subcommands)
+        {
+            AssignHelpRecrusive(subCommand);
+        }
     }
 
     private void AssignCommandsRecrusive(

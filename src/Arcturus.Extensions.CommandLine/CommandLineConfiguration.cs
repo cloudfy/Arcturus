@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.CommandLine;
+using System.CommandLine.Help;
+using System.CommandLine.Invocation;
 
 namespace Arcturus.CommandLine;
 
 public class CommandLineConfiguration
 {
     private readonly List<Type> _middlewareTypes = [];
+    internal Func<HelpAction, Command, SynchronousCommandLineAction?>? ConfigureHelpDelegate;
     internal IEnumerable<Type> GetMiddlewareTypes() => _middlewareTypes;
     internal void AddMiddleware(Type? middleware)
     {

@@ -11,5 +11,7 @@ builder.Services.AddCommandLine();
 
 var host = builder.Build();
 host.UseMiddleware<LogMiddleware>();
-
-await host.RunCommandLine<CommandRoot>(["sample", "-rq", "abc"]); // args
+host.UseCommandLineHelp((ha, cmd) => {
+    return new CustomHelpAction(ha);
+});
+await host.RunCommandLine<CommandRoot>(args);

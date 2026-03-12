@@ -3,6 +3,8 @@ using Arcturus.CommandLine.Internals;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.CommandLine;
+using System.CommandLine.Help;
+using System.CommandLine.Invocation;
 
 namespace Arcturus.CommandLine;
 
@@ -30,7 +32,7 @@ public static class HostExtensions
         // create an instance of the command line root using the host's service provider
         var rootInstance = ActivatorUtilities.CreateInstance<T>(host.Services);
 
-        var commandLineBuilder = new CommandLineBuilder<T>();
+        var commandLineBuilder = new CommandLineBuilder<T>(config);
         var commandLineRoot = commandLineBuilder.Build(host, rootInstance, cancellationTokenSource.Token);
 
         if (args.Length == 0)
@@ -61,7 +63,6 @@ public static class HostExtensions
             CancellationToken = cancellationTokenSource.Token,
             RootCommand = rootInstance
         };
-
         // execute chain and pipeline
         await pipeline(commandLineContext);
     }
@@ -80,6 +81,15 @@ public static class HostExtensions
         var config = host.Services.GetRequiredService<CommandLineConfiguration>();
 
         config.AddMiddleware(typeof(TMiddleware));
+        return host;
+    }
+
+    public static IHost UseCommandLineHelp(
+        this IHost host, Func<HelpAction, Command, SynchronousCommandLineAction?> configureHelp)
+    {
+        var config = host.Services.GetRequiredService<CommandLineConfiguration>();
+        config.ConfigureHelpDelegate = configureHelp;
+
         return host;
     }
 }
