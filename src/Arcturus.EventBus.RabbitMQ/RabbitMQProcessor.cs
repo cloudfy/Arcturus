@@ -49,7 +49,7 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
             , arguments: null
             , cancellationToken: cancellationToken);
 
-        await _channel.BasicQosAsync(prefetchSize: 0, prefetchCount: (ushort)_maxDegreeOfParallelism, global: false, cancellationToken);
+        await _channel.BasicQosAsync(prefetchSize: 0, prefetchCount: (ushort)_maxDegreeOfParallelism, global: false, cancellationToken: cancellationToken);
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
         consumer.ReceivedAsync += async (model, ea) =>
