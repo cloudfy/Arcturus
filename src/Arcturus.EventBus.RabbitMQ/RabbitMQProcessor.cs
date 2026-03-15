@@ -29,7 +29,11 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
 
         _connection = (RabbitMQConnection)connection;
         _queueName = queueName ?? "default_queue";
-        _maxDegreeOfParallelism = Math.Max(1, maxDegreeOfParallelism);
+
+        if (maxDegreeOfParallelism < 1 || maxDegreeOfParallelism > ushort.MaxValue)
+            throw new ArgumentOutOfRangeException(nameof(maxDegreeOfParallelism), maxDegreeOfParallelism, $"The value must be between 1 and {ushort.MaxValue}.");
+
+        _maxDegreeOfParallelism = maxDegreeOfParallelism;
         _logger = loggerFactory.CreateLogger<RabbitMQProcessor>();
         _eventMessageSerializer = eventMessageSerializer;
     }
