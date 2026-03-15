@@ -38,7 +38,26 @@ public sealed class EventHandlersProcessor : IProcessor, IDisposable
         => await _processor.WaitForEvents(cancellationToken);
 
     /// <inheritdoc />
-    public void Dispose() => _semaphore.Dispose();
+    public void Dispose()
+    {
+        // Unsubscribe from the inner processor event to avoid retaining this wrapper instance.
+        _processor.OnProcessAsync -= InternalOnProcessAsync;
+
+        // Dispose the semaphore used for concurrency control.
+        _semaphore.Dispose();
+
+        // Dispose the inner processor if it supports disposal to avoid leaking resources.
+        if (_processor is IAsyncDisposable asyncDisposable)
+        {
+            asyncDisposable.DisposeAsync().AsTask().GetAwaiter().GetResult();
+        }
+        else if (_processor is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
+
+        System.GC.SuppressFinalize(this);
+    }
 
     private async Task InternalOnProcessAsync(IEventMessage @event, OnProcessEventArgs? e)
     {
