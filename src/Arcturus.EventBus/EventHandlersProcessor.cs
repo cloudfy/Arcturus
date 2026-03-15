@@ -74,11 +74,11 @@ public sealed class EventHandlersProcessor : IProcessor, IDisposable
             return;
         }
 
-        await using var scope = _serviceProvider.CreateAsyncScope();
-
         await _semaphore.WaitAsync(e?.CancellationToken ?? default);
         try
         {
+            await using var scope = _serviceProvider.CreateAsyncScope();
+
             var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerEntry.HandlerType);
             if (handler == null)
             {
