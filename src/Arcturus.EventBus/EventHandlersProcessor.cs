@@ -8,12 +8,13 @@ namespace Arcturus.EventBus;
 /// <summary>
 /// Initializes a new instance of the auto-event wired message processor. This handles the events.
 /// </summary>
-public sealed class EventHandlersProcessor : IProcessor
+public sealed class EventHandlersProcessor : IProcessor, IDisposable
 {
     private readonly IProcessor _processor;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EventHandlersProcessor> _logger;
     private readonly EventTypeRegistry _eventTypeRegistry;
+    private readonly SemaphoreSlim _semaphore;
 
     public EventHandlersProcessor(
         IProcessor processor, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
@@ -22,8 +23,11 @@ public sealed class EventHandlersProcessor : IProcessor
         _processor.OnProcessAsync += InternalOnProcessAsync;
         _eventTypeRegistry = serviceProvider.GetRequiredService<EventTypeRegistry>();
         _serviceProvider = serviceProvider;
-
         _logger = loggerFactory.CreateLogger<EventHandlersProcessor>();
+
+        var options = serviceProvider.GetRequiredService<EventBusOptions>();
+        var parallelism = Math.Max(1, options.MaxDegreeOfParallelism);
+        _semaphore = new SemaphoreSlim(parallelism, parallelism);
     }
 
     /// <inheritdoc />
@@ -32,6 +36,28 @@ public sealed class EventHandlersProcessor : IProcessor
     /// <inheritdoc />
     public async Task WaitForEvents(CancellationToken cancellationToken = default)
         => await _processor.WaitForEvents(cancellationToken);
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        // Unsubscribe from the inner processor event to avoid retaining this wrapper instance.
+        _processor.OnProcessAsync -= InternalOnProcessAsync;
+
+        // Dispose the semaphore used for concurrency control.
+        _semaphore.Dispose();
+
+        // Dispose the inner processor if it supports disposal to avoid leaking resources.
+        if (_processor is IAsyncDisposable asyncDisposable)
+        {
+            asyncDisposable.DisposeAsync().AsTask().GetAwaiter().GetResult();
+        }
+        else if (_processor is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
+
+        System.GC.SuppressFinalize(this);
+    }
 
     private async Task InternalOnProcessAsync(IEventMessage @event, OnProcessEventArgs? e)
     {
@@ -48,9 +74,11 @@ public sealed class EventHandlersProcessor : IProcessor
             return;
         }
 
-        await using var scope = _serviceProvider.CreateAsyncScope();
+        await _semaphore.WaitAsync(e?.CancellationToken ?? default);
         try
         {
+            await using var scope = _serviceProvider.CreateAsyncScope();
+
             var handler = ActivatorUtilities.GetServiceOrCreateInstance(scope.ServiceProvider, handlerEntry.HandlerType);
             if (handler == null)
             {
@@ -66,9 +94,9 @@ public sealed class EventHandlersProcessor : IProcessor
 
             await pipeline(new EventContext(@event, nameof(@event), scope.ServiceProvider));
         }
-        catch
+        finally
         {
-            throw;
+            _semaphore.Release();
         }
     }
 }

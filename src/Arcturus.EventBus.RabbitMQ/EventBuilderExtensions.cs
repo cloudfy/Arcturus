@@ -26,6 +26,7 @@ public static class EventBuilderExtensions
         currentOptions.UseEventHandlersProcessor = builder.UseEventHandlersProcessor;
         currentOptions.ApplicationId = builder.ApplicationId;
         currentOptions.ClientName = builder.ClientName;
+        currentOptions.MaxDegreeOfParallelism = builder.MaxDegreeOfParallelism;
 
         builder.Services.AddSingleton<IConnection, RabbitMQConnection>(
             (sp) => { return new RabbitMQConnection(currentOptions); });
