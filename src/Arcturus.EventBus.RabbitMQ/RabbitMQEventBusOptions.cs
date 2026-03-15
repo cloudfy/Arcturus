@@ -5,6 +5,7 @@ public sealed class RabbitMQEventBusOptions
     internal string? ApplicationId { get; set; } 
     internal string? ClientName { get; set; }
     internal bool UseEventHandlersProcessor { get; set; }
+    internal int MaxDegreeOfParallelism { get; set; } = 1;
 
     /// <summary>
     /// Gets or sets a default exchange name. Defaults to "events".

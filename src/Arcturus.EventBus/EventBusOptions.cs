@@ -21,4 +21,10 @@ public class EventBusOptions
     /// The <see cref="Arcturus.EventBus.EventHandlersProcessor"/> provide support for event middleware pipelines. Use <see cref="Arcturus.EventBus.Middleware.HostExtensions.UseEventMiddleware{TMiddleware}(Microsoft.Extensions.Hosting.IHost, object?[])"/>.
     /// </remarks>
     public bool? UseEventHandlersProcessor { get; set; }
+    /// <summary>
+    /// Gets or sets the maximum number of events processed concurrently. A value of 1 (default) preserves
+    /// sequential processing. Values greater than 1 enable parallel dispatch; the broker-level prefetch
+    /// is automatically aligned to this value.
+    /// </summary>
+    public int MaxDegreeOfParallelism { get; set; } = 1;
 }

@@ -12,6 +12,7 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
     public event Func<IEventMessage, OnProcessEventArgs?, Task>? OnProcessAsync;
     private readonly RabbitMQConnection _connection;
     private readonly string _queueName;
+    private readonly int _maxDegreeOfParallelism;
     private IChannel? _channel;
     private readonly ILogger<RabbitMQProcessor> _logger;
     private readonly IEventMessageSerializer _eventMessageSerializer;
@@ -20,13 +21,15 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
         Abstracts.IConnection connection
         , ILoggerFactory loggerFactory
         , IEventMessageSerializer eventMessageSerializer
-        , string? queueName = null)
+        , string? queueName = null
+        , int maxDegreeOfParallelism = 1)
     {
         if (connection is not RabbitMQConnection)
             throw new NotImplementedException();
 
         _connection = (RabbitMQConnection)connection;
         _queueName = queueName ?? "default_queue";
+        _maxDegreeOfParallelism = Math.Max(1, maxDegreeOfParallelism);
         _logger = loggerFactory.CreateLogger<RabbitMQProcessor>();
         _eventMessageSerializer = eventMessageSerializer;
     }
@@ -46,7 +49,7 @@ public sealed class RabbitMQProcessor : IProcessor, IDisposable
             , arguments: null
             , cancellationToken: cancellationToken);
 
-        await _channel.BasicQosAsync(prefetchSize: 0, prefetchCount: 1, global: false, cancellationToken);
+        await _channel.BasicQosAsync(prefetchSize: 0, prefetchCount: (ushort)_maxDegreeOfParallelism, global: false, cancellationToken);
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
         consumer.ReceivedAsync += async (model, ea) =>
