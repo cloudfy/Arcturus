@@ -33,7 +33,8 @@ public sealed class EventBusBuilder
     public bool UseEventHandlersProcessor { get; set; }
     /// <summary>
     /// Gets or sets the maximum number of events processed concurrently. Defaults to 1 (sequential).
-    /// This value is propagated to the underlying broker prefetch configuration automatically.
+    /// For providers that support it (for example, the RabbitMQ provider), this value may be used to configure
+    /// the underlying broker prefetch or equivalent concurrency setting.
     /// </summary>
     public int MaxDegreeOfParallelism { get; set; } = 1;
 
