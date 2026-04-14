@@ -1,20 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-
+		<PackageId>Arcturus.Extensions.CommandLine</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>	
+		<PackageTags>commandline,cli,arcturus</PackageTags>
+		<PackageIcon>nuget.png</PackageIcon>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Description>Lightweight utilities for building, grouping, and configuring command-line interfaces with minimal boilerplate. Works with .NET applications, promoting clear command structure, DI-friendly handlers, and discoverable command registration.</Description>
 	</PropertyGroup>
+
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.1" />
 		<PackageReference Include="System.CommandLine" Version="2.0.4" />
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.5" />
 		<PackageReference Include="System.CommandLine" Version="2.0.4" />
 	</ItemGroup>
 
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
+	
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

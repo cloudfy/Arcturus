@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore.Middleware;
 
-internal sealed class UnhandledExceptionMiddleware(
+public sealed class UnhandledExceptionMiddleware(
     RequestDelegate next
     , ILoggerFactory loggerFactory
     , IProblemDetailsService? problemDetailsService = null
