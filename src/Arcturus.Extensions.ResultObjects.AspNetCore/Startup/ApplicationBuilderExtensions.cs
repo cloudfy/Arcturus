@@ -20,6 +20,8 @@ public static class ApplicationBuilderExtensions
         this IApplicationBuilder app
         , Func<HttpContext, Exception, bool>? onExceptionEvent = null)
     {
-        return app.UseMiddleware<UnhandledExceptionMiddleware>(onExceptionEvent);
+        if (onExceptionEvent is not null)
+            return app.UseMiddleware<UnhandledExceptionMiddleware>(onExceptionEvent);
+        return app.UseMiddleware<UnhandledExceptionMiddleware>();
     }
 }
