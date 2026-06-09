@@ -4,7 +4,7 @@ using Arcturus.Repository.Specification;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Arcturus.Repository.EntityFrameworkCore;
+namespace Arcturus.Repository.EntityFrameworkCore.InMemory;
 
 /// <summary>
 /// Provides a generic repository implementation for managing entities in a database context.

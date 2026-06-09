@@ -4,7 +4,7 @@ using Arcturus.Repository.EntityFrameworkCore.SqlServer.Internals;
 using Arcturus.Repository.Specification;
 using static Arcturus.Repository.EntityFrameworkCore.SqlServer.Internals.EfAddOrUpdateExtensions;
 
-namespace Arcturus.Repository.EntityFrameworkCore;
+namespace Arcturus.Repository.EntityFrameworkCore.SqlServer;
 
 /// <summary>
 /// Provides a generic repository implementation for managing entities in a database context.
