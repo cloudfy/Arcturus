@@ -1,17 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Arcturus.Repository.EntityFrameworkCore.PostgresSql</PackageId>
+		<PackageId>Arcturus.Repository.EntityFrameworkCore.InMemory</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,arcturus</PackageTags>
 		<PackageIcon>nuget.png</PackageIcon>
 		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
-		<Description>Entity Framework Core (PostgreSQL) implementation of the Arcturus repository abstractions.</Description>
+		<Description>Entity Framework Core (InMemory) implementation of the Arcturus repository abstractions.</Description>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
@@ -19,11 +15,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.300" />
+		<ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
 	</ItemGroup>
 
 </Project>
