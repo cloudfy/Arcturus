@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Arcturus.Repository.EntityFrameworkCore</PackageId>
+		<PackageId>Arcturus.Repository.EntityFrameworkCore.SqlServer</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>repository,data,arcturus</PackageTags>
 		<PackageIconUrl>https://raw.githubusercontent.com/cloudfy/Arcturus/326c991dfe0e024c0c104bde12d3aa91f0a18589/assets/logo_rounded_png.png</PackageIconUrl>
