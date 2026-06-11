@@ -199,6 +199,23 @@ spec
 
 This is handled by specialized overloads for `ICollection<T>` navigation properties.
 
+### AndInclude Type Inference After ThenInclude
+
+When chaining `.AndInclude()` after `.ThenInclude()` on a collection, the API correctly infers the parent item type:
+
+```csharp
+spec
+	.Include(app => app.AllowedScopes)        // ICollection<AllowedScope> → AllowedScope
+	.ThenInclude(scope => scope.Resource)     // Navigate to Resource (builder type becomes ResourceData)
+	.AndInclude(scope => scope.Scope);        // Correctly operates on AllowedScope, not ResourceData!
+```
+
+The `AndInclude` overload with `TParentItemType` parameter allows the compiler to infer the correct parent type from the lambda expression, even though the builder's generic type parameter is the nested property type. This enables creating sibling includes at the collection item level after navigating deeper with `ThenInclude`.
+
+**Generated paths:**
+- `Application.AllowedScopes.Resource`
+- `Application.AllowedScopes.Scope`
+
 ## Best Practices
 
 1. **Use `.Include()` for root-level siblings** - More readable than `.Parent().Include()`

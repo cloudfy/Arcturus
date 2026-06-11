@@ -30,9 +30,16 @@ public class SpecificationIncludeChainingExamples
         public int Id { get; set; }
         public Resource? Resource { get; set; }
         public Owner? Owner { get; set; }
+        public Scope? Scope { get; set; }
     }
 
     public class Resource
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+    }
+
+    public class Scope
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -149,10 +156,34 @@ public class SpecificationIncludeChainingExamples
     }
 
     /// <summary>
-    /// Example 5: Using .Parent() for explicit navigation when needed
+    /// Example 5: The AndInclude type inference fix (Bug Fix Example)
+    /// BEFORE: This would fail with "Scope is not a property of ResourceData" compilation error
+    /// AFTER: Now works correctly with the new AndInclude overload that infers TParentItemType
+    /// </summary>
+    public static Specification<Application> Example5_AndIncludeTypeInferenceFix()
+    {
+        var appSpecification = new Specification<Application>();
+
+        // This scenario demonstrates the bug fix:
+        // After .ThenInclude(_ => _.Resource), the builder type is IncludableSpecificationBuilder<Application, ResourceData>
+        // But .AndInclude(_ => _.Scope) needs to operate on AllowedScope (the parent item type), not ResourceData
+        // The new overload correctly infers TParentItemType = AllowedScope from the lambda expression
+        return appSpecification
+            .Include(app => app.AllowedScopes)          // ICollection<AllowedScope> → AllowedScope
+            .ThenInclude(scope => scope.Resource)       // Navigate to Resource (builder becomes <Application, ResourceData>)
+            .AndInclude(scope => scope.Scope);          // Sibling to Resource, both under AllowedScope
+                                                        // The compiler now correctly infers this operates on AllowedScope!
+
+        // Generated paths:
+        // - Application.AllowedScopes.Resource
+        // - Application.AllowedScopes.Scope
+    }
+
+    /// <summary>
+    /// Example 6: Using .Parent() for explicit navigation when needed
     /// Shows backwards compatibility with the existing Parent() method
     /// </summary>
-    public static Specification<Application> Example5_ExplicitParentNavigation()
+    public static Specification<Application> Example6_ExplicitParentNavigation()
     {
         var appSpecification = new Specification<Application>();
 
@@ -172,7 +203,7 @@ public class SpecificationIncludeChainingExamples
     }
 
     /// <summary>
-    /// Example 6: Migration example showing the improvement
+    /// Example 7: Migration example showing the improvement
     /// </summary>
     public static class BeforeAndAfter
     {
