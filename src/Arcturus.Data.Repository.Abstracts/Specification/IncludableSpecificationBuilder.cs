@@ -17,9 +17,17 @@ public sealed class IncludableSpecificationBuilder<TEntity, TProperty>
     public List<LambdaExpression> IncludeChain { get; }
 
     internal Specification<TEntity> Specification { get; private set; }
+
+    /// <summary>
+    /// Gets the parent chain of expressions representing the navigation path up to the parent level.
+    /// Used for AndInclude operations to create sibling includes at the same nesting level.
+    /// </summary>
+    internal List<LambdaExpression> ParentChain { get; }
+
     internal IncludableSpecificationBuilder(Expression<Func<TEntity, TProperty>> root, Specification<TEntity> specification)
     {
         IncludeChain = [root];
+        ParentChain = [];
         Specification = specification;
     }
     /// <summary>
@@ -29,11 +37,28 @@ public sealed class IncludableSpecificationBuilder<TEntity, TProperty>
     internal IncludableSpecificationBuilder(LambdaExpression root, Specification<TEntity> specification)
     {
         IncludeChain = [root];
+        ParentChain = [];
         Specification = specification;
     }
     internal IncludableSpecificationBuilder(List<LambdaExpression> chain, LambdaExpression next, Specification<TEntity> specification)
     {
         IncludeChain = [.. chain, next];
+        // Parent chain is everything except the last expression
+        ParentChain = chain.Count > 0 ? [.. chain] : [];
+        Specification = specification;
+    }
+
+    /// <summary>
+    /// Initializes a new instance with explicit parent chain tracking for AndInclude scenarios.
+    /// </summary>
+    internal IncludableSpecificationBuilder(
+        List<LambdaExpression> chain, 
+        List<LambdaExpression> parentChain,
+        LambdaExpression next, 
+        Specification<TEntity> specification)
+    {
+        IncludeChain = [.. chain, next];
+        ParentChain = [.. parentChain];
         Specification = specification;
     }
 }
