@@ -11,6 +11,9 @@
 public abstract class SpecificationEvaluator<TEntity>(ISpecification<TEntity> specification)
     where TEntity : class
 {
+    /// <summary>
+    /// Gets the specification to be applied to the queryable source. This property is initialized through the constructor
+    /// </summary>
     protected internal ISpecification<TEntity> Specification = specification;
 
     /// <summary>

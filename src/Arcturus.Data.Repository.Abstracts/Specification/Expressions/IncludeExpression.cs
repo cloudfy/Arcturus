@@ -8,14 +8,14 @@
 /// the navigation paths to include.</remarks>
 public sealed class IncludeExpression
 {
-    private readonly List<LambdaExpression> _includeChain;
+    private readonly string _includeChain;
 
-    internal IncludeExpression(List<LambdaExpression> includeChain)
+    internal IncludeExpression(string includeChain)
     {
         _includeChain = includeChain;
     }
     /// <summary>
     /// Gets the collection of lambda expressions representing the include chains.
     /// </summary>
-    public IEnumerable<LambdaExpression> Chains => _includeChain;
+    public IEnumerable<string> Chains => [ _includeChain ];
 }

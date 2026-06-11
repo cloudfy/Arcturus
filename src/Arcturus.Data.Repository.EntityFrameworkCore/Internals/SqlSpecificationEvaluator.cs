@@ -66,7 +66,7 @@ internal sealed class SqlSpecificationEvaluator<TEntity>(
 
     private static IQueryable<TEntity> ApplyIncludeChain(
         IQueryable<TEntity> source
-        , List<LambdaExpression> chain)
+        , List<string> chain)
     {
         if (chain.Count == 0) return source;
 
