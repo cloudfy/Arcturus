@@ -1,7 +1,8 @@
-﻿using Arcturus.Repository.Abstracts;
+﻿namespace Arcturus.Repository.Specification;
 
-namespace Arcturus.Repository.Specification;
-
+/// <summary>
+/// Provides extension methods for the <see cref="Specification{T}"/> and <see cref="Specification{T, TResult}"/> classes, allowing for fluent configuration of specifications with various criteria such as filtering, ordering, projection, and query behavior settings.
+/// </summary>
 public static class SpecificationExtensions
 {
     /// <summary>
@@ -14,6 +15,7 @@ public static class SpecificationExtensions
     /// <summary>
     /// Limits the number of entities returned by the specification.
     /// </summary>
+    /// <param name="spec">The specification to which the filtering condition will be added.</param>
     /// <param name="take">The maximum number of entities to return. Must be greater than or equal to zero.</param>
     /// <returns>The updated specification with the limit applied.</returns>
     public static Specification<T, R> Take<T, R>(this Specification<T, R> spec, int take)
@@ -22,6 +24,7 @@ public static class SpecificationExtensions
     /// <summary>
     /// Adds a filtering condition to the current specification based on the provided predicate.
     /// </summary>
+    /// <param name="spec">The specification to which the filtering condition will be added.</param>
     /// <param name="predicate">An expression that defines the filtering condition for the entity.</param>
     /// <returns>The updated specification with the added filtering condition.</returns>
     public static Specification<T> Where<T>(this Specification<T> spec, Expression<Func<T, bool>> predicate)
@@ -29,6 +32,7 @@ public static class SpecificationExtensions
     /// <summary>
     /// Adds a filtering condition to the current specification based on the provided predicate.
     /// </summary>
+    /// <param name="spec">The specification to which the filtering condition will be added.</param>
     /// <param name="predicate">An expression that defines the filtering condition for the entity.</param>
     /// <returns>The updated specification with the added filtering condition.</returns>
     public static Specification<T, R> Where<T, R>(this Specification<T, R> spec, Expression<Func<T, bool>> predicate)
@@ -37,7 +41,7 @@ public static class SpecificationExtensions
     /// Adds an order by condition to the current specification.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="spec"></param>
+    /// <param name="spec">The specification to which the filtering condition will be added.</param>
     /// <param name="orderByExpression">Order by expression.</param>
     /// <param name="descending">True to order by descending. Otherwise ascending.</param>
     /// <returns><see cref="Specification{T}"/></returns>
@@ -49,7 +53,7 @@ public static class SpecificationExtensions
     /// Adds an order by condition to the current specification.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="spec"></param>
+    /// <param name="spec">The specification to which the filtering condition will be added.</param>
     /// <param name="orderByExpression">Order by expression.</param>
     /// <param name="descending">True to order by descending. Otherwise ascending.</param>
     /// <returns><see cref="Specification{T, TResult}"/></returns>
@@ -63,8 +67,8 @@ public static class SpecificationExtensions
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="R"></typeparam>
-    /// <param name="spec"></param>
-    /// <param name="selector"></param>
+    /// <param name="spec">The specification to which the filtering condition will be added.</param>
+    /// <param name="selector">An expression that defines the projection from <typeparamref name="T"/> to <typeparamref name="R"/>.</param>
     /// <returns><see cref="Specification{T, TResult}"/></returns>
     public static Specification<T, R> Project<T, R>(this Specification<T, R> spec, Expression<Func<T, R>> selector)
         => spec.InnerProject(selector);
@@ -141,6 +145,34 @@ public static class SpecificationExtensions
         where TEntity : class
     {
         var builder = new IncludableSpecificationBuilder<TEntity, TProperty>(navigationPropertyPath, spec);
+        spec.Add(new Specification.Expressions.IncludeExpression(builder.IncludeChain));
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds a collection navigation property to the query path, automatically unwrapping the collection type
+    /// to enable proper ThenInclude chaining on the collection's item properties.
+    /// </summary>
+    /// <remarks>
+    /// This overload specifically handles ICollection&lt;T&gt; navigation properties. When you include a collection,
+    /// the returned builder is typed with the collection's item type (TCollectionItem), not the collection type itself.
+    /// This enables fluent ThenInclude calls on properties of the collection items.
+    /// <para>
+    /// Example: spec.Include(x => x.Orders).ThenInclude(order => order.Customer)
+    /// </para>
+    /// </remarks>
+    /// <typeparam name="TEntity">The type of the entity being queried.</typeparam>
+    /// <typeparam name="TCollectionItem">The type of items in the collection navigation property.</typeparam>
+    /// <param name="spec">The specification to which the collection navigation property path is added.</param>
+    /// <param name="navigationPropertyPath">An expression representing the collection navigation property path to include.</param>
+    /// <returns>An <see cref="IncludableSpecificationBuilder{TEntity, TCollectionItem}"/> typed with the collection's item type,
+    /// enabling ThenInclude calls on item properties.</returns>
+    public static IncludableSpecificationBuilder<TEntity, TCollectionItem> Include<TEntity, TCollectionItem>(
+        this Specification<TEntity> spec,
+        Expression<Func<TEntity, ICollection<TCollectionItem>>> navigationPropertyPath)
+        where TEntity : class
+    {
+        var builder = new IncludableSpecificationBuilder<TEntity, TCollectionItem>(navigationPropertyPath, spec);
         spec.Add(new Specification.Expressions.IncludeExpression(builder.IncludeChain));
         return builder;
     }
@@ -230,6 +262,7 @@ public static class SpecificationExtensions
     /// Clears all criteria from the current specification, resulting in a specification with no conditions.
     /// </summary>
     /// <typeparam name="T">The type of the entity to which the specification applies.</typeparam>
+    /// <typeparam name="R">The type of the result produced by the specification.</typeparam>
     /// <param name="specification">The specification to be cleared. Cannot be null.</param>
     /// <returns>A new specification with no conditions.</returns>
     public static Specification<T, R> Clear<T, R>(this Specification<T, R> specification)
@@ -246,8 +279,9 @@ public static class SpecificationExtensions
     /// Removes any limit constraints from the specified specification.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <typeparam name="R">The type of the result produced by the specification.</typeparam>
     /// <param name="specification">The specification from which to clear limit constraints.</param>
-    /// <returns>A new <see cref="Specification{T}"/> instance without limit constraints.</returns>
+    /// <returns>A new <see cref="Specification{T, R}"/> instance without limit constraints.</returns>
     public static Specification<T, R> ClearTake<T, R>(this Specification<T, R> specification)
         => (Specification<T, R>)specification.InnerClearLimit();
     /// <summary>
@@ -262,6 +296,7 @@ public static class SpecificationExtensions
     /// Removes any skip operation from the current specification.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the specification.</typeparam>
+    /// <typeparam name="R">The type of the result produced by the specification.</typeparam>
     /// <param name="specification">The specification from which to clear the skip operation.</param>
     /// <returns>A new specification without any skip operation applied.</returns>
     public static Specification<T, R> ClearSkip<T, R>(this Specification<T, R> specification)
@@ -278,6 +313,7 @@ public static class SpecificationExtensions
     /// Removes all conditions from the current specification.
     /// </summary>
     /// <typeparam name="T">The type of the elements to which the specification applies.</typeparam>
+    /// <typeparam name="R">The type of the result produced by the specification.</typeparam>
     /// <param name="specification">The specification instance from which to clear conditions.</param>
     /// <returns>A new specification with all conditions removed.</returns>
     public static Specification<T, R> ClearWhere<T, R>(this Specification<T, R> specification)

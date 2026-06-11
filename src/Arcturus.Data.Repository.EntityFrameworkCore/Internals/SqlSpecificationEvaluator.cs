@@ -16,6 +16,13 @@ internal sealed class SqlSpecificationEvaluator<TEntity>(
     : SpecificationEvaluator<TEntity>(specification)
     where TEntity : class
 {
+    /// <summary>
+    /// Applies the specification to the given source, returning an <see cref="IQueryable{TResult}"/> that represents
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result produced by the specification.</typeparam>
+    /// <param name="source">The source <see cref="IQueryable{TEntity}"/> to which the specification will be applied.</param>
+    /// <returns>An <see cref="IQueryable{TResult}"/> representing the result of applying the specification.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the specification cannot be applied to the source.</exception>
     public override IQueryable<TResult> Apply<TResult>(
         IQueryable<TEntity> source)
     {
