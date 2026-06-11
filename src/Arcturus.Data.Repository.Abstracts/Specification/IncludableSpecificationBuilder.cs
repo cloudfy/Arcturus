@@ -22,6 +22,15 @@ public sealed class IncludableSpecificationBuilder<TEntity, TProperty>
         IncludeChain = [root];
         Specification = specification;
     }
+    /// <summary>
+    /// Initializes a new instance with an untyped lambda expression root.
+    /// Used for type unwrapping scenarios (e.g., ICollection&lt;T&gt; to T).
+    /// </summary>
+    internal IncludableSpecificationBuilder(LambdaExpression root, Specification<TEntity> specification)
+    {
+        IncludeChain = [root];
+        Specification = specification;
+    }
     internal IncludableSpecificationBuilder(List<LambdaExpression> chain, LambdaExpression next, Specification<TEntity> specification)
     {
         IncludeChain = [.. chain, next];
