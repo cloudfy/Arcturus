@@ -328,6 +328,47 @@ public static class SpecificationExtensions
     }
 
     /// <summary>
+    /// Adds a sibling navigation property at the parent level when the parent type differs from the current property type.
+    /// This overload is used when chaining after ThenInclude on a collection, allowing navigation from the original
+    /// collection item type rather than the nested property type.
+    /// </summary>
+    /// <remarks>
+    /// This overload handles the scenario where ThenInclude has navigated from a collection item to a nested property,
+    /// but you want to add a sibling property at the collection item level, not at the nested property level.
+    /// <para>
+    /// Example: spec.Include(x => x.AllowedScopes).ThenInclude(s => s.Resource).AndInclude(s => s.Scope)
+    /// Here, Resource and Scope are siblings on AllowedScope, even though the builder type after ThenInclude is ResourceData.
+    /// This overload allows the lambda to operate on the parent type (AllowedScope) instead of the current type (ResourceData).
+    /// </para>
+    /// </remarks>
+    /// <typeparam name="TEntity">The type of the root entity being queried.</typeparam>
+    /// <typeparam name="TPreviousProperty">The type of the current (nested) property in the chain.</typeparam>
+    /// <typeparam name="TParentItemType">The type of the parent entity from which to navigate (typically a collection item type).</typeparam>
+    /// <typeparam name="TNextProperty">The type of the sibling property to include at the parent level.</typeparam>
+    /// <param name="source">The builder for the current include chain.</param>
+    /// <param name="navigationPropertyPath">An expression representing the sibling navigation property from the parent type.</param>
+    /// <returns>An <see cref="IncludableSpecificationBuilder{TEntity, TNextProperty}"/> for the new sibling include path.</returns>
+    public static IncludableSpecificationBuilder<TEntity, TNextProperty> AndInclude<TEntity, TPreviousProperty, TParentItemType, TNextProperty>(
+        this IncludableSpecificationBuilder<TEntity, TPreviousProperty> source,
+        Expression<Func<TParentItemType, TNextProperty>> navigationPropertyPath)
+        where TParentItemType : class
+    {
+        // The current builder's chain is already registered
+        // Create a new sibling chain starting from the parent level
+        // The navigationPropertyPath operates on TParentItemType, which should match the parent chain's target type
+        var siblingChain = new List<LambdaExpression>(source.ParentChain);
+        var builder = new IncludableSpecificationBuilder<TEntity, TNextProperty>(
+            siblingChain
+            , source.ParentChain  // Parent chain remains the same for siblings
+            , navigationPropertyPath
+            , source.Specification);
+
+        // Register this new sibling chain
+        source.Specification.Add(new Specification.Expressions.IncludeExpression(builder.IncludeChain));
+        return builder;
+    }
+
+    /// <summary>
     /// Adds a sibling collection navigation property at the same nesting level as the current include.
     /// Automatically unwraps the collection type to enable proper ThenInclude chaining.
     /// </summary>

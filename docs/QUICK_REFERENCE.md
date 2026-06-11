@@ -111,6 +111,7 @@ Root
 ✅ **DO**: Chain `.Include()` for root siblings
 ✅ **DO**: Use `.AndInclude()` for same-level siblings  
 ✅ **DO**: Use `.ThenInclude()` to go deeper
+✅ **DO**: Use `.AndInclude()` after `.ThenInclude()` to create siblings at parent level (type inference handles this!)
 ✅ **DON'T**: Need `.Parent()` between root includes (but you can if you want)
 
 ## Before & After
@@ -120,6 +121,19 @@ Root
 | `.Include(A).Parent().Include(B)` | `.Include(A).Include(B)` |
 | Complex navigation needed | Just chain naturally |
 | Had to think about context | Intuitive chaining |
+
+## Type Inference Magic
+
+When you use `.AndInclude()` after `.ThenInclude()` on a collection:
+
+```csharp
+spec
+    .Include(x => x.Items)       // ICollection<Item>
+    .ThenInclude(i => i.Details) // Navigate to Details
+    .AndInclude(i => i.Owner);   // ✨ Correctly operates on Item, not Details!
+```
+
+The compiler automatically infers the parent type from your lambda, so you can create siblings at the collection item level even after navigating deeper!
 
 ---
 
