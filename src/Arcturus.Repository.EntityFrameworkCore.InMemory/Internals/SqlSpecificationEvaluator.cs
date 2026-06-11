@@ -43,10 +43,18 @@ internal sealed class SqlSpecificationEvaluator<TEntity>(
     public override IQueryable<TEntity> Apply(
         IQueryable<TEntity> source)
     {
-        foreach (var chain in Specification.IncludeExpressions)
+        var includeList = Specification.IncludeExpressions.SelectMany(_ => _.Chains).ToList();
+        if (includeList.Count > 0)
         {
-            source = ApplyIncludeChain(source, [.. chain.Chains]);
+            foreach (var chain in includeList.Distinct())
+            {
+                source = source.Include(chain); // ApplyIncludeChain(source, chain.ToList());
+            }
         }
+        //foreach (var chain in Specification.IncludeExpressions)
+        //{
+        //    source = ApplyIncludeChain(source, [.. chain.Chains]);
+        //}
         if (Specification.UseSplitQuery)
         {
             // In-memory provider does not support split queries, so this is a no-op.
@@ -59,9 +67,7 @@ internal sealed class SqlSpecificationEvaluator<TEntity>(
         return ApplyLimit(ApplySkip(ApplyWhere(ApplyOrderBy(source))));
     }
 
-    private static IQueryable<TEntity> ApplyIncludeChain(
-        IQueryable<TEntity> source
-        , List<string> chain)
+    private static IQueryable<TEntity> ApplyIncludeChain(IQueryable<TEntity> source, List<string> chain)
     {
         if (chain.Count == 0) return source;
 
