@@ -43,18 +43,29 @@ internal sealed class SqlSpecificationEvaluator<TEntity>(
     public override IQueryable<TEntity> Apply(
         IQueryable<TEntity> source)
     {
-        var includeList = Specification.IncludeExpressions.SelectMany(_ => _.Chains).ToList();
-        if (includeList.Count > 0)
+        // Get all include paths and remove redundant parent paths
+        var allPaths = Specification.IncludeExpressions
+            .SelectMany(_ => _.Chains)
+            .Distinct()
+            .ToList();
+
+        // Remove paths that are prefixes of other paths
+        var filteredPaths = allPaths
+            .Where(path => !allPaths.Any(otherPath =>
+                otherPath != path &&
+                otherPath.StartsWith(path + ".")))
+            .OrderBy(chain => chain.Length)
+            .ThenBy(chain => chain)
+            .ToList();
+
+        if (filteredPaths.Count > 0)
         {
-            foreach (var chain in includeList.Distinct())
+            foreach (var chain in filteredPaths)
             {
-                source = source.Include(chain); // ApplyIncludeChain(source, chain.ToList());
+                source = source.Include(chain);
             }
         }
-        //foreach (var chain in Specification.IncludeExpressions)
-        //{
-        //    source = ApplyIncludeChain(source, [.. chain.Chains]);
-        //}
+
         if (Specification.UseSplitQuery)
         {
             source = source.AsSplitQuery();
