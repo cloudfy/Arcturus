@@ -7,7 +7,7 @@ public static class EndpointModuleExtensions
     /// <summary>
     /// Applies the provided configuration action to the <see cref="IEndpointConventionBuilder"/>.
     /// </summary>
-    /// <param name="app"></param>
+    /// <param name="app">Required. The endpoint convention builder to configure.</param>
     /// <param name="configure">Global configuration action to apply to the endpoint.</param>
     /// <returns><see cref="IEndpointConventionBuilder"/></returns>
     public static IEndpointConventionBuilder ApplyEndpointConfiguration(
