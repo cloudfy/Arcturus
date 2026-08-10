@@ -84,9 +84,9 @@ public static class ServiceCollectionExtensions
     /// Call <see cref="AddEndpointModules(IServiceCollection, Action{EndpointModuleConfiguration}?)" /> before calling this method.
     /// </para>
     /// <para>
-    /// The <paramref name="configure"/> delegate allows you to apply common endpoint conventions (such as <c>.RequireAuthorization()</c>, <c>.AllowAnonymous()</c>, <c>.WithMetadata(...)</c>) to all endpoints registered by the modules.
-    /// Each module receives this delegate and can invoke it on each endpoint it registers.
-    /// </para>
+    /// The <paramref name="configure"/> delegate allows you to apply common endpoint conventions (such as <c>.RequireAuthorization()</c>, <c>.AllowAnonymous()</c>, <c>.WithMetadata(...)</c>) to endpoints registered by modules.
+    /// Modules implementing <see cref="IConfigurableEndPointModule"/> receive this delegate and can invoke it for each endpoint they register.
+    /// Legacy modules that only implement <see cref="IEndPointModule"/> do not receive this delegate.
     /// </summary>
     /// <param name="builder">Required.</param>
     /// <param name="configure">Optional. A delegate to configure endpoint conventions that will be applied to all endpoints registered by each module.</param>
