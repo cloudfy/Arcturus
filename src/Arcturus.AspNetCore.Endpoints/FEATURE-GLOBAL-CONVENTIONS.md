@@ -2,7 +2,7 @@
 
 ## Overview
 
-This feature extends the `IEndPointModule` interface and `UseEndpointModules` method to support global endpoint conventions, allowing developers to apply common configurations like authorization, metadata, or other conventions to all endpoints registered by endpoint modules.
+This feature introduces the `IConfigurableEndPointModule` interface and extends the `UseEndpointModules`/`MapEndpointModules` methods to support global endpoint conventions, allowing developers to apply common configurations like authorization, metadata, or other conventions to endpoints registered by endpoint modules.
 
 ## New Capabilities
 
