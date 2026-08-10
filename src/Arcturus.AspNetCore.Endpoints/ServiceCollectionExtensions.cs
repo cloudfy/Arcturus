@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Reflection;
 
 namespace Arcturus.AspNetCore.Endpoints;
@@ -75,19 +75,30 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="builder">Required.</param>
     /// <returns><see cref="IEndpointRouteBuilder"/></returns>
-    [Obsolete("Use UseEndpointModules instead. This method is just an alias for UseEndpointModules and will be removed in future versions.")]
-    public static IEndpointRouteBuilder MapEndpointModules(this IEndpointRouteBuilder builder)
-        => UseEndpointModules(builder);
+    public static IEndpointRouteBuilder UseEndpointModules(this IEndpointRouteBuilder builder)
+        => UseEndpointModules(builder, null);
 
     /// <summary>
-    /// Maps all endpoint modules to the endpoint route builder.
+    /// Maps all endpoint modules to the endpoint route builder with optional global endpoint conventions.
     /// <para>
     /// Call <see cref="AddEndpointModules(IServiceCollection, Action{EndpointModuleConfiguration}?)" /> before calling this method.
     /// </para>
+    /// <para>
+    /// The <paramref name="configure"/> delegate allows you to apply common endpoint conventions (such as <c>.RequireAuthorization()</c>, <c>.AllowAnonymous()</c>, <c>.WithMetadata(...)</c>) to endpoints registered by modules.
+    /// Modules implementing <see cref="IConfigurableEndPointModule"/> receive this delegate and can invoke it for each endpoint they register.
+    /// Legacy modules that only implement <see cref="IEndPointModule"/> do not receive this delegate.
     /// </summary>
     /// <param name="builder">Required.</param>
+    /// <param name="configure">Optional. A delegate to configure endpoint conventions that will be applied to all endpoints registered by each module.</param>
     /// <returns><see cref="IEndpointRouteBuilder"/></returns>
-    public static IEndpointRouteBuilder UseEndpointModules(this IEndpointRouteBuilder builder)
+    /// <example>
+    /// <code>
+    /// app.UseEndpointModules(endpoint => endpoint.RequireAuthorization());
+    /// </code>
+    /// </example>
+    public static IEndpointRouteBuilder UseEndpointModules(
+        this IEndpointRouteBuilder builder
+        , Action<IEndpointConventionBuilder>? configure)
     {
         var config = builder.ServiceProvider.GetRequiredService<EndpointModuleConfiguration>();
         var logger = builder.ServiceProvider.GetService<ILogger<IEndpointRouteBuilder>>();
@@ -101,17 +112,15 @@ public static class ServiceCollectionExtensions
                 var modules = scope.ServiceProvider.GetServices<IEndPointModule>();
                 foreach (var module in modules)
                 {
-                    try
+                    // Check if the module implements IConfigurableEndPointModule
+                    if (module is IConfigurableEndPointModule configurableModule)
                     {
+                        configurableModule.AddRoute(builder, configure);
+                    }
+                    else
+                    {
+                        // Fall back to the base AddRoute method for legacy modules
                         module.AddRoute(builder);
-                    }
-                    catch (NotImplementedException)
-                    {
-                        // let it go
-                    }
-                    catch
-                    {
-                        throw;
                     }
                 }
             }
@@ -121,10 +130,44 @@ public static class ServiceCollectionExtensions
             logger?.LogTrace("Registration using non-scope");
             foreach (var moduleInterface in builder.ServiceProvider.GetServices<IEndPointModule>())
             {
-                moduleInterface.AddRoute(builder);
+                // Check if the module implements IConfigurableEndPointModule
+                if (moduleInterface is IConfigurableEndPointModule configurableModule)
+                {
+                    configurableModule.AddRoute(builder, configure);
+                }
+                else
+                {
+                    // Fall back to the base AddRoute method for legacy modules
+                    moduleInterface.AddRoute(builder);
+                }
             }
         }
 
         return builder;
     }
+
+    /// <summary>
+    /// Maps all endpoint modules to the endpoint route builder.
+    /// <para>
+    /// Call <see cref="AddEndpointModules(IServiceCollection, Action{EndpointModuleConfiguration}?)" /> before calling this method.
+    /// </para>
+    /// </summary>
+    /// <param name="builder">Required.</param>
+    /// <returns><see cref="IEndpointRouteBuilder"/></returns>
+    [Obsolete("Use UseEndpointModules instead. This method is just an alias for UseEndpointModules and will be removed in future versions.")]
+    public static IEndpointRouteBuilder MapEndpointModules(this IEndpointRouteBuilder builder)
+        => UseEndpointModules(builder);
+
+    /// <summary>
+    /// Maps all endpoint modules to the endpoint route builder with optional global endpoint conventions.
+    /// <para>
+    /// Call <see cref="AddEndpointModules(IServiceCollection, Action{EndpointModuleConfiguration}?)" /> before calling this method.
+    /// </para>
+    /// </summary>
+    /// <param name="builder">Required.</param>
+    /// <param name="configure">Optional. A delegate to configure endpoint conventions that will be applied to all endpoints registered by each module.</param>
+    /// <returns><see cref="IEndpointRouteBuilder"/></returns>
+    [Obsolete("Use UseEndpointModules instead. This method is just an alias for UseEndpointModules and will be removed in future versions.")]
+    public static IEndpointRouteBuilder MapEndpointModules(this IEndpointRouteBuilder builder, Action<IEndpointConventionBuilder>? configure)
+        => UseEndpointModules(builder, configure);
 }
