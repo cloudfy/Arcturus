@@ -10,13 +10,18 @@
 
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.10" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.10" />
 	</ItemGroup>
 
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Arcturus.Data.Repository.Abstracts\Arcturus.Repository.Abstracts.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
 	</ItemGroup>
 
 </Project>

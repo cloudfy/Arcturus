@@ -25,7 +25,7 @@
 	
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.300" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
 	</ItemGroup>
 	
 </Project>
