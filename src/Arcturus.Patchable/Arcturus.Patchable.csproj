@@ -20,5 +20,9 @@ Arcturus.Patchable is a lightweight .NET library for modeling and applying parti
 	  <None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
+  </ItemGroup>
+
 	
 </Project>
