@@ -1,7 +1,9 @@
-﻿using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
+﻿using Arcturus.AspNetCore.StandardResponse;
 using Arcturus.ResultObjects;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore.Results;
 
@@ -11,25 +13,29 @@ internal sealed class ProblemDetailsResult : IResult
 
     internal ProblemDetailsResult(Result result) => _result = result;
 
-    public Task ExecuteAsync(HttpContext httpContext)
+    public async Task ExecuteAsync(HttpContext httpContext)
     {
-        var problemDetails = Internals.ProblemDetailsFactory.Create(_result, httpContext);
-        ProblemDetailDefaults.ApplyDefaults(problemDetails, _result, httpContext);
+        //var problemDetails = Internals.ProblemDetailsFactory.Create(_result, httpContext);
+        //ProblemDetailDefaults.ApplyDefaults(problemDetails, _result, httpContext);
 
-        var problemDetailService = httpContext.RequestServices.GetService<IProblemDetailsService>();
-        if (problemDetailService is null)
+        var standardResponseFactory = httpContext.RequestServices.GetRequiredService<StandardResponseFactory>();
+        var problemDetails = Create(_result, httpContext);
+
+        await standardResponseFactory.WriteResponse(httpContext, problemDetails, _result.Exception);
+    }
+
+    private static ProblemDetails Create(Result result, HttpContext httpContext)
+    {
+        HttpStatusCode statusCode = result.HttpStatusCode ?? HttpStatusCode.BadRequest;
+
+        var problemDetails = new ProblemDetails()
         {
-            return FallbackProblemDetailsWriter.Write(problemDetails, httpContext);
-        }
-        else
-        {
-            var task = problemDetailService.WriteAsync(new ProblemDetailsContext()
-            {
-                HttpContext = httpContext
-                , ProblemDetails = problemDetails
-                , Exception = _result.Exception
-            });
-            return task.AsTask();
-        }
+            Status = (int)statusCode,
+            Title = result.Fault?.Code,
+            Detail = result.Fault?.Message,
+            Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
+        };
+
+        return problemDetails;
     }
 }

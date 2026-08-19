@@ -1,8 +1,8 @@
-﻿using Arcturus.Extensions.ResultObjects.AspNetCore.Middleware;
+﻿using Arcturus.AspNetCore.StandardResponse.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace Arcturus.Extensions.ResultObjects.AspNetCore;
+namespace Arcturus.AspNetCore.StandardResponse;
 
 public static class ApplicationBuilderExtensions
 {
@@ -22,6 +22,7 @@ public static class ApplicationBuilderExtensions
     {
         if (onExceptionEvent is not null)
             return app.UseMiddleware<UnhandledExceptionMiddleware>(onExceptionEvent);
+
         return app.UseMiddleware<UnhandledExceptionMiddleware>();
     }
 }

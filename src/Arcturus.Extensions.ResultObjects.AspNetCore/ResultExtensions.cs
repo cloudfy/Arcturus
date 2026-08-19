@@ -1,6 +1,5 @@
 ﻿using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 using Arcturus.Extensions.ResultObjects.AspNetCore.Results;
-using System.Net;
 
 namespace Arcturus.ResultObjects;
 
@@ -37,7 +36,7 @@ public static class ResultExtensions
         if (result.HttpStatusCode is not null)
             return new ProblemDetailsResult(result);
 
-        return new ProblemDetailsResult(result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
+        return new ProblemDetailsResult(result.WithHttpStatusCode(ProblemDetailDefaults._defaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Result{T}"/> object to an <see cref="Microsoft.AspNetCore.Http.IResult"/> object.
@@ -86,7 +85,7 @@ public static class ResultExtensions
             return new ProblemDetailsResult(result);
 
         return new ProblemDetailsResult(
-            result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
+            result.WithHttpStatusCode(ProblemDetailDefaults._defaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Task{TResult}"/> of type <see cref="Result"/> into an <see cref="Microsoft.AspNetCore.Http.IResult"/>.

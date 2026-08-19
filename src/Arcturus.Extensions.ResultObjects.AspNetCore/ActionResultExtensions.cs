@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Arcturus.Extensions.ResultObjects.AspNetCore.ActionResults;
 using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 
@@ -26,7 +25,7 @@ public static class ActionResultExtensions
 
         //return new Microsoft.AspNetCore.Mvc.ObjectResult(null) { StatusCode = 500 };
         return new ProblemDetailsActionResult(
-            result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
+            result.WithHttpStatusCode(ProblemDetailDefaults._defaultStatusCode));
     }
     /// <summary>
     /// Converts a <see cref="Result"/> object to an <see cref="IActionResult"/> object.
@@ -46,7 +45,7 @@ public static class ActionResultExtensions
 
         // return new Microsoft.AspNetCore.Mvc.ObjectResult(null) { StatusCode = 500 };
         return new ProblemDetailsActionResult(
-            result.WithHttpStatusCode(ProblemDetailDefaults.DefaultStatusCode));
+            result.WithHttpStatusCode(ProblemDetailDefaults._defaultStatusCode));
 
     }
     /// <summary>

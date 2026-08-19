@@ -1,9 +1,11 @@
 ﻿
+using Arcturus.AspNetCore.StandardResponse;
 using Arcturus.Extensions.ResultObjects.AspNetCore.Internals;
 using Arcturus.ResultObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore.ActionResults;
 
@@ -15,23 +17,24 @@ public sealed class ProblemDetailsActionResult : IActionResult
 
     public Task ExecuteResultAsync(ActionContext context)
     {
-        var problemDetails = Internals.ProblemDetailsFactory.Create(_result, context.HttpContext);
-        ProblemDetailDefaults.ApplyDefaults(problemDetails, _result, context.HttpContext);
+        var problemDetails = Create(_result, context.HttpContext);
 
-        var problemDetailService = context.HttpContext.RequestServices.GetService<IProblemDetailsService>();
-        if (problemDetailService is null)
+        var responseFactory = context.HttpContext.RequestServices.GetRequiredService<IStandardResponseFactory>();
+        return responseFactory.WriteResponse(context.HttpContext, problemDetails, _result.Exception);
+    }
+
+    private static ProblemDetails Create(Result result, HttpContext httpContext)
+    {
+        HttpStatusCode statusCode = result.HttpStatusCode ?? HttpStatusCode.BadRequest;
+
+        var problemDetails = new ProblemDetails()
         {
-            return FallbackProblemDetailsWriter.Write(problemDetails, context.HttpContext);
-        }
-        else
-        {
-            var task = problemDetailService.WriteAsync(new ProblemDetailsContext()
-            {
-                HttpContext = context.HttpContext
-                , ProblemDetails = problemDetails
-                , Exception = _result.Exception
-            });
-            return task.AsTask();
-        }
+            Status = (int)statusCode,
+            Title = result.Fault?.Code,
+            Detail = result.Fault?.Message,
+            Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
+        };
+
+        return problemDetails;
     }
 }

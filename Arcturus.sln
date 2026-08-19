@@ -96,6 +96,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Repository.EntityF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.Data.Repository.Sample", "src\Arcturus.Data.Repository.Sample\Arcturus.Data.Repository.Sample.csproj", "{89226E26-67D1-42E1-9374-64CDBE292F1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcturus.AspNetCore.StandardResponse", "src\Arcturus.AspNetCore.StandardResponse\Arcturus.AspNetCore.StandardResponse.csproj", "{57F6CD8F-0D68-4A48-9CC0-1D8A6A83455E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -242,6 +244,10 @@ Global
 		{89226E26-67D1-42E1-9374-64CDBE292F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89226E26-67D1-42E1-9374-64CDBE292F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{89226E26-67D1-42E1-9374-64CDBE292F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57F6CD8F-0D68-4A48-9CC0-1D8A6A83455E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57F6CD8F-0D68-4A48-9CC0-1D8A6A83455E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57F6CD8F-0D68-4A48-9CC0-1D8A6A83455E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57F6CD8F-0D68-4A48-9CC0-1D8A6A83455E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

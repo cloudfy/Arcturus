@@ -1,7 +1,6 @@
-﻿using Arcturus.Extensions.AspNetCore.Json.Serialization;
+﻿using Arcturus.AspNetCore.StandardResponse;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json.Serialization.Metadata;
 
 namespace Arcturus.Extensions.ResultObjects.AspNetCore;
 
@@ -25,34 +24,9 @@ public static class ServiceExtensions
         , bool applyJsonNamingPolicyOnProblemDetails = false
         , bool registerProblemDetails = true)
     {
-        if (registerProblemDetails && 
-            !services.Any(_ => _.ServiceType == typeof(IProblemDetailsService)))
+        if (!services.Any(_ => _.ServiceType == typeof(IStandardResponseFactory)))
         {
-            services.AddProblemDetails();
-        }
-
-        if (applyJsonNamingPolicyOnProblemDetails) 
-        { 
-            services.ConfigureHttpJsonOptions(options =>
-            {
-                options.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
-                    new ProblemDetailsHonorJsonResolver(new DefaultJsonTypeInfoResolver())
-                    , options.SerializerOptions.TypeInfoResolver);
-            });
-            services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(
-                options =>
-                {
-                    options.SerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
-                        new ProblemDetailsHonorJsonResolver(new DefaultJsonTypeInfoResolver())
-                        , options.SerializerOptions.TypeInfoResolver);
-                });
-            services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(
-                options =>
-                {
-                    options.JsonSerializerOptions.TypeInfoResolver = JsonTypeInfoResolver.Combine(
-                        new ProblemDetailsHonorJsonResolver(new DefaultJsonTypeInfoResolver())
-                        , options.JsonSerializerOptions.TypeInfoResolver);
-                });
+            services.AddStandardResponseHandling(applyJsonNamingPolicyOnProblemDetails, registerProblemDetails);
         }
 
         return services;
