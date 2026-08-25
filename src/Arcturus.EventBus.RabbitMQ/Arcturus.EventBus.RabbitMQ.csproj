@@ -10,7 +10,7 @@
 	<ItemGroup>
 	  <PackageReference Include="RabbitMQ.Client" Version="7.2.2" />
 	  <PackageReference Include="Polly" Version="8.7.0" />
-	  <PackageReference Include="OpenTelemetry.Api" Version="1.17.0" />
+	  <PackageReference Include="OpenTelemetry.Api" Version="1.18.0" />
 	  <ProjectReference Include="..\Arcturus.EventBus\Arcturus.EventBus.csproj" />
 	</ItemGroup>
 
