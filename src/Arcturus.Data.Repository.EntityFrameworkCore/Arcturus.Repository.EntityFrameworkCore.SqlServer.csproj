@@ -11,7 +11,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.11" />
 	</ItemGroup>
 
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
 	</ItemGroup>
 
 </Project>

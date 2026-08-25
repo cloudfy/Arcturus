@@ -24,7 +24,7 @@ Arcturus.ResultObjects is a lightweight, dependency-free .NET library for explic
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
 	</ItemGroup>
 
 </Project>

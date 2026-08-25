@@ -11,6 +11,48 @@ namespace Arcturus.Extensions.Repository.Json;
 /// </summary>
 public static class ConfigurationExtensions
 {
+    [Obsolete("Use PropertyColumnConversion instead.")]
+    public static PropertyBuilder<TProperty> ConfigureColumnConversion<TEntity, TProperty>(
+        this EntityTypeBuilder<TEntity> builder,
+        Expression<Func<TEntity, TProperty>> propertyExpression,
+        string columnName,
+        Func<string, TProperty> toProvider
+        , string columnType = "jsonb")
+        where TEntity : class
+        => PropertyColumnConversion<TEntity, TProperty>(builder, propertyExpression, columnName, toProvider, columnType);
+    [Obsolete("Use PropertyReadOnlyJsonCollection instead.")]
+    public static PropertyBuilder<IReadOnlyCollection<TProperty>> ConfigureReadOnlyJsonCollection<TEntity, TProperty>(
+        this EntityTypeBuilder<TEntity> builder,
+        Expression<Func<TEntity, IReadOnlyCollection<TProperty>>> propertyExpression
+        , string columnName
+        , string columnType = "jsonb")
+        where TEntity : class
+        => PropertyReadOnlyJsonCollection<TEntity, TProperty>(builder, propertyExpression, columnName, columnType);
+    [Obsolete("Use PropertyJsonProperty instead.")]
+    public static PropertyBuilder<TProperty> ConfigureJsonProperty<TEntity, TProperty>(
+        this EntityTypeBuilder<TEntity> builder,
+        Expression<Func<TEntity, TProperty>> propertyExpression,
+        string columnName
+        , string columnType = "jsonb")
+        where TEntity : class
+        => PropertyJsonProperty<TEntity, TProperty>(builder, propertyExpression, columnName, columnType);
+    [Obsolete("Use PropertyJsonProperty instead.")]
+    public static PropertyBuilder<ICollection<TProperty>> ConfigureJsonCollection<TEntity, TProperty>(
+        this EntityTypeBuilder<TEntity> builder,
+        Expression<Func<TEntity, ICollection<TProperty>>> propertyExpression
+        , string columnName
+        , string columnType = "jsonb")
+        where TEntity : class
+        => PropertyJsonCollection<TEntity, TProperty>(builder, propertyExpression, columnName, columnType);
+    [Obsolete("Use PropertyJsonList instead.")]
+    public static PropertyBuilder<IList<TProperty>> ConfigureJsonList<TEntity, TProperty>(
+        this EntityTypeBuilder<TEntity> builder,
+        Expression<Func<TEntity, IList<TProperty>>> propertyExpression
+        , string columnName
+        , string columnType = "jsonb")
+        where TEntity : class
+        => PropertyJsonList<TEntity, TProperty>(builder, propertyExpression, columnName, columnType);
+
     /// <summary>
     /// Configures a property with a custom conversion for the specified entity type.
     /// The property is stored as a column in the database and is converted to and from a string.
@@ -24,7 +66,7 @@ public static class ConfigurationExtensions
     /// <param name="columnType">The type of the column in the database. Default jsonb.</param>
     /// <returns>A <see cref="PropertyBuilder{TProperty}"/> for further configuration.</returns>
     /// <remarks>Require: Support nullable columns.</remarks>
-    public static PropertyBuilder<TProperty> ConfigureColumnConversion<TEntity, TProperty>(
+    public static PropertyBuilder<TProperty> PropertyColumnConversion<TEntity, TProperty>(
         this EntityTypeBuilder<TEntity> builder,
         Expression<Func<TEntity, TProperty>> propertyExpression,
         string columnName,
@@ -53,7 +95,7 @@ public static class ConfigurationExtensions
     /// <param name="columnType">The type of the column in the database. Default jsonb.</param>
     /// <returns>A <see cref="PropertyBuilder{TProperty}"/> for further configuration.</returns>
     /// <remarks>Require: Support nullable columns.</remarks>
-    public static PropertyBuilder<IReadOnlyCollection<TProperty>> ConfigureReadOnlyJsonCollection<TEntity, TProperty>(
+    public static PropertyBuilder<IReadOnlyCollection<TProperty>> PropertyReadOnlyJsonCollection<TEntity, TProperty>(
         this EntityTypeBuilder<TEntity> builder,
         Expression<Func<TEntity, IReadOnlyCollection<TProperty>>> propertyExpression
         , string columnName
@@ -85,7 +127,7 @@ public static class ConfigurationExtensions
     /// <param name="columnType">The type of the column in the database. Default jsonb.</param>
     /// <returns>A <see cref="PropertyBuilder{TProperty}"/> for further configuration.</returns>
     /// <remarks>Require: Support nullable columns.</remarks>
-    public static PropertyBuilder<TProperty> ConfigureJsonProperty<TEntity, TProperty>(
+    public static PropertyBuilder<TProperty> PropertyJsonProperty<TEntity, TProperty>(
         this EntityTypeBuilder<TEntity> builder,
         Expression<Func<TEntity, TProperty>> propertyExpression,
         string columnName
@@ -114,7 +156,7 @@ public static class ConfigurationExtensions
     /// <param name="columnType">The type of the column in the database. Default jsonb.</param>
     /// <returns>A <see cref="PropertyBuilder{TProperty}"/> for further configuration.</returns>
     /// <remarks>Require: Support nullable columns.</remarks>
-    public static PropertyBuilder<ICollection<TProperty>> ConfigureJsonCollection<TEntity, TProperty>(
+    public static PropertyBuilder<ICollection<TProperty>> PropertyJsonCollection<TEntity, TProperty>(
         this EntityTypeBuilder<TEntity> builder,
         Expression<Func<TEntity, ICollection<TProperty>>> propertyExpression
         , string columnName
@@ -146,7 +188,7 @@ public static class ConfigurationExtensions
     /// <param name="columnType">The type of the column in the database. Default jsonb.</param>
     /// <returns>A <see cref="PropertyBuilder{TProperty}"/> for further configuration.</returns>
     /// <remarks>Require: Support nullable columns.</remarks>
-    public static PropertyBuilder<IList<TProperty>> ConfigureJsonList<TEntity, TProperty>(
+    public static PropertyBuilder<IList<TProperty>> PropertyJsonList<TEntity, TProperty>(
         this EntityTypeBuilder<TEntity> builder,
         Expression<Func<TEntity, IList<TProperty>>> propertyExpression
         , string columnName

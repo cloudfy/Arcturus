@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.10" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.11" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
 	</ItemGroup>
 
 </Project>
