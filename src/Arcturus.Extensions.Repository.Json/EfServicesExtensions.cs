@@ -15,11 +15,17 @@ public static class ServicesExtensions
     /// <param name="services">The service collection to configure.</param>
     /// <param name="options">An action to configure the JSON serializer options.</param>
     /// <returns>The updated service collection.</returns>
-    public static IServiceCollection ConfigureEfJsonOptions(
+    public static IServiceCollection ConfigureEFCorePropertyJsonOptions(
         this IServiceCollection services
         , Action<JsonSerializerOptions> options)
     {
         SpecificEfJsonSerializer.ConfigureJsonOptions(options);
         return services;
     }
+
+    [Obsolete("Use ConfigureEFCorePropertyJsonOptions instead.")]
+    public static IServiceCollection ConfigureEfJsonOptions(
+        this IServiceCollection services
+        , Action<JsonSerializerOptions> options)
+        => ConfigureEFCorePropertyJsonOptions(services, options);
 }

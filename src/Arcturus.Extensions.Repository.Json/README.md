@@ -40,11 +40,11 @@ Install-Package Arcturus.Extensions.Repository.Json
 ```csharp
 modelBuilder.Entity<Order>(builder =>
 {
-    builder.ConfigureJsonProperty(x => x.Metadata, "metadata");
-    builder.ConfigureReadOnlyJsonCollection(x => x.Tags, "tags");
+    builder.PropertyJsonProperty(x => x.Metadata, "metadata");
+    builder.PropertyReadOnlyJsonCollection(x => x.Tags, "tags");
 });
 
-services.ConfigureEfJsonOptions(options =>
+services.ConfigureEFCorePropertyJsonOptions(options =>
 {
     options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
 });

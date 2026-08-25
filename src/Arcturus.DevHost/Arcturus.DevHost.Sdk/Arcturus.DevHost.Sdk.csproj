@@ -47,7 +47,7 @@
 	  <None Update="Sdk\Sdk.targets" Pack="true" PackagePath="Sdk\Sdk.targets" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.301" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
 	</ItemGroup>
 
 
