@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -47,12 +47,12 @@ public sealed class SmartEnumGenerator : IIncrementalGenerator
                 var source = Generate(model);
 
                 spc.AddSource(
-                    $"{model.HintName}.StringEnum.g.cs",
+                    $"{model.HintName}.SmartEnum.g.cs",
                     SourceText.From(source, Encoding.UTF8));
             });
     }
 
-    private static StringEnumModel? CreateModel(
+    private static SmartEnumModel? CreateModel(
         GeneratorAttributeSyntaxContext context,
         CancellationToken cancellationToken)
     {
@@ -81,34 +81,30 @@ public sealed class SmartEnumGenerator : IIncrementalGenerator
             ? null
             : typeSymbol.ContainingNamespace.ToDisplayString();
 
-        return new StringEnumModel(
-            Namespace: ns,
-            TypeName: typeSymbol.Name,
-            Accessibility: GetAccessibility(typeSymbol.DeclaredAccessibility),
-            IsRecord: typeSymbol.IsRecord,
-            Values: values);
+        return new SmartEnumModel(
+            ns,
+            typeSymbol.Name,
+            GetAccessibility(typeSymbol.DeclaredAccessibility),
+            typeSymbol.IsRecord,
+            values);
     }
 
-    private static StringEnumValue ParseValue(string input)
+    private static SmartEnumValue ParseValue(string input)
     {
         var separator = input.IndexOf('=');
 
         if (separator < 0)
         {
-            return new StringEnumValue(
-                MemberName: input,
-                SerializedValue: input);
+            return new SmartEnumValue(input, input);
         }
 
-        var memberName = input[..separator].Trim();
-        var serializedValue = input[(separator + 1)..].Trim();
+        var memberName = input.Substring(0, separator).Trim();
+        var serializedValue = input.Substring(separator + 1).Trim();
 
-        return new StringEnumValue(
-            memberName,
-            serializedValue);
+        return new SmartEnumValue(memberName, serializedValue);
     }
 
-    private static string Generate(StringEnumModel model)
+    private static string Generate(SmartEnumModel model)
     {
         var sb = new StringBuilder();
 
@@ -286,19 +282,42 @@ public sealed class SmartEnumGenerator : IIncrementalGenerator
         """;
 }
 
-internal sealed record SmartEnumModel(
-    string? Namespace,
-    string TypeName,
-    string Accessibility,
-    bool IsRecord,
-    ImmutableArray<SmartEnumValue> Values)
+internal sealed class SmartEnumModel
 {
+    public string? Namespace { get; }
+    public string TypeName { get; }
+    public string Accessibility { get; }
+    public bool IsRecord { get; }
+    public ImmutableArray<SmartEnumValue> Values { get; }
+
+    public SmartEnumModel(
+        string? @namespace,
+        string typeName,
+        string accessibility,
+        bool isRecord,
+        ImmutableArray<SmartEnumValue> values)
+    {
+        Namespace = @namespace;
+        TypeName = typeName;
+        Accessibility = accessibility;
+        IsRecord = isRecord;
+        Values = values;
+    }
+
     public string HintName =>
         Namespace is null
             ? TypeName
             : Namespace.Replace('.', '_') + "_" + TypeName;
 }
 
-internal sealed record SmartEnumValue(
-    string MemberName,
-    string SerializedValue);
+internal sealed class SmartEnumValue
+{
+    public string MemberName { get; }
+    public string SerializedValue { get; }
+
+    public SmartEnumValue(string memberName, string serializedValue)
+    {
+        MemberName = memberName;
+        SerializedValue = serializedValue;
+    }
+}

@@ -22,7 +22,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Arcturus.SmartEnums.CodeGenerator\Arcturus.SmartEnums.CodeGenerator.csproj" />
+		<!-- Include the generator as an analyzer in the NuGet package -->
+		<None Include="$(OutputPath)\..\..\..\Arcturus.SmartEnums.CodeGenerator\$(Configuration)\netstandard2.0\Arcturus.SmartEnums.CodeGenerator.dll" 
+			  Pack="true" 
+			  PackagePath="analyzers/dotnet/cs" 
+			  Visible="false" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Reference generator at build time -->
+		<ProjectReference Include="..\Arcturus.SmartEnums.CodeGenerator\Arcturus.SmartEnums.CodeGenerator.csproj" 
+						  OutputItemType="Analyzer" 
+						  ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<ItemGroup>
