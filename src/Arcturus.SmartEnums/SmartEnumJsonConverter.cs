@@ -24,9 +24,12 @@ public sealed class SmartEnumJsonConverter<T> : JsonConverter<T>
         Type typeToConvert,
         JsonSerializerOptions options)
     {
-        var value = reader.GetString()
-            ?? throw new JsonException("Expected a string.");
+        if (reader.TokenType != JsonTokenType.String)
+        {
+            throw new JsonException($"Expected a string for {typeof(T).Name}.");
+        }
 
+        var value = reader.GetString()!;
         try
         {
             return T.FromValue(value);
