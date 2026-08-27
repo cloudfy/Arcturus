@@ -30,13 +30,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- Reference generator at build time -->
-		<ProjectReference Include="..\Arcturus.SmartEnums.CodeGenerator\Arcturus.SmartEnums.CodeGenerator.csproj" 
-						  OutputItemType="Analyzer" 
-						  ReferenceOutputAssembly="false" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
 	</ItemGroup>
 
