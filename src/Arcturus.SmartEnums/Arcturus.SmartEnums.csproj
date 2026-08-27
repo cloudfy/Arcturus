@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>Arcturus.SmartEnums</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageTags>enums,smartenums,arcturus</PackageTags>
+		<PackageIcon>nuget.png</PackageIcon>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Description>SmartEnums for Arcturus</Description>
+	</PropertyGroup>
+
+
+	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">
+		<ItemGroup Condition="Exists('$(OutputPath)$(AssemblyName).xml')">
+			<None Include="$(OutputPath)$(AssemblyName).xml" Pack="true" PackagePath="lib\$(TargetFramework)" />
+		</ItemGroup>
+	</Target>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Arcturus.SmartEnums.CodeGenerator\Arcturus.SmartEnums.CodeGenerator.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
+	</ItemGroup>
+
+
+</Project>
