@@ -23,10 +23,7 @@
 
 	<ItemGroup>
 		<!-- Include the generator as an analyzer in the NuGet package -->
-		<None Include="$(OutputPath)\..\..\..\Arcturus.SmartEnums.CodeGenerator\$(Configuration)\netstandard2.0\Arcturus.SmartEnums.CodeGenerator.dll" 
-			  Pack="true" 
-			  PackagePath="analyzers/dotnet/cs" 
-			  Visible="false" />
+		<None Include="..\Arcturus.SmartEnums.CodeGenerator\bin\$(Configuration)\netstandard2.0\Arcturus.SmartEnums.CodeGenerator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 
 	<ItemGroup>
