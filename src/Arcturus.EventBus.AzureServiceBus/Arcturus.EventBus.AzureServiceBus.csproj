@@ -9,10 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.2" />
-		<PackageReference Include="Polly" Version="8.7.0" />
-		<PackageReference Include="OpenTelemetry.Api" Version="1.18.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.11" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.21.0" />
+		<PackageReference Include="Polly" Version="8.8.0" />
+		<PackageReference Include="OpenTelemetry.Api" Version="1.19.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.12" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -23,7 +23,7 @@
 		<None Include="..\..\assets\nuget.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.400" />
+	  <PackageReference Update="Microsoft.SourceLink.GitHub" Version="10.0.401" />
 	</ItemGroup>
 	
 	<Target Name="IncludeXmlDocsInPackage" AfterTargets="Build">

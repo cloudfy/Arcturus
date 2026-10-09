@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
     /// <returns>
     /// The same service collection so that multiple calls can be chained.
     /// </returns>
-    internal static IServiceCollection AddEntityFrameworkNamingConventions(
+    public static IServiceCollection AddEntityFrameworkNamingConventions(
         [NotNull] this IServiceCollection serviceCollection)
     {
         ArgumentNullException.ThrowIfNull(serviceCollection, nameof(serviceCollection));
