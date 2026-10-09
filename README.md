@@ -1,63 +1,74 @@
 # Arcturus
-Arcturus is a ready-to-use framework designed for building modern cloud and distributed applications. It streamlines the development process by offering robust tools and integrations, enabling developers to create scalable, efficient, and resilient systems with ease.
 
-## Give a Star! :star:
+[![Version](https://img.shields.io/github/v/release/cloudfy/Arcturus)](https://github.com/cloudfy/Arcturus/releases)
+[![NuGet](https://img.shields.io/badge/NuGet-packages-blue?logo=nuget)](https://www.nuget.org/packages?q=Arcturus)
+![NuGet Version](https://img.shields.io/nuget/v/Arcturus.Mediation.Abstracts) [![License](https://img.shields.io/github/license/cloudfy/Arcturus)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-10%20%7C%20Standard%202.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
 
-If you like or are using this project to learn or start your solution, please give it a star. Thanks!
+Arcturus is a modular set of .NET packages for building modern cloud, distributed, and API-driven applications. The repository is split into focused packages so you can reference only the functionality you need.
 
-## Packages
-Arcturus consist of multiple independant packages. Some are extensions of other packages, most are individual packages.
+## Package catalog
 
-> Find all Nuget [packages here](https://www.nuget.org/packages?q=Arcturus&includeComputedFrameworks=true&prerel=false).
+### Core result handling
+- [Arcturus.ResultObjects](src/Arcturus.ResultObjects/README.md) — Represents success and failure without relying on exceptions for control flow.
+- [Arcturus.Extensions.ResultObjects.AspNetCore](src/Arcturus.Extensions.ResultObjects.AspNetCore/README.md) — Maps result objects to ASP.NET Core responses and ProblemDetails.
 
-### Result Object
-* [Arcturus.ResultObjects](https://github.com/cloudfy/Arcturus/wiki/ResultObjects): Enable control of application state via `Result` rather than exceptions.
-* [Arcturus.ResultObjects for AspNetCore](https://github.com/cloudfy/Arcturus/wiki/ResultObjects-(AspNetCore-extension)): An extension to `Arcturus.ResultObjects` which enables return of normalized HTTP status codes using `ProblemDetails`.
+### Mediation and CQRS
+- [Arcturus.Mediation.Abstracts](src/Arcturus.Mediation.Abstracts/README.md) — Core mediator, request/response, notification, and middleware abstractions.
+- [Arcturus.Mediation](src/Arcturus.Mediation/README.md) — Runtime mediation and CQRS implementation with middleware and event publishing.
 
-### Caching
-* [Arcturus.Extensions.Caching](https://github.com/cloudfy/Arcturus/wiki/Caching): Provides common extensions for IDistributedCache interfaces.
-* [Arcturus.Extensions.Caching.AzureStorageTable](https://github.com/cloudfy/Arcturus/wiki/Caching): Distributed cache implementation using Azure Storage Tables.
+### Patch and endpoint utilities
+- [Arcturus.Patchable](src/Arcturus.Patchable/README.md) — Type-safe partial-update and patch support for domain models.
+- [Arcturus.Extensions.Patchable.AspNetCore](src/Arcturus.Extensions.Patchable.AspNetCore/README.md) — ASP.NET Core helpers for PATCH endpoints and JSON Patch workflows.
+- [Arcturus.AspNetCore.Endpoints](src/Arcturus.AspNetCore.Endpoints/README.md) — Endpoint-building abstractions for ASP.NET Core APIs.
+- [Arcturus.Extensions.Validation.AspNetCore](src/Arcturus.Extensions.Validation.AspNetCore/README.md) — Source-generated validation for ASP.NET Core Minimal APIs.
 
-### Data & Repository
-* [Arcturus.Repository.Abstracts](https://github.com/cloudfy/Arcturus/wiki/Repository): Provide abstract data models for using the repository implementations.
-* [Arcturus.Repository.EntityFrameworkCore](https://github.com/cloudfy/Arcturus/wiki/Repository): Repository implementation using Entity Framework Core using SQL server.
-* [Arcturus.Repository.EntityFrameworkCore.NamingConvention](https://github.com/cloudfy/Arcturus/wiki/Repository): Change naming convension for the database layer (Postgres SQL).
-* [Arcturus.Repository.EntityFrameworkCore.PostgresSql](https://github.com/cloudfy/Arcturus/wiki/Repository): Repository implementation using Entity Framework Core using Postgres SQL.
-* [Arcturus.Extensions.Repository.Pagination](https://github.com/cloudfy/Arcturus/wiki/Repository#pagination): Extensions supporting pagination response using [Arcturus.ResultObjects](https://github.com/cloudfy/Arcturus/wiki/ResultObjects).
+### Repository and data access
+- [Arcturus.Repository.Abstracts](src/Arcturus.Data.Repository.Abstracts/README.md) — Repository and specification abstractions for data access layers.
+- [Arcturus.Repository.EntityFrameworkCore.SqlServer](src/Arcturus.Data.Repository.EntityFrameworkCore/README.md) — Entity Framework Core repository implementation for SQL Server.
+- [Arcturus.Repository.EntityFrameworkCore.InMemory](src/Arcturus.Repository.EntityFrameworkCore.InMemory/README.md) — Entity Framework Core repository implementation for in-memory persistence.
+- [Arcturus.Repository.EntityFrameworkCore.PostgresSql](src/Arcturus.Repository.EntityFrameworkCore.PostgresSql/README.md) — Entity Framework Core repository implementation for PostgreSQL.
+- [Arcturus.Repository.EntityFrameworkCore.NamingConvention](src/Arcturus.Repository.EntityFrameworkCore.NamingConvention/README.md) — Applies consistent naming conventions to EF Core database objects.
+- [Arcturus.Extensions.Repository.Json](src/Arcturus.Extensions.Repository.Json/README.md) — Stores JSON-backed values and owned objects with Entity Framework Core.
+- [Arcturus.Extensions.Repository.Pagination](src/Arcturus.Extensions.Repository.Pagination/README.md) — Adds pagination support for repository queries and responses.
 
-### Mediation
-* [Arcturus.Mediation](https://github.com/cloudfy/Arcturus/wiki/Mediation): Enable meditation.
+### Caching and configuration
+- [Arcturus.Extensions.Caching](src/Arcturus.Extensions.Caching/README.md) — Shared extensions and abstractions for in-memory and distributed caching.
+- [Arcturus.Extensions.Caching.AzureStorageTable](src/Arcturus.Extensions.Caching.AzureStorageTable/README.md) — Distributed caching backed by Azure Storage Tables.
+- [Arcturus.Extensions.Configuration.AzureStorageBlob](src/Arcturus.Extensions.Configuration.AzureStorageBlob/README.md) — Loads configuration from Azure Storage Blob containers.
 
-### Patchable
-* [Arcturus.Patchable](https://github.com/cloudfy/Arcturus/wiki/Patchable): Enable Patch endpoints to partial updates.
-* [Arcturus.Extensions.Patchable.AspNetCore](https://github.com/cloudfy/Arcturus/wiki/Patchable): ASP.NET adoptation of patch endpoints.
-  
-### ASP.Net Core
-* [Arcturus.AspNetCore.Endpoints](https://github.com/cloudfy/Arcturus/wiki/Endpoints-(AspNetCore)): Provides endpoint builder pattern to setup MVC based controller endpoints.
+### Event bus and messaging
+- [Arcturus.EventBus.Abstracts](src/Arcturus.EventBus.Abstracts/README.md) — Event bus contracts and base types for publish/subscribe scenarios.
+- [Arcturus.EventBus](src/Arcturus.EventBus/README.md) — Core event bus runtime for publishing and handling integration events.
+- [Arcturus.EventBus.RabbitMQ](src/Arcturus.EventBus.RabbitMQ/README.md) — RabbitMQ transport for the Arcturus event bus.
+- [Arcturus.EventBus.AzureServiceBus](src/Arcturus.EventBus.AzureServiceBus/README.md) — Azure Service Bus transport for the Arcturus event bus.
+- [Arcturus.EventBus.AzureStorageQueue](src/Arcturus.EventBus.AzureStorageQueue/README.md) — Azure Storage Queue transport for the Arcturus event bus.
+- [Arcturus.EventBus.Sqlite](src/Arcturus.EventBus.Sqlite/README.md) — SQLite-backed event bus implementation for local or persistent messaging.
+- [Arcturus.EventBus.OpenTelemetry](src/Arcturus.EventBus.OpenTelemetry/README.md) — OpenTelemetry instrumentation for event publishing and handling.
 
-### EventBus
-* [Arcturus.EventBus](https://github.com/cloudfy/Arcturus/wiki/EventBus): Provides eventbus implementation.
-* [Arcturus.EventBus.Abstracts](https://github.com/cloudfy/Arcturus/wiki/EventBus): Provides abstracts eventbus implementation.
-* [Arcturus.EventBus.RabbitMQ](https://github.com/cloudfy/Arcturus/wiki/EventBus): RabbitMQ implementation of the event bus.
-* [Arcturus.EventBus.AzureStorageQueue](https://github.com/cloudfy/Arcturus/wiki/EventBs): Azure Storage Queue implementation of the event bus.
-* [Arcturus.EventBus.AzureServiceBus](https://github.com/cloudfy/Arcturus/wiki/EventBus): Azure Service Bus implementatino of the event bus.
+### Smart enums and code generation
+- [Arcturus.SmartEnums](src/Arcturus.SmartEnums/README.md) — Type-safe string-backed smart enums with JSON serialization support.
+- [Arcturus.SmartEnums.CodeGenerator](src/Arcturus.SmartEnums.CodeGenerator/README.md) — Source generator that emits smart enum members and supporting code.
+- [Arcturus.Validation.CodeGenerator](src/Arcturus.Validation.CodeGenerator/README.md) — Source generator used to add validation code generation.
+- [Arcturus.CodeAnalysis.CSharp](src/Arcturus.CodeAnalysis.CSharp/README.md) — Roslyn analyzers that enforce safe development practices.
 
-### CommandLine
-* [Arcturus.Extensions.CommandLine](): An extension to [System.CommandLine](https://learn.microsoft.com/en-us/dotnet/standard/commandline/) which enables dependency injection and command handler implementation.
+### Command-line and testing utilities
+- [Arcturus.Extensions.CommandLine](src/Arcturus.Extensions.CommandLine/README.md) — CLI helpers for commands, options, arguments, and help text.
+- [Arcturus.Xunit](src/Arcturus.Xunit/README.md) — xUnit helpers and dependency-injection support for tests.
 
-### Configuration
-* [Arcturus.Extensions.Configuration.AzureStorageBlob](https://github.com/cloudfy/Arcturus/wiki/Configuration); Enable storing configuration options in Azure Blob Storage.
+### DevHost
+- [Arcturus.DevHost.Sdk](src/Arcturus.DevHost/Arcturus.DevHost.Sdk/docs/README.md) — MSBuild SDK for orchestrating multiple projects and executables in a local development host.
+- [Arcturus.DevHost.Hosting](src/Arcturus.DevHost/Arcturus.DevHost.Hosting/docs/README.md) — Runtime hosting layer for coordinated local orchestration.
+- [Arcturus.DevHost.SourceGenerator](src/Arcturus.DevHost/Arcturus.DevHost.SourceGenerator/docs/README.md) — Source generator that creates strongly typed project metadata.
 
-### Code analysis
-* [Arcturus.CodeAnalysis.CSharp](https://github.com/cloudfy/Arcturus/wiki/Code-analysis): HttpClient code analysis and more.
+## Samples
 
-## Read the Wiki
-As Arcturus consist of multiple packages, we are keeping documentation in the [Wiki](https://github.com/cloudfy/Arcturus/wiki).
+Example applications are available in the `samples/` and `src/` sample projects, including command-line, event bus, mediation, and smart enum samples.
 
-## How can I contribute?
-We welcome contributions! Many people all over the world have helped make .NET better.
+## Contributing
 
-Follow instructions in [contributing.md](CONTRIBUTING.md) for working in the code in the repository.
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
 ## License
-The code in this repo is licensed under the [MIT](LICENSE) license.
+
+The code in this repository is licensed under the [MIT](LICENSE) license.
